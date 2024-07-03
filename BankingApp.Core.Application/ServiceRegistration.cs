@@ -1,9 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BankingApp.Core.Application.Interfaces.Services;
+using BankingApp.Core.Application.Services;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace BankingApp.Core.Application
 {
@@ -11,8 +9,15 @@ namespace BankingApp.Core.Application
     {
         public static void AddApplicationLayer(this IServiceCollection services)
         {
-            #region Services
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+            #region Services
+            services.AddTransient(typeof(IGenericService<,,>), typeof(GenericService<,,>));
+            services.AddTransient<IBeneficiaryService, BeneficiaryService>();
+            services.AddTransient<ICreditCardService, CreditCardService>();
+            services.AddTransient<ILoanService, LoanService>();
+            services.AddTransient<IPaymentService, PaymentService>();
+            services.AddTransient<ISavingsAccountService, SavingsAccountService>();
             #endregion
         }
     }

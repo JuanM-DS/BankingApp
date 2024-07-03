@@ -2,7 +2,7 @@
 
 namespace BankingApp.Core.Application.Interfaces.Repositories
 {
-    public interface IGenericRepository<Entity> where Entity : AuditableBaseEntity
+    public interface IGenericRepository<Entity> where Entity : class
     {
         Task AddAsync(Entity entity);
         Task UpdateAsync(Entity entity, int id);
