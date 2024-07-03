@@ -1,4 +1,6 @@
-﻿using BankingApp.Infrastructure.Persistence.Contexts;
+﻿using BankingApp.Core.Application.Interfaces.Repositories;
+using BankingApp.Infrastructure.Persistence.Contexts;
+using BankingApp.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +26,12 @@ namespace BankingApp.Infrastructure.Persistence
             #endregion
 
             #region Repositories
+            services.AddTransient(typeof(IGenericRepository<>), typeof(IGenericRepository<>));
+            services.AddTransient<IBeneficiaryRepository, BeneficiaryRepository>();
+            services.AddTransient<ICreditCardRepository, CreditCardRepository>();
+            services.AddTransient<ILoanRepository, LoanRepository>();
+            services.AddTransient<IPaymentRepository, PaymentRepository>();
+            services.AddTransient<ISavingsAccountRepository, SavingsAccountRepository>();
             #endregion
         }
     }
