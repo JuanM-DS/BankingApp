@@ -6,4 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BankingApp.Core.Application\BankingApp.Core.Application.csproj" />
+    <ProjectReference Include="..\BankingApp.Infrastructure.Persistence\BankingApp.Infrastructure.Persistence.csproj" />
+  </ItemGroup>
+
 </Project>
