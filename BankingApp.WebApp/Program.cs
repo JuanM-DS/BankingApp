@@ -1,4 +1,7 @@
 using BankingApp.Infrastructure.Persistence;
+using BankingApp.Infrastructure.Shared;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +10,7 @@ builder.Services.AddControllersWithViews();
 
 #region Services
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
+builder.Services.AddSharedInfrastructure(builder.Configuration);
 #endregion
 
 
