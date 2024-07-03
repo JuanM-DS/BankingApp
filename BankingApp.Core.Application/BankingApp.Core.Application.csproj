@@ -23,8 +23,6 @@
   <ItemGroup>
     <Folder Include="Mappings\" />
     <Folder Include="Helpers\" />
-    <Folder Include="ViewModels\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

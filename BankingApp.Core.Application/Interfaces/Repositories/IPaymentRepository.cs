@@ -4,5 +4,6 @@ namespace BankingApp.Core.Application.Interfaces.Repositories
 {
     public interface IPaymentRepository : IGenericRepository<Payment>
     {
+
     }
 }
