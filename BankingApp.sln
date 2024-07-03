@@ -11,13 +11,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{AFDB5231-BF67-4ABF-9C80-238AF08E0365}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.WebApp", "BankingApp.WebApp\BankingApp.WebApp.csproj", "{6A678F3C-297C-4B84-8751-24510E270DF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.WebApp", "BankingApp.WebApp\BankingApp.WebApp.csproj", "{6A678F3C-297C-4B84-8751-24510E270DF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.Core.Domain", "BankingApp.Core.Domain\BankingApp.Core.Domain.csproj", "{ECD08CA4-701B-4FFB-925B-399B1CB2E727}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.Core.Domain", "BankingApp.Core.Domain\BankingApp.Core.Domain.csproj", "{ECD08CA4-701B-4FFB-925B-399B1CB2E727}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.Core.Application", "BankingApp.Core.Application\BankingApp.Core.Application.csproj", "{58ACAD0D-C5CD-4708-B84C-83B20E37C509}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.Core.Application", "BankingApp.Core.Application\BankingApp.Core.Application.csproj", "{58ACAD0D-C5CD-4708-B84C-83B20E37C509}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.Infrastructure.Persistence", "BankingApp.Infrastructure.Persistence\BankingApp.Infrastructure.Persistence.csproj", "{25A40EA4-C219-47F8-8BBA-7C62C9090497}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.Infrastructure.Persistence", "BankingApp.Infrastructure.Persistence\BankingApp.Infrastructure.Persistence.csproj", "{25A40EA4-C219-47F8-8BBA-7C62C9090497}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.Infrastructure.Shared", "BankingApp.Infrastucture.Shared\BankingApp.Infrastructure.Shared.csproj", "{4F898066-4377-418A-8578-4061E5587DD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{25A40EA4-C219-47F8-8BBA-7C62C9090497}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25A40EA4-C219-47F8-8BBA-7C62C9090497}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25A40EA4-C219-47F8-8BBA-7C62C9090497}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F898066-4377-418A-8578-4061E5587DD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F898066-4377-418A-8578-4061E5587DD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F898066-4377-418A-8578-4061E5587DD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F898066-4377-418A-8578-4061E5587DD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{ECD08CA4-701B-4FFB-925B-399B1CB2E727} = {81DB689B-6F2E-476E-B7C6-5CA197ACA455}
 		{58ACAD0D-C5CD-4708-B84C-83B20E37C509} = {81DB689B-6F2E-476E-B7C6-5CA197ACA455}
 		{25A40EA4-C219-47F8-8BBA-7C62C9090497} = {4C207668-A1B8-4AC2-97B5-C6F3FA70E8A9}
+		{4F898066-4377-418A-8578-4061E5587DD6} = {4C207668-A1B8-4AC2-97B5-C6F3FA70E8A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {13D3A06D-4E35-457F-97F9-21CD33F87936}

@@ -6,7 +6,7 @@
 
         public string SmtpHost { get; set; }
 
-        public string SmtpPort { get; set; }
+        public int SmtpPort { get; set; }
 
         public string SmtpUser { get; set; }
 
