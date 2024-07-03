@@ -12,7 +12,7 @@ namespace BankingApp.Core.Domain.Entities
         public int AccountNumber { get; set; }
 
         //Navigation Properties
-        public  SavingsAccount SavingsAccount  { get; set;}
+        public SavingsAccount SavingsAccount  { get; set; }
 
     }
 }
