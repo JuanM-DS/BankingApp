@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/not possible because you have unmerged files.
+/appropriate to mark resolution and make a commit.
