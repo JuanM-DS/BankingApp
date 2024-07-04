@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BankingApp.Core.Application\BankingApp.Core.Application.csproj" />
+    <ProjectReference Include="..\BankingApp.Infrastructure.Identity\BankingApp.Infrastructure.Identity.csproj" />
     <ProjectReference Include="..\BankingApp.Infrastructure.Persistence\BankingApp.Infrastructure.Persistence.csproj" />
     <ProjectReference Include="..\BankingApp.Infrastucture.Shared\BankingApp.Infrastructure.Shared.csproj" />
   </ItemGroup>
