@@ -1,4 +1,5 @@
 using BankingApp.Infrastructure.Persistence;
+using BankingApp.Infrastructure.Identity;
 using BankingApp.Infrastructure.Shared;
 
 
@@ -11,10 +12,13 @@ builder.Services.AddControllersWithViews();
 #region Services
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
 builder.Services.AddSharedInfrastructure(builder.Configuration);
+builder.Services.AddIdentityInfrastructure(builder.Configuration);
 #endregion
 
 
 var app = builder.Build();
+
+await app.RunIdentitySeeds();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
