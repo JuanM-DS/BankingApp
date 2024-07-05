@@ -8,5 +8,6 @@ namespace BankingApp.Core.Application.ViewModels.Beneficiary
 {
     public class BeneficiaryViewModel
     {
+
     }
 }

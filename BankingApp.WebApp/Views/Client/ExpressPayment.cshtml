@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Pago expreso";
+
+}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card">
+                <div class="card-header bg-dark text-light">
+                    <h4>Pago expreso</h4>
+                </div>
+                <div class="card-body">
+
+                    <form method="post" asp-controller="" asp-action="" enctype="multipart/form-data">
+
+                        <div class="mb-3">
+                            <label class="form-label">Numero de cuenta de destino: </label>
+                            <input type="number" class="form-control" />
+                            <span class="text-danger"></span>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label">Tus cuentas </label>
+                            <select class="form-select">
+                                <option value="">Seleccione una opcion</option>
+                                <option value="">234876908</option>
+                                <option value="">654879675</option>
+                            </select>
+                            <span class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Monto a pagar: </label>
+                            <input type="number" class="form-control" />
+                            <span class="text-danger"></span>
+                        </div>
+
+
+
+                        @*                         <input type="hidden" asp-for="Id" />
+                        *@
+                        <button type="submit" class="btn btn-primary">Realizar pago</button>
+                        <a asp-controller="Paciente" asp-action="Index" class="btn btn-warning">Volver atras</a>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
