@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace BankingApp.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -59,7 +58,7 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Balance = table.Column<int>(type: "int", nullable: false),
+                    Balance = table.Column<double>(type: "float", nullable: false),
                     IsPrincipal = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -101,11 +100,11 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FromAccountId = table.Column<int>(type: "int", nullable: true),
-                    ToAccountId = table.Column<int>(type: "int", nullable: false),
+                    ToAccountId = table.Column<int>(type: "int", nullable: true),
                     Amount = table.Column<double>(type: "float", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreditCardId = table.Column<int>(type: "int", nullable: true),
-                    LoanId = table.Column<int>(type: "int", nullable: true),
+                    ToCreditCardId = table.Column<int>(type: "int", nullable: true),
+                    ToLoanId = table.Column<int>(type: "int", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -116,18 +115,23 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Payments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Payments_CreditCards_CreditCardId",
-                        column: x => x.CreditCardId,
+                        name: "FK_Payments_CreditCards_ToCreditCardId",
+                        column: x => x.ToCreditCardId,
                         principalTable: "CreditCards",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Payments_Loans_LoanId",
-                        column: x => x.LoanId,
+                        name: "FK_Payments_Loans_ToLoanId",
+                        column: x => x.ToLoanId,
                         principalTable: "Loans",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Payments_SavingsAccounts_FromAccountId",
                         column: x => x.FromAccountId,
+                        principalTable: "SavingsAccounts",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Payments_SavingsAccounts_ToAccountId",
+                        column: x => x.ToAccountId,
                         principalTable: "SavingsAccounts",
                         principalColumn: "Id");
                 });
@@ -138,17 +142,22 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                 column: "AccountNumber");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_CreditCardId",
-                table: "Payments",
-                column: "ToCreditCardId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Payments_FromAccountId",
                 table: "Payments",
                 column: "FromAccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_LoanId",
+                name: "IX_Payments_ToAccountId",
+                table: "Payments",
+                column: "ToAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_ToCreditCardId",
+                table: "Payments",
+                column: "ToCreditCardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_ToLoanId",
                 table: "Payments",
                 column: "ToLoanId");
         }

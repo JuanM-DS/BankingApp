@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BankingApp.Infrastructure.Persistence.Repositories
 {
-    public class GenericRepository<Entity> : IGenericRepository<Entity> where Entity : AuditableBaseEntity
+    public class GenericRepository<Entity> : IGenericRepository<Entity> where Entity : UserAuditableBaseEntity
     {
         private readonly ApplicationContext _dbContext;
 

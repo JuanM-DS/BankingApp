@@ -17,7 +17,7 @@ namespace BankingApp.Infrastructure.Shared.Services
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_emailSettings.EmailFrom);
             email.To.Add(MailboxAddress.Parse(request.To));
-            email.Subject = request.Subjetc;
+            email.Subject = request.Subject;
             var body = new BodyBuilder()
             {
                 HtmlBody = request.Body

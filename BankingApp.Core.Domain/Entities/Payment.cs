@@ -11,7 +11,7 @@ namespace BankingApp.Core.Domain.Entities
 
         public double Amount { get; set; }
 
-        public string Type { get; set; }
+        public byte Type { get; set; }
 
         public int? ToCreditCardId { get; set; }
 

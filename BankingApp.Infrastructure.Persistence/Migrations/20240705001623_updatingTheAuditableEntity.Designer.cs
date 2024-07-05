@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240703041034_addingNavigatorProperties")]
-    partial class addingNavigatorProperties
+    [Migration("20240705001623_updatingTheAuditableEntity")]
+    partial class updatingTheAuditableEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,6 +48,10 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime?>("LastModifiedTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserUserName", "BeneficiaryUserName", "AccountNumber");
 
@@ -176,9 +180,8 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                     b.Property<int?>("ToLoanId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("UserName")
                         .IsRequired()

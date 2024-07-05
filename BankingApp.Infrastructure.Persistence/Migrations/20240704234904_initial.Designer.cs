@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240703033209_Initial")]
-    partial class Initial
+    [Migration("20240704234904_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,9 +158,6 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("ToCreditCardId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("FromAccountId")
                         .HasColumnType("int");
 
@@ -170,10 +167,13 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("ToLoanId")
+                    b.Property<int?>("ToAccountId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ToAccountId")
+                    b.Property<int?>("ToCreditCardId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ToLoanId")
                         .HasColumnType("int");
 
                     b.Property<string>("Type")
@@ -186,9 +186,11 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ToCreditCardId");
-
                     b.HasIndex("FromAccountId");
+
+                    b.HasIndex("ToAccountId");
+
+                    b.HasIndex("ToCreditCardId");
 
                     b.HasIndex("ToLoanId");
 
@@ -203,8 +205,8 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Balance")
-                        .HasColumnType("int");
+                    b.Property<double>("Balance")
+                        .HasColumnType("float");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -244,20 +246,33 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("BankingApp.Core.Domain.Entities.Payment", b =>
                 {
-                    b.HasOne("BankingApp.Core.Domain.Entities.CreditCard", null)
-                        .WithMany("Payments")
-                        .HasForeignKey("ToCreditCardId");
-
                     b.HasOne("BankingApp.Core.Domain.Entities.SavingsAccount", "FromAccount")
-                        .WithMany("Payments")
+                        .WithMany("PaymentsFrom")
                         .HasForeignKey("FromAccountId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("BankingApp.Core.Domain.Entities.Loan", null)
+                    b.HasOne("BankingApp.Core.Domain.Entities.SavingsAccount", "ToAccount")
+                        .WithMany("PaymentsTo")
+                        .HasForeignKey("ToAccountId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("BankingApp.Core.Domain.Entities.CreditCard", "ToCreditCard")
                         .WithMany("Payments")
-                        .HasForeignKey("ToLoanId");
+                        .HasForeignKey("ToCreditCardId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("BankingApp.Core.Domain.Entities.Loan", "ToLoan")
+                        .WithMany("Payments")
+                        .HasForeignKey("ToLoanId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("FromAccount");
+
+                    b.Navigation("ToAccount");
+
+                    b.Navigation("ToCreditCard");
+
+                    b.Navigation("ToLoan");
                 });
 
             modelBuilder.Entity("BankingApp.Core.Domain.Entities.CreditCard", b =>
@@ -274,7 +289,9 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                 {
                     b.Navigation("Beneficiaries");
 
-                    b.Navigation("Payments");
+                    b.Navigation("PaymentsFrom");
+
+                    b.Navigation("PaymentsTo");
                 });
 #pragma warning restore 612, 618
         }
