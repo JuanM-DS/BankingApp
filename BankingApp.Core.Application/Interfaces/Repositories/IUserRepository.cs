@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BankingApp.Core.Application.DTOs.User;
+using BankingApp.Core.Application.Enums;
 
 namespace BankingApp.Core.Application.Interfaces.Repositories
 {
-    internal interface IUserRepository
+    public interface IUserRepository
     {
+        public Task<bool> UpdateAsync(ApplicationUserDTO userDto);
+
+        public Task<bool> DeleteAsycn(ApplicationUserDTO userDto);
+
+        public IQueryable<ApplicationUserDTO> GetAsync();
+
+        public Task<IQueryable<ApplicationUserDTO>> GetAsync(RoleTypes role);
     }
 }

@@ -12,8 +12,6 @@ using BankingApp.Infrastructure.Identity.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
-using System.Numerics;
-using System.Security.Policy;
 using System.Text;
 
 namespace BankingApp.Infrastructure.Identity.Services
@@ -26,7 +24,7 @@ namespace BankingApp.Infrastructure.Identity.Services
             IEmailServices emailServices,
             IMapper mapper
         )
-        : IAccountServices
+        : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
@@ -149,7 +147,7 @@ namespace BankingApp.Infrastructure.Identity.Services
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<RegisterResponseDTO> RegisterAsync(RegisterRequestDTO request)
+        public async Task<RegisterResponseDTO> RegisterAsync(ApplicationUserDTO request, string origin)
         {
             var userByUserName = await _userManager.FindByNameAsync(request.UserName);
             if (userByUserName is not null)
@@ -185,9 +183,9 @@ namespace BankingApp.Infrastructure.Identity.Services
                     Error = result.Errors.First().Description
                 };
 
-            await userManager.AddToRoleAsync(user, request.role.ToString());
+            await userManager.AddToRolesAsync(user, request.Roles.Select(x=>x.ToString()));
 
-            var url = await GetConfirmAccountUrlAsync(user, request.Origin);
+            var url = await GetConfirmAccountUrlAsync(user, origin);
             var email = new EmailRequestDTO()
             {
                 To = user.Email,
