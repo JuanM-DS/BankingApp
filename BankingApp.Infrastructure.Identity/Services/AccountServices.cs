@@ -21,16 +21,18 @@ namespace BankingApp.Infrastructure.Identity.Services
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailServices emailServices,
-            IMapper mapper
+            IEmailService emailServices,
+            IMapper mapper,
+            IUrlService urlService
         )
         : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
-        private readonly IEmailServices _emailServices = emailServices;
+        private readonly IEmailService _emailServices = emailServices;
         private readonly IMapper _mapper = mapper;
+        private readonly IUrlService _urlService = urlService;
 
         public async Task<AuthenticationResponseDTO> AuthenticationAsync(AuthenticationRequestDTO request)
         {
@@ -128,8 +130,11 @@ namespace BankingApp.Infrastructure.Identity.Services
                     Success = false,
                     Error = $"{userByEmail.Email} is not confirmed"
                 };
+            
+            var token = await _userManager.GeneratePasswordResetTokenAsync(userByEmail);
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            var url = await GetResetPasswordUrlAsync(userByEmail, request.Origin);
+            var url = _urlService.GetResetPasswordUrl(token, userByEmail.Email);
 
             var emailRequest = new EmailRequestDTO()
             {
@@ -147,7 +152,7 @@ namespace BankingApp.Infrastructure.Identity.Services
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<RegisterResponseDTO> RegisterAsync(ApplicationUserDTO request, string origin)
+        public async Task<RegisterResponseDTO> RegisterAsync(ApplicationUserDTO request)
         {
             var userByUserName = await _userManager.FindByNameAsync(request.UserName);
             if (userByUserName is not null)
@@ -185,7 +190,10 @@ namespace BankingApp.Infrastructure.Identity.Services
 
             await userManager.AddToRolesAsync(user, request.Roles.Select(x=>x.ToString()));
 
-            var url = await GetConfirmAccountUrlAsync(user, origin);
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+            var url = _urlService.GetConfimrEmailUrl(token, userByEmail.Email);
             var email = new EmailRequestDTO()
             {
                 To = user.Email,
@@ -224,32 +232,6 @@ namespace BankingApp.Infrastructure.Identity.Services
                 };
             return new() { Success = true };
 
-        }
-
-        private async Task<string> GetResetPasswordUrlAsync(ApplicationUser user, string origin)
-        {
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-            var route = "Login/ResetPassword";
-            var uri = new Uri(string.Concat(origin,"/", route));
-            var finalUrl = QueryHelpers.AddQueryString(uri.ToString(), "Email", user.Email);
-            finalUrl = QueryHelpers.AddQueryString(finalUrl, "Token",  code);
-
-            return finalUrl;
-        }
-
-        private async Task<string> GetConfirmAccountUrlAsync(ApplicationUser user, string origin)
-        {
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-            var route = "Login/ConfirmAccount";
-            var uri = new Uri(string.Concat(origin,"/",route));
-            var finalUrl = QueryHelpers.AddQueryString(uri.ToString(), "UserId", user.Id);
-            finalUrl = QueryHelpers.AddQueryString(finalUrl, "Token", code);
-
-            return finalUrl;
         }
     }
 }

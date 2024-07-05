@@ -4,7 +4,7 @@ using BankingApp.Core.Application.ViewModels.User;
 
 namespace BankingApp.Core.Application.Interfaces.Services
 {
-    public interface IUserServices
+    public interface IUserService
     {
         public Task<Response<SaveUserViewModel>> CreateAsync(SaveUserViewModel userViewModel);
 

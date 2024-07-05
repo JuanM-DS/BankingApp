@@ -2,7 +2,7 @@
 
 namespace BankingApp.Core.Application.Interfaces.Services
 {
-    public interface IEmailServices
+    public interface IEmailService
     {
         public Task SendEmailAsync(EmailRequestDTO request);
     }

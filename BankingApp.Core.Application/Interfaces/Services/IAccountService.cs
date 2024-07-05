@@ -11,7 +11,7 @@ namespace BankingApp.Core.Application.Interfaces.Services
     {
         public Task<AuthenticationResponseDTO> AuthenticationAsync(AuthenticationRequestDTO request);
 
-        public Task<RegisterResponseDTO> RegisterAsync(ApplicationUserDTO request, string origin);
+        public Task<RegisterResponseDTO> RegisterAsync(ApplicationUserDTO request);
 
         public Task LogOutAsync();
 

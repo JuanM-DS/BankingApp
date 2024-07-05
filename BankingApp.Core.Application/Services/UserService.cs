@@ -1,13 +1,19 @@
-﻿using BankingApp.Core.Application.CostomEntities;
+﻿using AutoMapper;
+using BankingApp.Core.Application.CostomEntities;
 using BankingApp.Core.Application.Enums;
+using BankingApp.Core.Application.Interfaces.Repositories;
 using BankingApp.Core.Application.Interfaces.Services;
 using BankingApp.Core.Application.ViewModels.User;
 
 namespace BankingApp.Core.Application.Services
 {
-    internal class UserService : IUserServices
+    internal class UserService(IUserRepository userRepository,IAccountService accountService ,IMapper mapper) : IUserService
     {
-        public Task<Response<SaveUserViewModel>> CreateAsync(SaveUserViewModel userViewModel)
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IAccountService _accountService = accountService;
+        private readonly IMapper _mapper = mapper;
+
+        public async Task<Response<SaveUserViewModel>> CreateAsync(SaveUserViewModel userViewModel)
         {
             throw new NotImplementedException();
         }
