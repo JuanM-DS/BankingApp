@@ -16,7 +16,7 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
+            foreach (var entry in ChangeTracker.Entries<UserAuditableBaseEntity>())
             {
                 switch (entry.State)
                 {

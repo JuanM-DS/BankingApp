@@ -1,5 +1,4 @@
-﻿using BankingApp.Core.Application.Enums;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace BankingApp.Infrastructure.Identity.Entities
 {
@@ -12,5 +11,15 @@ namespace BankingApp.Infrastructure.Identity.Entities
         public byte Status { get; set; }
 
         public string IdCard { get; set; }
+
+        public string? PhotoUrl { get; set; }
+
+        public string CreatedBy { get; set; }
+
+        public DateTime CreatedTime { get; set; }
+
+        public string? LastModifiedBy { get; set; }
+
+        public DateTime? LastModifiedTime { get; set; }
     }
 }
