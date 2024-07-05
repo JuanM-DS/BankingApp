@@ -46,6 +46,10 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("UserUserName", "BeneficiaryUserName", "AccountNumber");
 
                     b.HasIndex("AccountNumber");
@@ -173,9 +177,8 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                     b.Property<int?>("ToLoanId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("UserName")
                         .IsRequired()

@@ -3,7 +3,7 @@
 
 namespace BankingApp.Core.Domain.Entities
 {
-    public class Beneficiary : AuditableBaseEntity
+    public class Beneficiary : UserAuditableBaseEntity
     {
         public string UserUserName { get; set; }
 

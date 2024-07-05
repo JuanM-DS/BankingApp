@@ -1,4 +1,5 @@
 ﻿using BankingApp.Core.Application.Enums;
+using BankingApp.Core.Domain.Common;
 using BankingApp.Infrastructure.Identity.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -11,6 +12,26 @@ namespace BankingApp.Infrastructure.Identity.Contexts
         public BankingAppIdentityDbContext(DbContextOptions option) : base(option)
         {}
 
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var entry in ChangeTracker.Entries<UserAuditableBaseEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedTime = DateTime.Now;
+                        entry.Entity.CreatedBy = "DefaultAppUser";
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.LastModifiedTime = DateTime.Now;
+                        entry.Entity.LastModifiedBy = "DefaultAppUser";
+                        break;
+                }
+            }
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -19,7 +40,9 @@ namespace BankingApp.Infrastructure.Identity.Contexts
             builder.Entity<ApplicationUser>(e =>
             {
                 e.ToTable(name : "Users");
-                e.Property(x => x.Status);
+                e.Property(x => x.Status)
+                .HasDefaultValue((int)UserStatus.active);
+                e.Property(x => x.PhotoUrl);
                 e.Property(x => x.FirstName);
                 e.Property(x => x.LastName);
                 e.Property(x => x.IdCard);
