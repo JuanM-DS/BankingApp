@@ -4,6 +4,7 @@ using BankingApp.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240705205248_ChangeUserUserNameToUserName")]
+    partial class ChangeUserUserNameToUserName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,7 +158,7 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("FromProductId")
+                    b.Property<int?>("FromAccountId")
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
@@ -164,7 +167,7 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("ToProductId")
+                    b.Property<int?>("ToAccountId")
                         .HasColumnType("int");
 
                     b.Property<byte>("Type")
@@ -176,9 +179,9 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FromProductId");
+                    b.HasIndex("FromAccountId");
 
-                    b.HasIndex("ToProductId");
+                    b.HasIndex("ToAccountId");
 
                     b.ToTable("Payments", (string)null);
                 });
@@ -234,32 +237,32 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("BankingApp.Core.Domain.Entities.CreditCard", "FromCrediCard")
                         .WithMany("PaymentsFrom")
-                        .HasForeignKey("FromProductId")
+                        .HasForeignKey("FromAccountId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("BankingApp.Core.Domain.Entities.Loan", "FromLoan")
                         .WithMany("PaymentsFrom")
-                        .HasForeignKey("FromProductId")
+                        .HasForeignKey("FromAccountId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("BankingApp.Core.Domain.Entities.SavingsAccount", "FromAccount")
                         .WithMany("PaymentsFrom")
-                        .HasForeignKey("FromProductId")
+                        .HasForeignKey("FromAccountId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("BankingApp.Core.Domain.Entities.CreditCard", "ToCreditCard")
                         .WithMany("PaymentsTo")
-                        .HasForeignKey("ToProductId")
+                        .HasForeignKey("ToAccountId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("BankingApp.Core.Domain.Entities.Loan", "ToLoan")
                         .WithMany("PaymentsTo")
-                        .HasForeignKey("ToProductId")
+                        .HasForeignKey("ToAccountId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("BankingApp.Core.Domain.Entities.SavingsAccount", "ToAccount")
                         .WithMany("PaymentsTo")
-                        .HasForeignKey("ToProductId")
+                        .HasForeignKey("ToAccountId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("FromAccount");

@@ -8,5 +8,6 @@ namespace BankingApp.Core.Application.ViewModels.SavingsAccount
 {
     public class SavingsAccountViewModel
     {
+        public int Id { get; set; }
     }
 }

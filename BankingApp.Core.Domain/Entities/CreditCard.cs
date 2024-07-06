@@ -14,6 +14,8 @@ namespace BankingApp.Core.Domain.Entities
         public byte PaymentDay { get; set; }
 
         //Navigation Property
-        public ICollection<Payment> Payments { get; set; }
+        public ICollection<Payment> PaymentsTo { get; set; }
+
+        public ICollection<Payment> PaymentsFrom { get; set; }
     }
 }

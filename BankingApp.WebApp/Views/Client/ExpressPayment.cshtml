@@ -1,4 +1,6 @@
-﻿@{
+﻿@using BankingApp.Core.Application.ViewModels.Payment
+@model SaveExpressPaymentViewModel
+@{
     ViewData["Title"] = "Pago expreso";
 
 }
@@ -13,29 +15,31 @@
                 </div>
                 <div class="card-body">
 
-                    <form method="post" asp-controller="" asp-action="" enctype="multipart/form-data">
+                    <form method="post" asp-controller="Client" asp-action="ExpressPayment" enctype="multipart/form-data">
 
                         <div class="mb-3">
-                            <label class="form-label">Numero de cuenta de destino: </label>
-                            <input type="number" class="form-control" />
-                            <span class="text-danger"></span>
+                            <label asp-for="ToAccount" class="form-label">Numero de cuenta de destino: </label>
+                            <input asp-for="ToAccount" type="number" class="form-control" />
+                            <span asp-validation-for="ToAccount" class="text-danger"></span>
                         </div>
 
 
                         <div class="mb-3">
-                            <label class="form-label">Tus cuentas </label>
-                            <select class="form-select">
+                            <label asp-for="FromAccountId" class="form-label">Tus cuentas</label>
+                            <select asp-for="FromAccountId" class="form-select">
                                 <option value="">Seleccione una opcion</option>
-                                <option value="">234876908</option>
-                                <option value="">654879675</option>
+                                @foreach (var Account in Model.FromAccounts)
+                                {
+                                    <option value="@Account.Id">@Account.Id</option>
+                                }
                             </select>
-                            <span class="text-danger"></span>
+                            <span asp-validation-for="FromAccountId" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Monto a pagar: </label>
-                            <input type="number" class="form-control" />
-                            <span class="text-danger"></span>
+                            <label asp-for="Amount" class="form-label">Monto a pagar: </label>
+                            <input asp-for="Amount" type="number" class="form-control" />
+                            <span asp-validation-for="Amount" class="text-danger"></span>
                         </div>
 
 
@@ -43,7 +47,7 @@
                         @*                         <input type="hidden" asp-for="Id" />
                         *@
                         <button type="submit" class="btn btn-primary">Realizar pago</button>
-                        <a asp-controller="Paciente" asp-action="Index" class="btn btn-warning">Volver atras</a>
+                        <a asp-controller="Client" asp-action="Index" class="btn btn-warning">Volver atras</a>
 
 
                     </form>
@@ -56,3 +60,31 @@
 
 </div>
 
+
+
+<div class="modal fade" id="TransactionCancelled" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Transacción cancelada</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>ViewBag.Message</p>
+            </div>
+            <div class="modal-footer">
+                <a asp-controller="Client" asp-action="Index" type="button" class="btn btn-primary">OK</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.Message != null)
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = new bootstrap.Modal(document.getElementById('TransactionCancelled'));
+            modal.show();
+        });
+    </script>
+}

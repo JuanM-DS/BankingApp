@@ -2,7 +2,9 @@
 using BankingApp.Core.Application.Interfaces.Repositories;
 using BankingApp.Core.Application.Interfaces.Services;
 using BankingApp.Core.Application.ViewModels.CreditCard;
+using BankingApp.Core.Application.ViewModels.Payment;
 using BankingApp.Core.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankingApp.Core.Application.Services
 {
@@ -16,5 +18,7 @@ namespace BankingApp.Core.Application.Services
             _creditCardRepository = creditCardRepository;
             _mapper = mapper;
         }
+
+        
     }
 }

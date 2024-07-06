@@ -6,6 +6,8 @@
         CreditCard,
         Loan,
         InitialDeposit,
-        Deposit
+        Deposit,
+        CashAdvance,
+        Disbursement
     }
 }

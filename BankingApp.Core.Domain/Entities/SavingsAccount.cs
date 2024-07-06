@@ -16,5 +16,7 @@ namespace BankingApp.Core.Domain.Entities
         public ICollection<Payment> PaymentsFrom { get; set; }
 
         public ICollection<Beneficiary> Beneficiaries { get;}
+
+
     }
 }

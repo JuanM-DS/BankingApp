@@ -8,5 +8,6 @@ namespace BankingApp.Core.Application.ViewModels.CreditCard
 {
     public class CreditCardViewModel
     {
+        public int Id { get; set; }
     }
 }

@@ -10,6 +10,6 @@ namespace BankingApp.Core.Application.Interfaces.Services
 {
     public interface IPaymentService : IGenericService<SavePaymentViewModel, PaymentViewModel, Payment>
     {
-
+        Task<double> TransactionsTillCutoffDay(int CutoffDay, int CreditCardNumber);
     }
 }

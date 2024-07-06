@@ -8,5 +8,7 @@ namespace BankingApp.Core.Application.ViewModels.SavingsAccount
 {
     public class SaveSavingsAccountViewModel
     {
+        public int Id { get; set; }
+        public double Balance { get; set; }
     }
 }

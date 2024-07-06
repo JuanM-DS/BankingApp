@@ -68,7 +68,7 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
                 .HasKey(s => s.Id);
 
             modelBuilder.Entity<Beneficiary>()
-                .HasKey(b => new {b.UserUserName,b.BeneficiaryUserName,b.AccountNumber});
+                .HasKey(b => new {b.UserName,b.BeneficiaryUserName,b.AccountNumber});
 
             #endregion
 
@@ -76,13 +76,13 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
             modelBuilder.Entity<SavingsAccount>()
                 .HasMany<Payment>(s => s.PaymentsFrom)
                 .WithOne(p => p.FromAccount)
-                .HasForeignKey(p => p.FromAccountId)
+                .HasForeignKey(p => p.FromProductId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<SavingsAccount>()
                 .HasMany<Payment>(s => s.PaymentsTo)
                 .WithOne(p => p.ToAccount)
-                .HasForeignKey(p => p.ToAccountId)
+                .HasForeignKey(p => p.ToProductId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<SavingsAccount>()
@@ -92,15 +92,27 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<CreditCard>()
-               .HasMany<Payment>(s => s.Payments)
+               .HasMany<Payment>(s => s.PaymentsTo)
                .WithOne(b => b.ToCreditCard)
-               .HasForeignKey(b => b.ToCreditCardId)
+               .HasForeignKey(b => b.ToProductId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<CreditCard>()
+               .HasMany<Payment>(s => s.PaymentsFrom)
+               .WithOne(b => b.FromCrediCard)
+               .HasForeignKey(b => b.FromProductId)
                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Loan>()
-               .HasMany<Payment>(s => s.Payments)
+               .HasMany<Payment>(s => s.PaymentsFrom)
+               .WithOne(b => b.FromLoan)
+               .HasForeignKey(b => b.FromProductId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Loan>()
+               .HasMany<Payment>(s => s.PaymentsTo)
                .WithOne(b => b.ToLoan)
-               .HasForeignKey(b => b.ToLoanId)
+               .HasForeignKey(b => b.ToProductId)
                .OnDelete(DeleteBehavior.NoAction);
             #endregion
 
@@ -167,13 +179,9 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
             #region Payment
             modelBuilder.Entity<Payment>(payment =>
             {
-                payment.Property(p => p.FromAccountId);
+                payment.Property(p => p.FromProductId);
 
-                payment.Property(p => p.ToAccountId);
-
-                payment.Property(p => p.ToCreditCardId);
-
-                payment.Property(p => p.ToLoanId);
+                payment.Property(p => p.ToProductId);
 
                 payment.Property(p => p.Amount)
                 .IsRequired();

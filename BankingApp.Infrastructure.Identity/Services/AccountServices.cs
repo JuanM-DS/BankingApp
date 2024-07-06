@@ -253,5 +253,13 @@ namespace BankingApp.Infrastructure.Identity.Services
 
             return finalUrl;
         }
+
+        public async Task<ApplicationUserDTO> GetUserByUserName(string userName)
+        {
+            ApplicationUser user = await _userManager.FindByNameAsync(userName);
+            ApplicationUserDTO userDTO = _mapper.Map<ApplicationUserDTO>(user);
+
+            return userDTO;
+        }
     }
 }

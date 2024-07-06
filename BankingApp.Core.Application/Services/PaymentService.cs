@@ -16,5 +16,11 @@ namespace BankingApp.Core.Application.Services
             _paymentRepository = paymentRepository;
             _mapper = mapper;
         }
+
+        public async Task<double> TransactionsTillCutoffDay(int CutoffDay, int CreditCardNumber)
+        {
+
+            return await _paymentRepository.TransactionsTillCutoffDay(CutoffDay, CreditCardNumber); ;
+        }
     }
 }
