@@ -44,7 +44,7 @@ namespace BankingApp.Infrastructure.Identity.Services
                     Error = $"{request.UserName} is not register"
                 };
 
-            if(userByUserName.Status is (int)UserStatus.inactive)
+            if(userByUserName.Status is (int)UserStatus.Inactive)
                 return new()
                 {
                     Success = false,
@@ -117,7 +117,7 @@ namespace BankingApp.Infrastructure.Identity.Services
                     Error = $"{request.Email} is not register"
                 };
 
-            if (userByEmail.Status is (int)UserStatus.inactive)
+            if (userByEmail.Status is (int)UserStatus.Inactive)
                 return new()
                 {
                     Success = false,

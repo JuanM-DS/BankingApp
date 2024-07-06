@@ -36,9 +36,9 @@ namespace BankingApp.Core.Application.Services
             await _repository.DeleteAsync(entity);
         }
 
-        public virtual async Task<List<ViewModel>> GetAllViewModel()
+        public virtual List<ViewModel> GetAllViewModel()
         {
-            var entityList = await _repository.GetAllAsync();
+            var entityList = _repository.GetAllAsync().ToList();
 
             return _mapper.Map<List<ViewModel>>(entityList);
         }

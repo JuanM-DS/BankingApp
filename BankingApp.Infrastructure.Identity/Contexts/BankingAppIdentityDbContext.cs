@@ -41,7 +41,7 @@ namespace BankingApp.Infrastructure.Identity.Contexts
             {
                 e.ToTable(name : "Users");
                 e.Property(x => x.Status)
-                .HasDefaultValue((int)UserStatus.active);
+                .HasDefaultValue((int)UserStatus.Active);
                 e.Property(x => x.PhotoUrl);
                 e.Property(x => x.FirstName);
                 e.Property(x => x.LastName);
