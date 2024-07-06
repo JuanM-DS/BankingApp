@@ -2,6 +2,7 @@
 using BankingApp.Core.Domain.Common;
 using BankingApp.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BankingApp.Infrastructure.Persistence.Repositories
 {
@@ -43,16 +44,16 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
             return await _dbContext.Set<Entity>().FindAsync(id);
         }
 
-        public virtual async Task<List<Entity>> GetAllWithIncludeAsync(List<string> properties)
+        public IQueryable<Entity> GetAllWithInclude(params Expression<Func<Entity, object>>[] properties)
         {
             var query = _dbContext.Set<Entity>().AsQueryable();
 
-            foreach (string property in properties)
+            foreach (var property in properties)
             {
                 query = query.Include(property);
             }
 
-            return await query.ToListAsync();
+            return query;
         }
     }
 }

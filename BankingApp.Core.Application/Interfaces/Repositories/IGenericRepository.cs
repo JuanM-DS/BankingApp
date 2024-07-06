@@ -1,4 +1,5 @@
 ﻿using BankingApp.Core.Domain.Common;
+using System.Linq.Expressions;
 
 namespace BankingApp.Core.Application.Interfaces.Repositories
 {
@@ -9,6 +10,6 @@ namespace BankingApp.Core.Application.Interfaces.Repositories
         Task DeleteAsync(Entity entity);
         Task<List<Entity>> GetAllAsync();
         Task<Entity> GetByIdAsync(int id);
-        Task<List<Entity>> GetAllWithIncludeAsync(List<string> properties);
+        IQueryable<Entity> GetAllWithInclude(params Expression<Func<Entity, object>>[] properties);
     }
 }

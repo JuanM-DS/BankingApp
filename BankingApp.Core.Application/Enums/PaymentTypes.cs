@@ -2,10 +2,11 @@
 {
     public enum PaymentTypes
     {
-        InitialDeposit,
         Deposit,
         CashAdvance,
         Disbursement,
-        Transfers
+        Transfers,
+        PaymentToCreditCard,
+        PaymentToLoan
     }
 }
