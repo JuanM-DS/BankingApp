@@ -19,8 +19,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<double> TransactionsTillCutoffDay(int CutoffDay, int CreditCardNumber)
         {
-
-            return await _paymentRepository.TransactionsTillCutoffDay(CutoffDay, CreditCardNumber); ;
+            return await _paymentRepository.TransactionsTillCutoffDay(CutoffDay, CreditCardNumber);
         }
     }
 }
