@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BankingApp.Core.Application.DTOs.User;
 using BankingApp.Core.Application.ViewModels.Beneficiary;
+using BankingApp.Core.Application.ViewModels.Payment;
 using BankingApp.Core.Application.ViewModels.User;
+using BankingApp.Core.Domain.Entities;
 
 namespace BankingApp.Core.Application.Mappings
 {
@@ -29,6 +31,23 @@ namespace BankingApp.Core.Application.Mappings
 
             CreateMap<ApplicationUserDTO, UserViewModel>()
                 .ReverseMap();
+            #endregion
+
+            #region payments
+            CreateMap<Payment, SavePaymentViewModel>()
+                .ReverseMap()
+                .ForMember(des => des.FromAccount, opt => opt.Ignore())
+                .ForMember(des => des.FromCrediCard, opt => opt.Ignore())
+                .ForMember(des => des.FromLoan, opt => opt.Ignore())
+                .ForMember(des => des.ToAccount, opt => opt.Ignore())
+                .ForMember(des => des.ToCreditCard, opt => opt.Ignore())
+                .ForMember(des => des.ToLoan, opt => opt.Ignore());
+
+            CreateMap<Payment, PaymentViewModel>()
+                .ReverseMap();
+            #endregion
+
+            #region nex region
             #endregion
         }
     }
