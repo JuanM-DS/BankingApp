@@ -8,7 +8,7 @@ using MimeKit;
 
 namespace BankingApp.Infrastructure.Shared.Services
 {
-    public class EmailServices(IOptions<EmailSettings> emailSettings) : IEmailServices
+    public class EmailService(IOptions<EmailSettings> emailSettings) : IEmailService
     {
         private readonly EmailSettings _emailSettings = emailSettings.Value;
 

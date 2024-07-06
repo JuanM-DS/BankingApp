@@ -3,14 +3,15 @@ using BankingApp.Core.Application.DTOs.Account.ConfirmAccount;
 using BankingApp.Core.Application.DTOs.Account.ForgotPassword;
 using BankingApp.Core.Application.DTOs.Account.Register;
 using BankingApp.Core.Application.DTOs.Account.ResetPassword;
+using BankingApp.Core.Application.DTOs.User;
 
 namespace BankingApp.Core.Application.Interfaces.Services
 {
-    public interface IAccountServices
+    public interface IAccountService
     {
         public Task<AuthenticationResponseDTO> AuthenticationAsync(AuthenticationRequestDTO request);
 
-        public Task<RegisterResponseDTO> RegisterAsync(RegisterRequestDTO request);
+        public Task<RegisterResponseDTO> RegisterAsync(ApplicationUserDTO request);
 
         public Task LogOutAsync();
 
