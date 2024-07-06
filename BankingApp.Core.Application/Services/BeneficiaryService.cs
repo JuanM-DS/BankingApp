@@ -12,13 +12,13 @@ namespace BankingApp.Core.Application.Services
     {
         private readonly IBeneficiaryRepository _beneficiaryRepository;
         private readonly IMapper _mapper;
-        private readonly IAccountServices _accountServices;
+        private readonly IUserRepository _userResporitory;
 
-        public BeneficiaryService(IBeneficiaryRepository beneficiaryRepository, IMapper mapper, IAccountServices accountServices) : base(beneficiaryRepository, mapper)
+        public BeneficiaryService(IBeneficiaryRepository beneficiaryRepository, IMapper mapper, IUserRepository userResporitory) : base(beneficiaryRepository, mapper)
         {
             _beneficiaryRepository = beneficiaryRepository;
             _mapper = mapper;
-            _accountServices = accountServices;
+            _userResporitory = userResporitory;
         }
 
         public async Task<List<BeneficiaryViewModel>> ListBeneficiaries()
@@ -30,7 +30,7 @@ namespace BankingApp.Core.Application.Services
 
             foreach (var bn in beneficiaries)
             {
-                user = await _accountServices.GetUserByUserName(bn.UserUserName);
+                user = await _userResporitory.GetUserByUserName(bn.UserUserName);
                 beneficiary = bn;
                 beneficiary = _mapper.Map<BeneficiaryViewModel>(user);
                 fullBeneficiaries.Add(beneficiary);

@@ -45,15 +45,14 @@ namespace BankingApp.WebApp.Controllers
             return View("Beneficiary");
         }
 
-        public async Task<IActionResult> DeleteBeneficiary()
+        public async Task<IActionResult> DeleteBeneficiary( string UserName)
         {
-            return View();
+            return View("DeleteBeneficiary",UserName);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeletePost(int id)
+        public async Task<IActionResult> DeletePost(string UserName)
         {
-            await _beneficiaryService.Delete(id);
             return RedirectToRoute(new { controller = "Client", action = "Beneficiary" });
         }
 
