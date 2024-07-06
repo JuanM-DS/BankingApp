@@ -1,7 +1,6 @@
 ﻿using BankingApp.Core.Application.Interfaces.Services;
 using BankingApp.Core.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace BankingApp.Core.Application
 {
