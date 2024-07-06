@@ -70,13 +70,13 @@ namespace BankingApp.Core.Application.Services
             if(filters is not null)
             {
                 if (filters.Email is not null)
-                    users.Where(x => x.Email == filters.Email);
+                    users = users.Where(x => x.Email == filters.Email);
 
                 if (filters.IdCard is not null)
-                    users.Where(x => x.IdCard == filters.IdCard);
+                    users = users.Where(x => x.IdCard == filters.IdCard);
 
                 if (filters.Status is not null)
-                    users.Where(x => x.Status == filters.Status);
+                    users = users.Where(x => x.Status == filters.Status);
             }
 
             var userViewModels = _mapper.Map<IEnumerable<UserViewModel>>(users.AsEnumerable());

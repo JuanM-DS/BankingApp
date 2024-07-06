@@ -13,6 +13,9 @@ namespace BankingApp.Core.Domain.Entities
 
         public byte Type { get; set; }
 
+        public byte ProductType { get; set; }
+
+
         //Navigation Property
         public SavingsAccount? FromAccount { get; set; }
         public CreditCard? FromCrediCard { get; set; }

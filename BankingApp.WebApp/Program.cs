@@ -1,7 +1,6 @@
-using BankingApp.Infrastructure.Persistence;
 using BankingApp.Infrastructure.Identity;
+using BankingApp.Infrastructure.Persistence;
 using BankingApp.Infrastructure.Shared;
-using System.Reflection;
 
 
 var builder = WebApplication.CreateBuilder(args);

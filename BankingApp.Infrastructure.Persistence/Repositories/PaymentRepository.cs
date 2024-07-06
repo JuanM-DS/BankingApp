@@ -39,7 +39,7 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
                 {
                     TotalAmount -= payment.Amount;
                 }
-                else if (payment.Type == (byte)PaymentTypes.CreditCard)
+                else if (payment.ProductType == (byte)ProductTypes.CreditCard)
                 {
                     TotalAmount += payment.Amount;
                 }

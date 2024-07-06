@@ -2,12 +2,10 @@
 {
     public enum PaymentTypes
     {
-        SavingsAccount,
-        CreditCard,
-        Loan,
         InitialDeposit,
         Deposit,
         CashAdvance,
-        Disbursement
+        Disbursement,
+        Transfers
     }
 }

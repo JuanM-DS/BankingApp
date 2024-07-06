@@ -1,7 +1,6 @@
 ﻿using BankingApp.Core.Application.Interfaces.Services;
 using BankingApp.Core.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace BankingApp.Core.Application
 {
@@ -16,6 +15,7 @@ namespace BankingApp.Core.Application
             services.AddTransient<ILoanService, LoanService>();
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<ISavingsAccountService, SavingsAccountService>();
+            services.AddTransient<IUserService, UserService>();
             #endregion
         }
     }
