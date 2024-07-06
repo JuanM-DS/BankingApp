@@ -1,5 +1,6 @@
 ﻿using BankingApp.Core.Application.CostomEntities;
 using BankingApp.Core.Application.Enums;
+using BankingApp.Core.Application.QuerryFiilters;
 using BankingApp.Core.Application.ViewModels.User;
 
 namespace BankingApp.Core.Application.Interfaces.Services
@@ -18,7 +19,7 @@ namespace BankingApp.Core.Application.Interfaces.Services
 
         public Task<Response<UserViewModel>> GetByNameAsync(string userName);
 
-        public Response<IEnumerable<UserViewModel>> GetAll();
+        public Response<IEnumerable<UserViewModel>> GetAll(UserQueryFilter? filters = null);
 
         public Task<Response<IEnumerable<UserViewModel>>> GetAll(RoleTypes roleType);
     }

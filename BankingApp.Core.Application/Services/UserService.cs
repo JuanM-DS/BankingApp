@@ -4,12 +4,13 @@ using BankingApp.Core.Application.DTOs.User;
 using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.Interfaces.Repositories;
 using BankingApp.Core.Application.Interfaces.Services;
+using BankingApp.Core.Application.QuerryFiilters;
 using BankingApp.Core.Application.ViewModels.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankingApp.Core.Application.Services
 {
-    internal class UserService(IUserRepository userRepository,IAccountService accountService ,IMapper mapper) : IUserService
+    public class UserService(IUserRepository userRepository,IAccountService accountService ,IMapper mapper) : IUserService
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IAccountService _accountService = accountService;
@@ -63,11 +64,22 @@ namespace BankingApp.Core.Application.Services
             };
         }
 
-        public Response<IEnumerable<UserViewModel>> GetAll()
+        public Response<IEnumerable<UserViewModel>> GetAll(UserQueryFilter? filters = null)
         {
-            var users =  _userRepository.Get().AsEnumerable();
+            var users =  _userRepository.Get();
+            if(filters is not null)
+            {
+                if (filters.Email is not null)
+                    users.Where(x => x.Email == filters.Email);
 
-            var userViewModels = _mapper.Map<IEnumerable<UserViewModel>>(users);
+                if (filters.IdCard is not null)
+                    users.Where(x => x.IdCard == filters.IdCard);
+
+                if (filters.Status is not null)
+                    users.Where(x => x.Status == filters.Status);
+            }
+
+            var userViewModels = _mapper.Map<IEnumerable<UserViewModel>>(users.AsEnumerable());
 
             return new()
             {
