@@ -9,7 +9,9 @@ namespace BankingApp.Core.Application.Interfaces.Repositories
 
         public Task<bool> DeleteAsycn(ApplicationUserDTO userDto);
 
-        public IQueryable<ApplicationUserDTO> GetAsync();
+        public Task<ApplicationUserDTO> GetAsync(string id);
+
+        public IQueryable<ApplicationUserDTO> Get();
 
         public Task<IQueryable<ApplicationUserDTO>> GetAsync(RoleTypes role);
     }

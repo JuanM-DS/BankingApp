@@ -29,7 +29,7 @@ namespace BankingApp.Infrastructure.Identity.Repository
             }
         }
 
-        public IQueryable<ApplicationUserDTO> GetAsync()
+        public IQueryable<ApplicationUserDTO> Get()
         {
             var users = context.Users.AsQueryable();
 
@@ -59,6 +59,13 @@ namespace BankingApp.Infrastructure.Identity.Repository
             var users = context.Users.Where(x => UserIds.Contains(x.Id));
 
             return _mapper.Map<IQueryable<ApplicationUserDTO>>(users);
+        }
+
+        public async Task<ApplicationUserDTO> GetAsync(string id)
+        {
+            var user = await context.Users.FindAsync(id);
+            var userDto = _mapper.Map<ApplicationUserDTO>(user);
+            return userDto;
         }
 
         public async Task<bool> UpdateAsync(ApplicationUserDTO userDto)

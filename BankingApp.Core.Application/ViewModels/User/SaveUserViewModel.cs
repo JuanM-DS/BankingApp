@@ -37,6 +37,6 @@ namespace BankingApp.Core.Application.ViewModels.User
         public string? PhotoUrl { get; set; }
 
         [DataType(DataType.Upload)]
-        public IFormFile? FIle { get; set; }
+        public IFormFile? File { get; set; }
     }
 }
