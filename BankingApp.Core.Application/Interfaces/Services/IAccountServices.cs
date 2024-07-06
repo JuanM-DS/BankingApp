@@ -7,19 +7,18 @@ using BankingApp.Core.Application.DTOs.User;
 
 namespace BankingApp.Core.Application.Interfaces.Services
 {
-    public interface IAccountServices
+    public interface IAccountService
     {
-        Task<AuthenticationResponseDTO> AuthenticationAsync(AuthenticationRequestDTO request);
+        public Task<AuthenticationResponseDTO> AuthenticationAsync(AuthenticationRequestDTO request);
 
-        Task<RegisterResponseDTO> RegisterAsync(RegisterRequestDTO request);
+        public Task<RegisterResponseDTO> RegisterAsync(ApplicationUserDTO request);
 
-        Task LogOutAsync();
+        public Task LogOutAsync();
 
-        Task<ConfirmAccountResponseDTO> ConfirmAccountAsync(ConfirmAccountRequestDTO request);
+        public Task<ConfirmAccountResponseDTO> ConfirmAccountAsync(ConfirmAccountRequestDTO request);
 
-        Task<ForgotPasswordResponseDTO> ForgotPasswordAsync(ForgotPasswordRequestDTO request);
+        public Task<ForgotPasswordResponseDTO> ForgotPasswordAsync(ForgotPasswordRequestDTO request);
 
-        Task<ResetPasswordResponseDTO> ResetPasswordAsync(ResetPasswordRequestDTO request);
-        Task<ApplicationUserDTO> GetUserByUserName(string userName);
+        public Task<ResetPasswordResponseDTO> ResetPasswordAsync(ResetPasswordRequestDTO request);
     }
 }
