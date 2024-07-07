@@ -16,5 +16,17 @@ namespace BankingApp.Core.Application.Services
             _savingsAccountRepository = savingsAccountRepository;
             _mapper = mapper;
         }
+
+        public List<SavingsAccount> GetAllByUserWithInclude(string userName)
+        {
+            var savingsAccount = _savingsAccountRepository.GetAllWithInclude(x => x.PaymentsFrom, x => x.PaymentsTo, x=>x.Beneficiaries);
+
+            var savingsAccounts = savingsAccount.Where(x => x.UserName == userName)
+                                               .ToList();
+
+            var savingsAccountViewModel = _mapper.Map<List<SavingsAccount>>(savingsAccounts);
+
+            return savingsAccountViewModel;
+        }
     }
 }
