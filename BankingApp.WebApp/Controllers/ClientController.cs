@@ -71,7 +71,7 @@ namespace BankingApp.WebApp.Controllers
         public async Task<IActionResult> ExpressPayment()
         {
             SaveExpressPaymentViewModel vm = new();
-            vm.FromAccounts = await _savingsAccountService.GetAllViewModel();
+            vm.FromAccounts = _savingsAccountService.GetAllViewModel();
             return View("ExpressPayment",vm);
         }
 

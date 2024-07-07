@@ -24,7 +24,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<List<BeneficiaryViewModel>> BeneficiariesList()
         {
-            List<BeneficiaryViewModel> beneficiaries = await GetAllViewModel();
+            List<BeneficiaryViewModel> beneficiaries =  GetAllViewModel().ToList();
             BeneficiaryViewModel beneficiary = new();
             List<BeneficiaryViewModel> fullBeneficiaries = new();
             ApplicationUserDTO user = new();
