@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BankingApp.Core.Application.Interfaces.Services
+﻿namespace BankingApp.Core.Application.Interfaces.Services
 {
     public interface IGenericService<SaveViewModel, ViewModel, Entity>
         where SaveViewModel : class
@@ -14,7 +8,7 @@ namespace BankingApp.Core.Application.Interfaces.Services
         Task Add(SaveViewModel vm);
         Task Update(SaveViewModel vm, int id);
         Task Delete(int id);
-        Task<List<ViewModel>> GetAllViewModel();
+        List<ViewModel> GetAllViewModel();
         Task<SaveViewModel> GetByIdSaveViewModel(int id);
     }
 }

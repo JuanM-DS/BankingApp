@@ -34,9 +34,9 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public virtual async Task<List<Entity>> GetAllAsync()
+        public virtual IQueryable<Entity> GetAllAsync()
         {
-            return await _dbContext.Set<Entity>().ToListAsync();
+            return  _dbContext.Set<Entity>();
         }
 
         public virtual async Task<Entity> GetByIdAsync(int id)

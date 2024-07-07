@@ -16,5 +16,17 @@ namespace BankingApp.Core.Application.Services
             _loanRepository = loanRepository;
             _mapper = mapper;
         }
+
+        public List<LoanViewModel> GetAllByUserWithInclude(string userName)
+        {
+            var loans = _loanRepository.GetAllWithInclude(x => x.PaymentsFrom, x => x.PaymentsTo);
+
+            var loansByUser = loans.Where(x => x.UserName == userName)
+                                               .ToList();
+
+            var loansViewModels = _mapper.Map<List<LoanViewModel>>(loansByUser);
+
+            return loansViewModels;
+        }
     }
 }
