@@ -100,7 +100,7 @@ namespace BankingApp.WebApp.Controllers
 
             if(FromAccount.Balance < vm.Amount)
             {
-                ViewBag.Message = "No tienes en esa cuenta el dinero suficiente para realizar la transacción";
+                ViewBag.Message = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto menor";
                 return View();
             }
             return View("ConfirmTransactionExpress", vm);
@@ -155,22 +155,28 @@ namespace BankingApp.WebApp.Controllers
 
             if (FromAccount.Balance < vm.Amount)
             {
-                ViewBag.Message = "No tienes en esa cuenta el dinero suficiente para realizar la transacción";
-                return View();
+                ViewBag.Message = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto menor";
+                return View("CreditCardPayment");
             }
             return View("CreditCardPayment", vm);
 
             SaveCreditCardViewModel ToCreditCard = await _creditCardService.GetByIdSaveViewModel(vm.ToCreditCardId);
-            ToCreditCard.Balance += vm.Amount;
-            FromAccount.Balance -= vm.Amount;
-            if (ToCreditCard.Balance > ToCreditCard.CreditLimit)
-            {
-               vm.Amount = ToCreditCard.Balance - ToCreditCard.CreditLimit;
-            }
-            FromAccount.Balance += vm.Amount;
+            double transferAmount = Math.Min(vm.Amount, ToCreditCard.CreditLimit - ToCreditCard.Balance);
+
+            ToCreditCard.Balance += transferAmount;
+            FromAccount.Balance -= transferAmount;
+
             await _creditCardService.Update(ToCreditCard, ToCreditCard.Id);
             await _savingsAccountService.Update(FromAccount, FromAccount.Id);
 
+            SavePaymentViewModel payment = new();
+            payment.Amount = vm.Amount;
+            payment.FromProductId = vm.FromAccountId;
+            payment.ToProductId = vm.ToCreditCardId;
+            payment.Type = ((byte)PaymentTypes.PaymentToCreditCard);
+            payment.ProductType = ((byte)ProductTypes.CreditCard);
+
+            await _paymentService.Add(payment);
 
             return View("Index", vm);
         }
@@ -181,8 +187,42 @@ namespace BankingApp.WebApp.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> LoanRepayment(SaveLoanPaymentViewModel vm)
+        {
+            SaveSavingsAccountViewModel FromAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.FromAccountId);
 
-       
+            if (!ModelState.IsValid)
+            {
+                return View("LoanRepayment", vm);
+            }
+
+            if (FromAccount.Balance < vm.Amount)
+            {
+                ViewBag.Message = "No tienes en esa cuenta el dinero suficiente para realizar la transacción";
+                return View();
+            }
+            return View("LoanRepayment", vm);
+
+            SaveLoanViewModel ToLoan = await _loanService.GetByIdSaveViewModel(vm.ToLoanId);
+            if(vm.Amount >= ToLoan.Balance)
+            {
+                vm.Amount = ToLoan.Balance;
+                FromAccount.Balance -= vm.Amount;
+                ToLoan.Balance -= vm.Amount;
+            }
+            FromAccount.Balance -= vm.Amount;
+            ToLoan.Balance -= vm.Amount;
+
+            await _loanService.Update(ToLoan, ToLoan.Id);
+            await _savingsAccountService.Update(FromAccount, FromAccount.Id);
+
+
+            return View("Index", vm);
+        }
 
     }
+
+
+}
 }

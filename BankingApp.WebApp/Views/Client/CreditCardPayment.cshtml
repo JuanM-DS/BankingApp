@@ -48,31 +48,11 @@
                             <span asp-validation-for="Amount" class="text-danger"></span>
                         </div>
 
-                        <div class="form-check">
-                            <input class="form-check-input" value="1" type="radio" name="AmountTodate" id="flexRadioDefault1">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                Pagar monto hasta la fecha.
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" value="2" type="radio" name="AmountAsOfCutoffDate" id="flexRadioDefault2" checked>
-                            <label class="form-check-label" for="flexRadioDefault2">
-                                Pagar monto hasta la fecha de corte.
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input asp-for="Amount" class="form-check-input" value="" type="radio" name="OtherAmount" id="flexRadioDefault3" checked>
-                            <label class="form-check-label" for="flexRadioDefault3">
-                                Otro monto
-                            </label>
-                        </div>
-
-
 
 @*                         <input type="hidden" asp-for="Id" />
  *@
                         <button type="submit" class="btn btn-primary">Realizar pago</button>
-                        <a asp-controller="Paciente" asp-action="Index" class="btn btn-warning">Volver atras</a>
+                        <a asp-controller="Client" asp-action="Index" class="btn btn-warning">Volver atras</a>
 
 
                     </form>
@@ -119,22 +99,3 @@
     </script>
 }
 
-<div class="modal fade" id="Transaction" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Monto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form asp-controller="Beneficiary" asp-action="Add" method="post">
-                <input required type="text" class="form-control" name="Amount" />
-
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
-                    <input type="submit" class="btn btn-success" value="Realizar" />
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
