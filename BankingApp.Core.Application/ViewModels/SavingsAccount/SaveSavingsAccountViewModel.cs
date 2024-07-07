@@ -10,5 +10,6 @@ namespace BankingApp.Core.Application.ViewModels.SavingsAccount
     {
         public int Id { get; set; }
         public double Balance { get; set; }
+        public string UserName { get; set; }
     }
 }

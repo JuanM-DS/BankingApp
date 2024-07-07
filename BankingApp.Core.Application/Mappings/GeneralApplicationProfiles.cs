@@ -23,7 +23,7 @@ namespace BankingApp.Core.Application.Mappings
                .ForMember(des => des.PhotoUrl, opt => opt.Ignore())
                .ReverseMap()
                .ForMember(des => des.AccountNumber, opt => opt.Ignore())
-               .ForMember(des => des.UserUserName, opt => opt.Ignore());
+               .ForMember(des => des.UserName, opt => opt.Ignore());
 
             CreateMap<ApplicationUserDTO, SaveUserViewModel>()
                 .ForMember(des => des.File, obj => obj.Ignore())
@@ -45,6 +45,19 @@ namespace BankingApp.Core.Application.Mappings
 
             CreateMap<Payment, PaymentViewModel>()
                 .ReverseMap();
+            #endregion
+
+            #region Beneficiary
+            CreateMap<Beneficiary, BeneficiaryViewModel>()
+               .ForMember(des => des.FirstName, opt => opt.Ignore())
+               .ForMember(des => des.LastName, opt => opt.Ignore())
+               .ReverseMap()
+               .ForMember(des => des.AccountNumber, opt => opt.Ignore())
+               .ForMember(des => des.SavingsAccount, opt => opt.Ignore())
+               .ForMember(des => des.CreatedBy, opt => opt.Ignore())
+               .ForMember(des => des.CreatedTime, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedTime, opt => opt.Ignore());
             #endregion
 
             #region nex region

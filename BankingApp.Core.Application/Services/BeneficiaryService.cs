@@ -5,6 +5,7 @@ using BankingApp.Core.Application.Interfaces.Services;
 using BankingApp.Core.Application.ViewModels.Beneficiary;
 using BankingApp.Core.Domain.Entities;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BankingApp.Core.Application.Services
 {
@@ -21,7 +22,7 @@ namespace BankingApp.Core.Application.Services
             _userResporitory = userResporitory;
         }
 
-        public async Task<List<BeneficiaryViewModel>> ListBeneficiaries()
+        public async Task<List<BeneficiaryViewModel>> BeneficiariesList()
         {
             List<BeneficiaryViewModel> beneficiaries = await GetAllViewModel();
             BeneficiaryViewModel beneficiary = new();
@@ -30,13 +31,18 @@ namespace BankingApp.Core.Application.Services
 
             foreach (var bn in beneficiaries)
             {
-                user = await _userResporitory.GetUserByUserName(bn.UserUserName);
+                user = await _userResporitory.GetUserByUserName(bn.UserName);
                 beneficiary = bn;
                 beneficiary = _mapper.Map<BeneficiaryViewModel>(user);
                 fullBeneficiaries.Add(beneficiary);
             }
 
             return fullBeneficiaries;
+        }
+
+        public async Task DeleteByUserName(string BeneficiaryUserName)
+        {
+            
         }
     }
 }

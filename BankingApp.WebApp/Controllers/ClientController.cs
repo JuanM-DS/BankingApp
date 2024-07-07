@@ -33,26 +33,38 @@ namespace BankingApp.WebApp.Controllers
 
         public async Task<IActionResult> Beneficiary()
         {
-            List<BeneficiaryViewModel> Vm = await _beneficiaryService.ListBeneficiaries();
+            List<BeneficiaryViewModel> Vm = await _beneficiaryService.BeneficiariesList();
             return View("Beneficiary",Vm);
         }
 
         public async Task<IActionResult> CreateBeneficiary(int accountNumber)
         {
+            SaveSavingsAccountViewModel savingsAccount = await _savingsAccountService.GetByIdSaveViewModel(accountNumber);
+
+            if(savingsAccount == null)
+            {
+                ViewBag.Message = "El numero de cuenta no existe";
+                return View("Beneficiary");
+            }
             SaveBeneficiaryViewModel vm = new();
             vm.AccountNumber = accountNumber;
+            vm.BeneficiaryUserName = savingsAccount.UserName;
+            await _beneficiaryService.Add(vm);
 
             return View("Beneficiary");
         }
 
-        public async Task<IActionResult> DeleteBeneficiary( string UserName)
+        public async Task<IActionResult> DeleteBeneficiary( int AccountNumber)
         {
-            return View("DeleteBeneficiary",UserName);
+            SaveBeneficiaryViewModel vm = new();
+            vm.AccountNumber = AccountNumber;
+            return View("DeleteBeneficiary", vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeletePost(string UserName)
+        public async Task<IActionResult> DeletePost(SaveBeneficiaryViewModel vm)
         {
+            await _beneficiaryService.Delete(vm.AccountNumber);
             return RedirectToRoute(new { controller = "Client", action = "Beneficiary" });
         }
 
