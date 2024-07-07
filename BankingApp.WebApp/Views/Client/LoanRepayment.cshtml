@@ -10,6 +10,13 @@
 
     <div class="row">
         <div class="col-6 offset-3">
+            @if (ViewBag.InsufficientMoney != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <p>@ViewBag.Message</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            }
             <div class="card">
                 <div class="card-header bg-dark text-light">
                     <h4>Pago de prestamos</h4>
@@ -18,15 +25,16 @@
 
                     <form method="post" asp-controller="Client" asp-action="LoanRepayment" enctype="multipart/form-data">
 
-
                         <div class="mb-3">
-                            <label class="form-label">Prestamo</label>
-                            <select class="form-select">
+                            <label asp-for="ToLoanId" class="form-label">Prestamo</label>
+                            <select asp-for="ToLoanId" class="form-select">
                                 <option value="">Seleccione una opcion</option>
-                                <option value="">234876908</option>
-                                <option value="">654879675</option>
+                                @foreach (var loan in Model.ToLoans)
+                                {
+                                    <option value="@loan.Id">@loan.Id</option>
+                                }
                             </select>
-                            <span class="text-danger"></span>
+                            <span asp-validation-for="ToLoanId" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">

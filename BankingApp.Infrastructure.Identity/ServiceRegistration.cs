@@ -1,6 +1,10 @@
-﻿using BankingApp.Infrastructure.Identity.Contexts;
+﻿using BankingApp.Core.Application.Interfaces.Repositories;
+using BankingApp.Core.Application.Interfaces.Services;
+using BankingApp.Infrastructure.Identity.Contexts;
 using BankingApp.Infrastructure.Identity.Entities;
+using BankingApp.Infrastructure.Identity.Repository;
 using BankingApp.Infrastructure.Identity.Seeds;
+using BankingApp.Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +35,11 @@ namespace BankingApp.Infrastructure.Identity
                 .AddEntityFrameworkStores<BankingAppIdentityDbContext>()
                 .AddDefaultTokenProviders();
             #endregion
+
+            service.AddTransient<IUserRepository, UserRepository>();
+            #region Services
+            service.AddTransient<IAccountService, AccountServices>();
+            #endregion
         }
 
         public static async Task RunIdentitySeeds(this WebApplication app)
@@ -52,5 +61,7 @@ namespace BankingApp.Infrastructure.Identity
                 throw;
             }
         }
+
+
     }
 }
