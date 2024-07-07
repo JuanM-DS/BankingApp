@@ -1,0 +1,28 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card shadow-sm" style="max-width: 400px; width: 100%; border-radius: 10px;">
+        <div class="card-body">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            <form method="post" asp-controller="Login" asp-action="Index">
+                <div class="mb-3">
+                    <label asp-for="NombreUsuario" class="form-label">Nombre de usuario</label>
+                    <input class="form-control" asp-for="NombreUsuario" placeholder="Escribe el nombre de usuario">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Contrasena" class="form-label">Contraseña</label>
+                    <input class="form-control" asp-for="Contrasena" type="password" placeholder="Escribe la contraseña">
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(to right, #6a11cb, #2575fc); border: none;">Iniciar sesión</button>
+                </div>
+                <div class="text-center mt-3">
+                  
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

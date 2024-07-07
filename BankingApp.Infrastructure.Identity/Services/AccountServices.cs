@@ -86,7 +86,7 @@ namespace BankingApp.Infrastructure.Identity.Services
                 return new()
                 {
                     Success = false,
-                    Message = "User doestn exists"
+                    Error = "User doestn exists"
                 };
 
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
@@ -97,13 +97,13 @@ namespace BankingApp.Infrastructure.Identity.Services
                 return new()
                 {
                     Success = false,
-                    Message = result.Errors.First().Description
+                    Error = result.Errors.First().Description
                 };
 
             return new()
             {
                 Success = true,
-                Message = $"Account confirm for {userById.Email}, You can now user the app"
+                Error = $"Account confirm for {userById.Email}, You can now user the app"
             };
         }
 

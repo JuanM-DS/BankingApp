@@ -1,16 +1,21 @@
 ﻿using AutoMapper;
 using BankingApp.Core.Application.CostomEntities;
+using BankingApp.Core.Application.DTOs.Account.Authentication;
+using BankingApp.Core.Application.DTOs.Account.ConfirmAccount;
+using BankingApp.Core.Application.DTOs.Account.ForgotPassword;
+using BankingApp.Core.Application.DTOs.Account.ResetPassword;
 using BankingApp.Core.Application.DTOs.User;
 using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.Interfaces.Repositories;
 using BankingApp.Core.Application.Interfaces.Services;
 using BankingApp.Core.Application.QuerryFiilters;
+using BankingApp.Core.Application.ViewModels.Account;
 using BankingApp.Core.Application.ViewModels.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankingApp.Core.Application.Services
 {
-    public class UserService(IUserRepository userRepository,IAccountService accountService ,IMapper mapper) : IUserService
+    public class UserService(IUserRepository userRepository, IAccountService accountService, IMapper mapper) : IUserService
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IAccountService _accountService = accountService;
@@ -19,7 +24,7 @@ namespace BankingApp.Core.Application.Services
         public async Task<Response<SaveUserViewModel>> CreateAsync(SaveUserViewModel userViewModel)
         {
             var userDto = _mapper.Map<ApplicationUserDTO>(userViewModel);
-            
+
             var result = await _accountService.RegisterAsync(userDto);
             if (!result.Success)
                 return new()
@@ -48,7 +53,7 @@ namespace BankingApp.Core.Application.Services
                 };
 
             var result = await _userRepository.DeleteAsycn(userById);
-            if(result)
+            if (result)
                 return new()
                 {
                     Data = null,
@@ -66,8 +71,8 @@ namespace BankingApp.Core.Application.Services
 
         public Response<IEnumerable<UserViewModel>> GetAll(UserQueryFilter? filters = null)
         {
-            var users =  _userRepository.Get();
-            if(filters is not null)
+            var users = _userRepository.Get();
+            if (filters is not null)
             {
                 if (filters.Email is not null)
                     users = users.Where(x => x.Email == filters.Email);
@@ -116,7 +121,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<Response<UserViewModel>> GetByNameAsync(string userName)
         {
-            var users =  await _userRepository.Get()
+            var users = await _userRepository.Get()
                                               .FirstOrDefaultAsync(x => x.UserName == userName);
 
             var userViewModels = _mapper.Map<UserViewModel>(users);
@@ -184,6 +189,103 @@ namespace BankingApp.Core.Application.Services
             return new()
             {
                 Data = userViewModel,
+                Success = true
+            };
+        }
+
+        // account services
+        public async Task<Response<UserViewModel>> LoginAsync(LoginViewModel login)
+        {
+            var userDto = _mapper.Map<AuthenticationRequestDTO>(login);
+
+            var result = await _accountService.AuthenticationAsync(userDto);
+            if (!result.Success)
+                return new()
+                {
+                    Data = null,
+                    Success = false,
+                    Error = result.Error
+                };
+
+            return new()
+            {
+                Data = _mapper.Map<UserViewModel>(result.UserDTO),
+                Success = true
+            };
+        }
+
+        public async Task<Response<UserViewModel>> RegisterAsync(SaveUserViewModel userViewModel)
+        {
+            var userDto = _mapper.Map<ApplicationUserDTO>(userViewModel);
+
+            var result = await _accountService.RegisterAsync(userDto);
+            if (!result.Success)
+                return new()
+                {
+                    Data = null,
+                    Success = false,
+                    Error = result.Error
+                };
+
+            return new()
+            {
+                Data = _mapper.Map<UserViewModel>(result.UserDTO),
+                Success = true
+            };
+        }
+
+        public async Task SingOutAsync()
+        {
+            await _accountService.LogOutAsync();
+        }
+        
+        public async Task<Response<bool>> ForgotPasswordAsync(ForgotPasswordViewModel viewModel)
+        {
+            var request = _mapper.Map<ForgotPasswordRequestDTO>(viewModel);
+            var result = await _accountService.ForgotPasswordAsync(request);
+            if (!result.Success)
+                return new()
+                {
+                    Success = false,
+                    Error = result.Error
+                };
+
+            return new()
+            {
+                Success = true
+            };
+        }
+
+        public async Task<Response<bool>> ResetPasswordAsync(ResetPasswordViewModel viewModel)
+        {
+            var request = _mapper.Map<ResetPasswordRequestDTO>(viewModel);
+            var result = await _accountService.ResetPasswordAsync(request);
+            if (!result.Success)
+                return new()
+                {
+                    Success = false,
+                    Error = result.Error
+                };
+
+            return new()
+            {
+                Success = true
+            };
+        }
+
+        public async Task<Response<bool>> ConfirmAccountAsync(ConfirmAccountViewModel viewModel)
+        {
+            var request = _mapper.Map<ConfirmAccountRequestDTO>(viewModel);
+            var result = await _accountService.ConfirmAccountAsync(request);
+            if (!result.Success)
+                return new()
+                {
+                    Success = false,
+                    Error = result.Error
+                };
+
+            return new()
+            {
                 Success = true
             };
         }
