@@ -1,9 +1,14 @@
-﻿using BankingApp.Core.Application.Interfaces.Services;
+﻿using BankingApp.Core.Application.CostomEntities;
+using BankingApp.Core.Application.DTOs.User;
+using BankingApp.Core.Application.Enums;
+using BankingApp.Core.Application.Interfaces.Services;
 using BankingApp.Core.Application.ViewModels.Beneficiary;
 using BankingApp.Core.Application.ViewModels.CreditCard;
 using BankingApp.Core.Application.ViewModels.Loan;
 using BankingApp.Core.Application.ViewModels.Payment;
 using BankingApp.Core.Application.ViewModels.SavingsAccount;
+using BankingApp.Core.Application.ViewModels.User;
+using BankingApp.Core.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankingApp.WebApp.Controllers
@@ -15,14 +20,16 @@ namespace BankingApp.WebApp.Controllers
         public readonly ICreditCardService _creditCardService;
         public readonly ILoanService _loanService;
         public readonly IPaymentService _paymentService;
+        public readonly IUserService _userService;
 
-        public ClientController(IBeneficiaryService beneficiaryService,ISavingsAccountService savingsAccountService, ICreditCardService creditCardService, ILoanService loanService,IPaymentService paymentService)
+        public ClientController(IBeneficiaryService beneficiaryService,ISavingsAccountService savingsAccountService, ICreditCardService creditCardService, ILoanService loanService,IPaymentService paymentService, IUserService userService)
         {
             _beneficiaryService = beneficiaryService;
             _savingsAccountService = savingsAccountService;
             _creditCardService = creditCardService;
             _loanService = loanService;
             _paymentService = paymentService;
+            _userService = userService;
         }
 
         public async Task <IActionResult> Index()
@@ -41,7 +48,7 @@ namespace BankingApp.WebApp.Controllers
         {
             SaveSavingsAccountViewModel savingsAccount = await _savingsAccountService.GetByIdSaveViewModel(accountNumber);
 
-            if(savingsAccount == null)
+            if (savingsAccount == null)
             {
                 ViewBag.Message = "El numero de cuenta no existe";
                 return View("Beneficiary");
@@ -62,7 +69,7 @@ namespace BankingApp.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeletePost(SaveBeneficiaryViewModel vm)
+        public async Task<IActionResult> DeleteBeneficiaryPost(SaveBeneficiaryViewModel vm)
         {
             await _beneficiaryService.Delete(vm.AccountNumber);
             return RedirectToRoute(new { controller = "Client", action = "Beneficiary" });
@@ -78,11 +85,12 @@ namespace BankingApp.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> ExpressPayment(SaveExpressPaymentViewModel vm)
         {
+
             if (!ModelState.IsValid)
             {
                 return View("ExpressPayment", vm);
             }
-            SaveSavingsAccountViewModel ToAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToAccount);
+            SaveSavingsAccountViewModel ToAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToAccountId);
             SaveSavingsAccountViewModel FromAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.FromAccountId);
             if (ToAccount == null)
             {
@@ -100,6 +108,10 @@ namespace BankingApp.WebApp.Controllers
 
         public async Task<IActionResult> ConfirmTransactionExpress(SaveExpressPaymentViewModel vm)
         {
+            SaveSavingsAccountViewModel savingsAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToAccountId);
+            Response<UserViewModel> user = await _userService.GetByNameAsync(savingsAccount.UserName);
+            vm.FirstName = user.Data.FirstName;
+            vm.LastName = user.Data.LastName;
 
             return View("ConfirmTransactionExpress", vm);
         }
@@ -107,15 +119,23 @@ namespace BankingApp.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmTransactionExpressPost(SaveExpressPaymentViewModel vm)
         {
-            SaveSavingsAccountViewModel ToAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToAccount);
+            SaveSavingsAccountViewModel ToAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToAccountId);
             ToAccount.Balance += vm.Amount;
             await _savingsAccountService.Update(ToAccount,ToAccount.Id);
             SaveSavingsAccountViewModel FromAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.FromAccountId);
             FromAccount.Balance -= vm.Amount;
             await _savingsAccountService.Update(FromAccount,FromAccount.Id);
 
+            SavePaymentViewModel payment = new();
+            payment.Amount = vm.Amount;
+            payment.FromProductId = vm.FromAccountId;
+            payment.ToProductId = vm.ToAccountId;
+            payment.Type = ((byte)PaymentTypes.Transfers);
+            payment.ProductType = ((byte)ProductTypes.SavingsAccount);
 
-            return View("Index", vm);
+            await _paymentService.Add(payment);
+
+            return View("Index");
         }
 
         public async Task<IActionResult> CreditCardPayment()

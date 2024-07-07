@@ -186,6 +186,9 @@ namespace BankingApp.Core.Application.Services
                 Data = userViewModel,
                 Success = true
             };
+
         }
+
+
     }
 }

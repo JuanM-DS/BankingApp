@@ -2,6 +2,7 @@
 using BankingApp.Core.Application.DTOs.User;
 using BankingApp.Core.Application.ViewModels.Beneficiary;
 using BankingApp.Core.Application.ViewModels.Payment;
+using BankingApp.Core.Application.ViewModels.SavingsAccount;
 using BankingApp.Core.Application.ViewModels.User;
 using BankingApp.Core.Domain.Entities;
 
@@ -54,6 +55,39 @@ namespace BankingApp.Core.Application.Mappings
                .ReverseMap()
                .ForMember(des => des.AccountNumber, opt => opt.Ignore())
                .ForMember(des => des.SavingsAccount, opt => opt.Ignore())
+               .ForMember(des => des.CreatedBy, opt => opt.Ignore())
+               .ForMember(des => des.CreatedTime, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedTime, opt => opt.Ignore());
+
+            CreateMap<Beneficiary, SaveBeneficiaryViewModel>()
+               .ReverseMap()
+               .ForMember(des => des.SavingsAccount, opt => opt.Ignore())
+               .ForMember(des => des.CreatedBy, opt => opt.Ignore())
+               .ForMember(des => des.CreatedTime, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedTime, opt => opt.Ignore());
+            #endregion
+
+            #region SavingsAccount
+            CreateMap<SavingsAccount, SaveSavingsAccountViewModel>()
+               .ReverseMap()
+               .ForMember(des => des.PaymentsTo, opt => opt.Ignore())
+               .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())
+               .ForMember(des => des.Beneficiaries, opt => opt.Ignore())
+               .ForMember(des => des.CreatedBy, opt => opt.Ignore())
+               .ForMember(des => des.CreatedTime, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedTime, opt => opt.Ignore());
+
+            CreateMap<SavingsAccount, SavingsAccountViewModel>()
+               .ReverseMap()
+               .ForMember(des => des.PaymentsTo, opt => opt.Ignore())
+               .ForMember(des => des.UserName, opt => opt.Ignore())
+               .ForMember(des => des.Balance, opt => opt.Ignore())
+               .ForMember(des => des.IsPrincipal, opt => opt.Ignore())
+               .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())
+               .ForMember(des => des.Beneficiaries, opt => opt.Ignore())
                .ForMember(des => des.CreatedBy, opt => opt.Ignore())
                .ForMember(des => des.CreatedTime, opt => opt.Ignore())
                .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())

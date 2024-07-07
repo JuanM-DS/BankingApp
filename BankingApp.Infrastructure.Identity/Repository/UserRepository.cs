@@ -87,12 +87,5 @@ namespace BankingApp.Infrastructure.Identity.Repository
             }
         }
 
-        public async Task<ApplicationUserDTO> GetUserByUserName(string userName)
-        {
-            ApplicationUser user = await context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
-            ApplicationUserDTO userDTO = _mapper.Map<ApplicationUserDTO>(user);
-
-            return userDTO;
-        }
     }
 }
