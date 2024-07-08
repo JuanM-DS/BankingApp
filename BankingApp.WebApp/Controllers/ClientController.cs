@@ -139,7 +139,7 @@ namespace BankingApp.WebApp.Controllers
             payment.Amount = vm.Amount;
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToAccountId;
-            payment.Type = ((byte)PaymentTypes.Transfers);
+            payment.Type = ((byte)PaymentTypes.Transfer);
 
             await _paymentService.Add(payment);
 
@@ -293,7 +293,7 @@ namespace BankingApp.WebApp.Controllers
             payment.Amount = vm.Amount;
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToBeneficiaryId;
-            payment.Type = ((byte)PaymentTypes.Transfers);
+            payment.Type = ((byte)PaymentTypes.Transfer);
 
             await _paymentService.Add(payment);
 
@@ -395,7 +395,7 @@ namespace BankingApp.WebApp.Controllers
             payment.Amount = vm.Amount;
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToAccountId;
-            payment.Type = ((byte)PaymentTypes.Transfers);
+            payment.Type = ((byte)PaymentTypes.Transfer);
 
             await _paymentService.Add(payment);
 

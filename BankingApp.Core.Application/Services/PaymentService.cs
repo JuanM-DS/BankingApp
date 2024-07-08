@@ -67,7 +67,7 @@ namespace BankingApp.Core.Application.Services
         {
             var payments = _paymentRepository.GetAllWithInclude(x => x.FromLoan, x => x.FromCrediCard, x => x.FromAccount, x => x.ToCreditCard, x => x.ToAccount, x => x.ToLoan);
 
-            var transactionsId = new List<int>() { (int)PaymentTypes.Deposit, (int)PaymentTypes.CashAdvance, (int)PaymentTypes.Transfers, (int)PaymentTypes.Disbursement };
+            var transactionsId = new List<int>() { (int)PaymentTypes.Deposit, (int)PaymentTypes.CashAdvance, (int)PaymentTypes.Transfer, (int)PaymentTypes.Disbursement };
 
             var transactions = payments.Where(x => transactionsId.Contains(x.Type));
 
