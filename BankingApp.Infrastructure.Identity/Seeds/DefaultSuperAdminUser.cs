@@ -19,10 +19,10 @@ namespace BankingApp.Infrastructure.Identity.Seeds
             };
 
             var userByUserName = await userManager.FindByNameAsync(user.UserName);
-            if (userByUserName is null) return;
+            if (userByUserName is not null) return;
 
             var userByEmail = await userManager.FindByEmailAsync(user.Email);
-            if (userByEmail is null) return;
+            if (userByEmail is not null) return;
 
             await userManager.CreateAsync(user);
 
