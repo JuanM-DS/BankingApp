@@ -13,12 +13,12 @@ namespace BankingApp.WebApp.Controllers
 {
     public class ClientController : Controller
     {
-        public readonly IBeneficiaryService _beneficiaryService;
-        public readonly ISavingsAccountService _savingsAccountService;
-        public readonly ICreditCardService _creditCardService;
-        public readonly ILoanService _loanService;
-        public readonly IPaymentService _paymentService;
-        public readonly IUserService _userService;
+        private readonly IBeneficiaryService _beneficiaryService;
+        private readonly ISavingsAccountService _savingsAccountService;
+        private readonly ICreditCardService _creditCardService;
+        private readonly ILoanService _loanService;
+        private readonly IPaymentService _paymentService;
+        private readonly IUserService _userService;
 
         public ClientController(IBeneficiaryService beneficiaryService,ISavingsAccountService savingsAccountService, ICreditCardService creditCardService, ILoanService loanService,IPaymentService paymentService, IUserService userService)
         {
@@ -303,7 +303,6 @@ namespace BankingApp.WebApp.Controllers
         public async Task<IActionResult> CashAdvances(SaveCashAdvancesViewModel vm)
         {
             SaveCreditCardViewModel FromCreditCard = await _creditCardService.GetByIdSaveViewModel(vm.FromCreditCardId);
-
             if (!ModelState.IsValid)
             {
                 return View("CreditCardPayment", vm);
@@ -327,7 +326,7 @@ namespace BankingApp.WebApp.Controllers
             }
            
             SaveSavingsAccountViewModel ToAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToAccountId);
-            FromCreditCard.Balance -= vm.Amount;
+            FromCreditCard.Balance -= vm.Amount * 1.0625;
             ToAccount.Balance += vm.Amount;
 
             await _creditCardService.Update(FromCreditCard, FromCreditCard.Id);
