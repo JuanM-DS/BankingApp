@@ -16,6 +16,9 @@ namespace BankingApp.Infrastructure.Identity.Seeds
                 Email = "SuperAdminUser@email.com",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
+                CreatedTime = DateTime.Now,
+                CreatedBy = "System",
+                IdCard = "0",
             };
 
             var userByUserName = await userManager.FindByNameAsync(user.UserName);
