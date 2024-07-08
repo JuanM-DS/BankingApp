@@ -33,9 +33,6 @@ namespace BankingApp.Core.Application.Services
             var payments = _paymentRepository.GetAllWithInclude(x=>x.FromLoan, x=>x.FromCrediCard, x=>x.FromAccount, x=>x.ToCreditCard, x=>x.ToAccount, x=>x.ToLoan);
             if (filters is not null)
             {
-                if (filters.ProductTypes is not null)
-                    payments = payments.Where(x => x.ProductType == (int)filters.ProductTypes);
-
                 if (filters.PaymentTypes is not null)
                     payments = payments.Where(x => x.Type == (int)filters.PaymentTypes);
 

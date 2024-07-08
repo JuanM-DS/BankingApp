@@ -1,8 +1,4 @@
 ﻿using BankingApp.Core.Application.CostomEntities;
-using BankingApp.Core.Application.DTOs.Account.Authentication;
-using BankingApp.Core.Application.DTOs.Account.ForgotPassword;
-using BankingApp.Core.Application.DTOs.Account.ResetPassword;
-using BankingApp.Core.Application.DTOs.User;
 using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.QuerryFiilters;
 using BankingApp.Core.Application.ViewModels.Account;

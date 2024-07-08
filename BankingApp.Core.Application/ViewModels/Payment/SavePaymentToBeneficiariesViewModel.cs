@@ -1,5 +1,5 @@
-﻿using BankingApp.Core.Application.ViewModels.CreditCard;
-using BankingApp.Core.Application.ViewModels.Loan;
+﻿using BankingApp.Core.Application.ViewModels.Beneficiary;
+using BankingApp.Core.Application.ViewModels.CreditCard;
 using BankingApp.Core.Application.ViewModels.SavingsAccount;
 using System;
 using System.Collections.Generic;
@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace BankingApp.Core.Application.ViewModels.Payment
 {
-    public class SaveLoanPaymentViewModel
+    public class SavePaymentToBeneficiariesViewModel
     {
-        [Required(ErrorMessage = "Debe seleccionar un prestamo")]
+        [Required(ErrorMessage = "Debe seleccionar un beneficiario")]
         [DataType(DataType.Text)]
-        public int ToLoanId { get; set; }
+        public int ToBeneficiaryId { get; set; }
         [Required(ErrorMessage = "Debe seleccionar una cuenta")]
         [DataType(DataType.Text)]
         public int FromAccountId { get; set; }
@@ -22,7 +22,7 @@ namespace BankingApp.Core.Application.ViewModels.Payment
         [DataType(DataType.Text)]
         public double Amount { get; set; }
 
-        public List<LoanViewModel> ToLoans { get; set; }
+        public List<BeneficiaryViewModel> ToBeneficiaries { get; set; }
 
         public List<SavingsAccountViewModel> FromAccounts { get; set; }
     }

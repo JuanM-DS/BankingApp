@@ -1,4 +1,6 @@
-﻿@{
+﻿@using BankingApp.Core.Application.ViewModels.Payment
+@model SaveTransferBetweenAccountsViewModel
+@{
     ViewData["Title"] = "Transferencia entre cuentas";
 
 }
@@ -13,41 +15,48 @@
                 </div>
                 <div class="card-body">
 
-                    <form method="post" asp-controller="" asp-action="" enctype="multipart/form-data">
-
+                    <form method="post" asp-controller="Client" asp-action="" enctype="multipart/form-data">
 
                         <div class="mb-3">
-                            <label class="form-label">Cuenta de ahorro de origen</label>
-                            <select class="form-select">
+                            <label asp-for="ToAccountId" class="form-label">Cuenta de ahorro de destino</label>
+                            <select asp-for="ToAccountId" class="form-select">
                                 <option value="">Seleccione una opcion</option>
-                                <option value="">234876908</option>
-                                <option value="">654879675</option>
+                                @foreach (var beneficiary in Model.ToAccounts)
+                                {
+                                    <option value="@beneficiary.AccountNumber">@beneficiary.AccountNumber</option>
+                                }
                             </select>
-                            <span class="text-danger"></span>
+                            <span asp-validation-for="ToAccountId" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Cuenta de ahorro de destino</label>
-                            <select class="form-select">
+                            <label asp-for="FromAccountId" class="form-label">Cuenta de ahorro origen</label>
+                            <select asp-for="FromAccountId" class="form-select">
                                 <option value="">Seleccione una opcion</option>
-                                <option value="">234876908</option>
-                                <option value="">654879675</option>
+                                @foreach (var Account in Model.FromAccounts)
+                                {
+                                    <option value="@Account.Id">@Account.Id</option>
+                                }
                             </select>
-                            <span class="text-danger"></span>
+                            <span asp-validation-for="FromAccountId" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Monto a transferir: </label>
-                            <input type="number" class="form-control" />
-                            <span class="text-danger"></span>
+                            <label asp-for="Amount" class="form-label">Monto a pagar: </label>
+                            <input asp-for="Amount" type="number" class="form-control" />
+                            <span asp-validation-for="Amount" class="text-danger"></span>
                         </div>
-
 
 
                         @*                         <input type="hidden" asp-for="Id" />
                         *@
+                        <button type="submit" class="btn btn-primary">Realizar pago</button>
+                        <a asp-controller="Client" asp-action="Index" class="btn btn-warning">Volver atras</a>
+
+                        @*                         <input type="hidden" asp-for="Id" />
+                        *@
                         <button type="submit" class="btn btn-primary">Realizar</button>
-                        <a asp-controller="Paciente" asp-action="Index" class="btn btn-warning">Volver atras</a>
+                        <a asp-controller="Client" asp-action="Index" class="btn btn-warning">Volver atras</a>
 
 
                     </form>

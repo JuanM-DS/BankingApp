@@ -12,7 +12,7 @@ namespace BankingApp.Core.Application.ViewModels.Payment
     {
         [Required(ErrorMessage = "Debe ingresar una cuenta")]
         [DataType(DataType.Text)]
-        public int ToAccount {  get; set; }
+        public int ToAccountId {  get; set; }
         [Required(ErrorMessage = "Debe ingresar un monto")]
         [DataType(DataType.Text)]
         public double Amount { get; set; }
@@ -21,5 +21,8 @@ namespace BankingApp.Core.Application.ViewModels.Payment
         [Required(ErrorMessage = "Debe seleccionar una cuenta")]
         [DataType(DataType.Text)]
         public int FromAccountId { get; set; }
+
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
     }
 }

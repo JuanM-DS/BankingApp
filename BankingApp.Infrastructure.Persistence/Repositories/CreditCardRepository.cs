@@ -2,6 +2,7 @@
 using BankingApp.Core.Application.Interfaces.Repositories;
 using BankingApp.Core.Domain.Entities;
 using BankingApp.Infrastructure.Persistence.Contexts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

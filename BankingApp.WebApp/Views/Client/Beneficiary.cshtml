@@ -14,7 +14,13 @@
     </div>
 
     <div class="row">
-
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <p>@ViewBag.Message</p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        }
         @if (Model == null || Model.Count == 0)
         {
             <h2>No hay beneficiarios</h2>
@@ -44,7 +50,7 @@
                             </table>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <a asp-controller="" asp-action="" asp-route-id="@* @item.Id *@" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                                    <a asp-controller="Client" asp-action="DeleteBeneficiary" asp-route-BeneficiaryUserName="AccountNumber" class="btn btn-sm btn-outline-danger">Eliminar</a>
                                 </div>
                             </div>
                         </div>
@@ -64,7 +70,7 @@
                 <h1 class="modal-title fs-5" id="modalLabel">Agregar Beneficiario</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form asp-controller="Beneficiary" asp-action="Add" method="post">
+            <form asp-controller="Client" asp-action="CreateBeneficiary" method="post">
                 <input required type="text" class="form-control" name="accountNumber" />
 
 

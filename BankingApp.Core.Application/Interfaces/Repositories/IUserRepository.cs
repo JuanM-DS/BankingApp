@@ -14,6 +14,5 @@ namespace BankingApp.Core.Application.Interfaces.Repositories
         public IQueryable<ApplicationUserDTO> Get();
 
         public Task<IQueryable<ApplicationUserDTO>> GetAsync(RoleTypes role);
-        public Task<ApplicationUserDTO> GetUserByUserName(string userName);
     }
 }

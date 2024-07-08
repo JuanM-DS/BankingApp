@@ -3,6 +3,7 @@ using BankingApp.Core.Domain.Common;
 using BankingApp.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using BankingApp.Core.Application.Enums;
 
 namespace BankingApp.Infrastructure.Persistence.Repositories
 {
@@ -12,7 +13,7 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
 
         public GenericRepository(ApplicationContext dbContext)
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext;            
         }
 
         public virtual async Task AddAsync(Entity entity)
@@ -36,7 +37,7 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
 
         public virtual IQueryable<Entity> GetAllAsync()
         {
-            return  _dbContext.Set<Entity>();
+            return _dbContext.Set<Entity>();
         }
 
         public virtual async Task<Entity> GetByIdAsync(int id)

@@ -16,10 +16,13 @@
                 <form method="post" asp-controller="Client" asp-action="ConfirmTransactionExpressPost">
 
                     <input type="hidden" asp-for="FromAccountId" />
-                    <input type="hidden" asp-for="ToAccount" />
+                    <input type="hidden" asp-for="ToAccountId" />
                     <input type="hidden" asp-for="Amount" />
 
-
+                    <div class="form-group mb-3">
+                        <label for="nombre">Nombre y apellido del destinatario:</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" value="@Model.FirstName @Model.LastName" readonly>
+                    </div>
                     <button type="submit" class="btn btn-success">Si</button>
                     <a asp-controller="Client" asp-action="Index" class="btn btn-warning">No</a>
 

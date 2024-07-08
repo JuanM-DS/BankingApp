@@ -9,6 +9,13 @@
 
     <div class="row">
         <div class="col-6 offset-3">
+            @if (ViewBag.InsufficientMoney != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <p>@ViewBag.Message</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            }
             <div class="card">
                 <div class="card-header bg-dark text-light">
                     <h4>Pago expreso</h4>
@@ -18,9 +25,9 @@
                     <form method="post" asp-controller="Client" asp-action="ExpressPayment" enctype="multipart/form-data">
 
                         <div class="mb-3">
-                            <label asp-for="ToAccount" class="form-label">Numero de cuenta de destino: </label>
-                            <input asp-for="ToAccount" type="number" class="form-control" />
-                            <span asp-validation-for="ToAccount" class="text-danger"></span>
+                            <label asp-for="ToAccountId" class="form-label">Numero de cuenta de destino: </label>
+                            <input asp-for="ToAccountId" type="number" class="form-control" />
+                            <span asp-validation-for="ToAccountId" class="text-danger"></span>
                         </div>
 
 

@@ -11,6 +11,7 @@ namespace BankingApp.Core.Application.ViewModels.Beneficiary
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int AccountNumber { get; set; }
-        public string UserUserName { get; set; }
+        public string UserName { get; set; }
+        public string BeneficiaryUserName { get; set; }
     }
 }

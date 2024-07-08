@@ -16,9 +16,6 @@ namespace BankingApp.Core.Application.ViewModels.Payment
         public byte Type { get; set; }
 
         [Required]
-        public byte ProductType { get; set; }
-
-        [Required]
         public string UserName { get; set; }
 
     }

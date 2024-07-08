@@ -189,9 +189,6 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
                 payment.Property(p => p.Type)
                 .IsRequired();
 
-                payment.Property(p => p.ProductType)
-                .IsRequired();
-
                 payment.Property(l => l.CreatedBy)
                 .IsRequired();
 
