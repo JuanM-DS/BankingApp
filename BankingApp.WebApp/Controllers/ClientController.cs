@@ -22,7 +22,7 @@ namespace BankingApp.WebApp.Controllers
         public readonly IPaymentService _paymentService;
         public readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly AuthenticationResponseDTO userViewModel;
+        private readonly UserViewModel userViewModel;
 
         public ClientController(IBeneficiaryService beneficiaryService,ISavingsAccountService savingsAccountService, ICreditCardService creditCardService, ILoanService loanService,IPaymentService paymentService, IUserService userService, IHttpContextAccessor httpContextAccessor)
         {
@@ -33,7 +33,7 @@ namespace BankingApp.WebApp.Controllers
             _paymentService = paymentService;
             _userService = userService;
             _httpContextAccessor = httpContextAccessor;
-            userViewModel = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponseDTO>("user");
+            userViewModel = _httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
         }
 
         public async Task <IActionResult> Index()
@@ -45,7 +45,7 @@ namespace BankingApp.WebApp.Controllers
         public async Task<IActionResult> Beneficiary()
         {
             List<BeneficiaryViewModel> Vm = await _beneficiaryService.BeneficiariesList();
-            return View("Beneficiary",Vm.Where(b => b.UserName == userViewModel.UserDTO.UserName));
+            return View("Beneficiary",Vm.Where(b => b.UserName == userViewModel.UserName));
         }
 
         public async Task<IActionResult> CreateBeneficiary(int accountNumber)

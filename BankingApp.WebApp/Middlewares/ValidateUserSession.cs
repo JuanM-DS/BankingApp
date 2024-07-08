@@ -1,5 +1,6 @@
 ﻿using BankingApp.Core.Application.DTOs.Account.Authentication;
 using BankingApp.Core.Application.Helpers;
+using BankingApp.Core.Application.ViewModels.User;
 
 namespace BankingApp.WebApp.Middlewares
 {
@@ -14,7 +15,7 @@ namespace BankingApp.WebApp.Middlewares
 
         public bool HasUser()
         {
-            AuthenticationResponseDTO userViewModel = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponseDTO>("user");
+            UserViewModel userViewModel = _httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
 
             if (userViewModel == null)
             {

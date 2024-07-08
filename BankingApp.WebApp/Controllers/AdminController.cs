@@ -2,6 +2,7 @@
 using BankingApp.Core.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.Core.Application.Helpers;
+using BankingApp.Core.Application.ViewModels.User;
 
 namespace BankingApp.WebApp.Controllers
 {
@@ -13,7 +14,7 @@ namespace BankingApp.WebApp.Controllers
         private readonly IPaymentService _paymentService;
         private readonly IUserService _userService; 
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly AuthenticationResponseDTO userViewModel;
+        private readonly UserViewModel userViewModel;
 
         public AdminController(ISavingsAccountService savingsAccountService, ICreditCardService creditCardService, ILoanService loanService, IPaymentService paymentService, IUserService userService, IHttpContextAccessor httpContextAccessor)
         {
@@ -23,7 +24,7 @@ namespace BankingApp.WebApp.Controllers
             _paymentService = paymentService;
             _userService = userService;
             _httpContextAccessor = httpContextAccessor;
-            userViewModel = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponseDTO>("user");
+            userViewModel = _httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
         }
 
         public IActionResult Index(int? filterOption)
