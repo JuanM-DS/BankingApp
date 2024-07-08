@@ -41,9 +41,9 @@ namespace BankingApp.Core.Application.Services
             return fullBeneficiaries;
         }
 
-        public override async Task Delete(int id)
+        public async Task Delete(string userName, int accuntNumber)
         {
-            Beneficiary beneficiary = await _beneficiaryRepository.GetBeneficiary(id);
+            Beneficiary beneficiary = await _beneficiaryRepository.GetBeneficiary(userName, accuntNumber);
             await _beneficiaryRepository.DeleteAsync(beneficiary);
         }
     }
