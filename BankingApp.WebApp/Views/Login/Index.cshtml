@@ -1,28 +1,54 @@
-﻿@model LoginViewModel
-@{
-    ViewData["Title"] = "Login";
-}
+﻿@using BankingApp.Core.Application.ViewModels.Account
 
-<div class="d-flex justify-content-center align-items-center">
-    <div class="card shadow-sm" style="max-width: 400px; width: 100%; border-radius: 10px;">
-        <div class="card-body">
-            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-            <form method="post" asp-controller="Login" asp-action="Index">
-                <div class="mb-3">
-                    <label asp-for="NombreUsuario" class="form-label">Nombre de usuario</label>
-                    <input class="form-control" asp-for="NombreUsuario" placeholder="Escribe el nombre de usuario">
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Home Page";
+    var Success = ViewData["Success"] as bool?;
+    Success = Success ?? false;
+    var error = ViewData["Error"] as string;
+}
+<link rel="stylesheet" href="~/SM.WebApplication.styles.css" asp-append-version="true" />
+
+
+<div class="container-fluid">
+    <div class="w50">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between">
+                    <h5>Log in</h5>
+                    <a asp-controller="Login" asp-action="Register" class="btn btn-light btn-sm">Register</a>
                 </div>
-                <div class="mb-3">
-                    <label asp-for="Contrasena" class="form-label">Contraseña</label>
-                    <input class="form-control" asp-for="Contrasena" type="password" placeholder="Escribe la contraseña">
-                </div>
-                <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(to right, #6a11cb, #2575fc); border: none;">Iniciar sesión</button>
-                </div>
-                <div class="text-center mt-3">
-                  
-                </div>
-            </form>
+            </div>
+            <div class="card-body">
+                <form method="post" asp-controller="Login" asp-action="Index">
+
+                    @if (Success.Value)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <div class="mb-3">
+                        <label asp-for="UserName" for="exampleInputEmail1" class="form-label">Email address</label>
+                        <input asp-for="UserName" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" for="exampleInputPassword1" class="form-label">Password</label>
+                        <input asp-for="Password" type="password" class="form-control" id="exampleInputPassword1">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="btn-form d-flex align-items-center">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a asp-controller="Login" asp-action="ForgotPassword" class="btn btn-light btn-sm">Forget Password</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
