@@ -1,5 +1,4 @@
-﻿using BankingApp.Core.Application.DTOs.Account.Authentication;
-using BankingApp.Core.Application.Interfaces.Services;
+﻿using BankingApp.Core.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.Core.Application.Helpers;
 using BankingApp.Core.Application.ViewModels.User;
