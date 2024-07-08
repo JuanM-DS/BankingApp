@@ -134,7 +134,6 @@ namespace BankingApp.WebApp.Controllers
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToAccountId;
             payment.Type = ((byte)PaymentTypes.Transfers);
-            payment.ProductType = ((byte)ProductTypes.SavingsAccount);
 
             await _paymentService.Add(payment);
 
@@ -183,7 +182,6 @@ namespace BankingApp.WebApp.Controllers
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToCreditCardId;
             payment.Type = ((byte)PaymentTypes.PaymentToCreditCard);
-            payment.ProductType = ((byte)ProductTypes.CreditCard);
 
             await _paymentService.Add(payment);
 
@@ -237,7 +235,6 @@ namespace BankingApp.WebApp.Controllers
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToLoanId;
             payment.Type = ((byte)PaymentTypes.PaymentToLoan);
-            payment.ProductType = ((byte)ProductTypes.Loan);
 
             await _paymentService.Add(payment);
 
@@ -291,7 +288,6 @@ namespace BankingApp.WebApp.Controllers
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToBeneficiaryId;
             payment.Type = ((byte)PaymentTypes.Transfers);
-            payment.ProductType = ((byte)ProductTypes.SavingsAccount);
 
             await _paymentService.Add(payment);
 
@@ -342,7 +338,6 @@ namespace BankingApp.WebApp.Controllers
             payment.FromProductId = vm.FromCreditCardId;
             payment.ToProductId = vm.ToAccountId;
             payment.Type = ((byte)PaymentTypes.CashAdvance);
-            payment.ProductType = ((byte)ProductTypes.SavingsAccount);
 
             await _paymentService.Add(payment);
 
@@ -396,7 +391,6 @@ namespace BankingApp.WebApp.Controllers
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToAccountId;
             payment.Type = ((byte)PaymentTypes.Transfers);
-            payment.ProductType = ((byte)ProductTypes.SavingsAccount);
 
             await _paymentService.Add(payment);
 

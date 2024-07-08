@@ -34,19 +34,9 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
             List<Payment> transactionsTillCutoffDay = await _dbContext.Set<Payment>().Where(ts => ts.FromProductId == CreditCardNumber)
                                                                                      .Where(ts => ts.CreatedTime > PreviousCutoffdate && ts.CreatedTime <= CurrentCutoffdate).ToListAsync();
 
-            double TotalAmount =0;
+            double TotalAmount = transactionsTillCutoffDay.Where(x => x.Type == ((byte)PaymentTypes.CashAdvance)).Sum(x => x.Amount);
+            TotalAmount -= transactionsTillCutoffDay.Where(x => x.Type == ((byte)PaymentTypes.PaymentToCreditCard)).Sum(x => x.Amount);
 
-            foreach (Payment payment in transactionsTillCutoffDay)
-            {
-                if (payment.Type == (byte)PaymentTypes.CashAdvance)
-                {
-                    TotalAmount -= payment.Amount;
-                }
-                else if (payment.ProductType == (byte)ProductTypes.CreditCard)
-                {
-                    TotalAmount += payment.Amount;
-                }
-            }
             return TotalAmount;
         }
     }
