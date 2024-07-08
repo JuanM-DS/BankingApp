@@ -10,14 +10,11 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
     public class BeneficiaryRepository : GenericRepository<Beneficiary>, IBeneficiaryRepository
     {
         private readonly ApplicationContext _dbContext;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ApplicationUserDTO User;
 
-        public BeneficiaryRepository(ApplicationContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
+        public BeneficiaryRepository(ApplicationContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
-            _httpContextAccessor = httpContextAccessor;
-            User = _httpContextAccessor.HttpContext.Session.Get<ApplicationUserDTO>("user");
+            
         }
 
         public async Task<Beneficiary> GetBeneficiary (int AccountNumber)

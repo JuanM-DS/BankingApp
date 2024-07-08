@@ -1,4 +1,5 @@
 ﻿using BankingApp.Core.Application.CostomEntities;
+using BankingApp.Core.Application.DTOs.Account.Authentication;
 using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.Interfaces.Services;
 using BankingApp.Core.Application.ViewModels.Beneficiary;
@@ -8,6 +9,8 @@ using BankingApp.Core.Application.ViewModels.Payment;
 using BankingApp.Core.Application.ViewModels.SavingsAccount;
 using BankingApp.Core.Application.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
+using BankingApp.Core.Application.Helpers;
+using Microsoft.AspNetCore.Http;
 
 namespace BankingApp.WebApp.Controllers
 {
@@ -19,8 +22,10 @@ namespace BankingApp.WebApp.Controllers
         public readonly ILoanService _loanService;
         public readonly IPaymentService _paymentService;
         public readonly IUserService _userService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly AuthenticationResponseDTO userViewModel;
 
-        public ClientController(IBeneficiaryService beneficiaryService,ISavingsAccountService savingsAccountService, ICreditCardService creditCardService, ILoanService loanService,IPaymentService paymentService, IUserService userService)
+        public ClientController(IBeneficiaryService beneficiaryService,ISavingsAccountService savingsAccountService, ICreditCardService creditCardService, ILoanService loanService,IPaymentService paymentService, IUserService userService, IHttpContextAccessor httpContextAccessor)
         {
             _beneficiaryService = beneficiaryService;
             _savingsAccountService = savingsAccountService;
@@ -28,6 +33,8 @@ namespace BankingApp.WebApp.Controllers
             _loanService = loanService;
             _paymentService = paymentService;
             _userService = userService;
+            _httpContextAccessor = httpContextAccessor;
+            userViewModel = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponseDTO>("user");
         }
 
         public async Task <IActionResult> Index()
@@ -39,7 +46,7 @@ namespace BankingApp.WebApp.Controllers
         public async Task<IActionResult> Beneficiary()
         {
             List<BeneficiaryViewModel> Vm = await _beneficiaryService.BeneficiariesList();
-            return View("Beneficiary",Vm);
+            return View("Beneficiary",Vm.Where(b => b.UserName == userViewModel.UserDTO.UserName));
         }
 
         public async Task<IActionResult> CreateBeneficiary(int accountNumber)

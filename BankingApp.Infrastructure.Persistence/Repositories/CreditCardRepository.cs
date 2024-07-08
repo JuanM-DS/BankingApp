@@ -17,12 +17,10 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
     public class CreditCardRepository : GenericRepository<CreditCard>, ICreditCardRepository
     {
         private readonly ApplicationContext _dbContext;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CreditCardRepository(ApplicationContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
+        public CreditCardRepository(ApplicationContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
-            _httpContextAccessor = httpContextAccessor;
         }
 
     }
