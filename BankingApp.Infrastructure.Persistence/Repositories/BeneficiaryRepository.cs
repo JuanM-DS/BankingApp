@@ -17,9 +17,9 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
             
         }
 
-        public async Task<Beneficiary> GetBeneficiary (int AccountNumber)
+        public async Task<Beneficiary> GetBeneficiary (string userName, int AccountNumber)
         {
-            Beneficiary beneficiary = _dbContext.Set<Beneficiary>().FirstOrDefault(b => b.UserName == User.UserName && b.AccountNumber == AccountNumber);
+            Beneficiary beneficiary = _dbContext.Set<Beneficiary>().FirstOrDefault(b => b.UserName == userName && b.AccountNumber == AccountNumber);
 
             return beneficiary;
         }
