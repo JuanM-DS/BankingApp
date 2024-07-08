@@ -10,20 +10,11 @@ using BankingApp.Core.Application.ViewModels.SavingsAccount;
 using BankingApp.Core.Application.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.Core.Application.Helpers;
-using Microsoft.AspNetCore.Http;
 
 namespace BankingApp.WebApp.Controllers
 {
     public class ClientController : Controller
     {
-<<<<<<< HEAD
-        private readonly IBeneficiaryService _beneficiaryService;
-        private readonly ISavingsAccountService _savingsAccountService;
-        private readonly ICreditCardService _creditCardService;
-        private readonly ILoanService _loanService;
-        private readonly IPaymentService _paymentService;
-        private readonly IUserService _userService;
-=======
         public readonly IBeneficiaryService _beneficiaryService;
         public readonly ISavingsAccountService _savingsAccountService;
         public readonly ICreditCardService _creditCardService;
@@ -32,7 +23,6 @@ namespace BankingApp.WebApp.Controllers
         public readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AuthenticationResponseDTO userViewModel;
->>>>>>> master
 
         public ClientController(IBeneficiaryService beneficiaryService,ISavingsAccountService savingsAccountService, ICreditCardService creditCardService, ILoanService loanService,IPaymentService paymentService, IUserService userService, IHttpContextAccessor httpContextAccessor)
         {
