@@ -16,13 +16,13 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between">
                     <h5>Log in</h5>
-                    <a asp-controller="Home" asp-action="Register" class="btn btn-light btn-sm">Register</a>
+                    <a asp-controller="Login" asp-action="Register" class="btn btn-light btn-sm">Register</a>
                 </div>
             </div>
             <div class="card-body">
-                <form method="post" asp-controller="Home" asp-action="Index">
+                <form method="post" asp-controller="Login" asp-action="Index">
 
-                    @if (!Success.Value)
+                    @if (Success.Value)
                     {
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             @error
@@ -45,9 +45,8 @@
 
                     <div class="btn-form d-flex align-items-center">
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <a asp-controller="Home" asp-action="ForgotPassword" class="btn btn-light btn-sm">Forget Password</a>
+                        <a asp-controller="Login" asp-action="ForgotPassword" class="btn btn-light btn-sm">Forget Password</a>
                     </div>
-
                 </form>
             </div>
         </div>
