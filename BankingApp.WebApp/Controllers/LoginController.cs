@@ -1,14 +1,16 @@
-using BankingApp.WebApp.Models;
+using BankingApp.Core.Application.ViewModels.Account;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace BankingApp.WebApp.Controllers
 {
     public class LoginController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index() => View();
+
+        [HttpPost]
+        public IActionResult Index(LoginViewModel login)
         {
-            return View();
+            return View(login);
         }
     }
 }
