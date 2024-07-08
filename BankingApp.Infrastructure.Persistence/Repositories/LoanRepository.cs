@@ -13,12 +13,10 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
     public class LoanRepository : GenericRepository<Loan>, ILoanRepository
     {
         private readonly ApplicationContext _dbContext;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public LoanRepository(ApplicationContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
+        public LoanRepository(ApplicationContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
-            _httpContextAccessor = httpContextAccessor;
         }
     }
 }

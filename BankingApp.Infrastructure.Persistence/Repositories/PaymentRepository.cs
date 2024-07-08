@@ -15,12 +15,10 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
     public class PaymentRepository : GenericRepository<Payment>, IPaymentRepository
     {
         private readonly ApplicationContext _dbContext;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PaymentRepository(ApplicationContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
+        public PaymentRepository(ApplicationContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Double> TransactionsTillCutoffDay(int CutoffDay, int CreditCardNumber)

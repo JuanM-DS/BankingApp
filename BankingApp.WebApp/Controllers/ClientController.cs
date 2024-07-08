@@ -1,4 +1,5 @@
 ﻿using BankingApp.Core.Application.CostomEntities;
+using BankingApp.Core.Application.DTOs.Account.Authentication;
 using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.Interfaces.Services;
 using BankingApp.Core.Application.ViewModels.Beneficiary;
@@ -8,19 +9,32 @@ using BankingApp.Core.Application.ViewModels.Payment;
 using BankingApp.Core.Application.ViewModels.SavingsAccount;
 using BankingApp.Core.Application.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
+using BankingApp.Core.Application.Helpers;
+using Microsoft.AspNetCore.Http;
 
 namespace BankingApp.WebApp.Controllers
 {
     public class ClientController : Controller
     {
+<<<<<<< HEAD
         private readonly IBeneficiaryService _beneficiaryService;
         private readonly ISavingsAccountService _savingsAccountService;
         private readonly ICreditCardService _creditCardService;
         private readonly ILoanService _loanService;
         private readonly IPaymentService _paymentService;
         private readonly IUserService _userService;
+=======
+        public readonly IBeneficiaryService _beneficiaryService;
+        public readonly ISavingsAccountService _savingsAccountService;
+        public readonly ICreditCardService _creditCardService;
+        public readonly ILoanService _loanService;
+        public readonly IPaymentService _paymentService;
+        public readonly IUserService _userService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly AuthenticationResponseDTO userViewModel;
+>>>>>>> master
 
-        public ClientController(IBeneficiaryService beneficiaryService,ISavingsAccountService savingsAccountService, ICreditCardService creditCardService, ILoanService loanService,IPaymentService paymentService, IUserService userService)
+        public ClientController(IBeneficiaryService beneficiaryService,ISavingsAccountService savingsAccountService, ICreditCardService creditCardService, ILoanService loanService,IPaymentService paymentService, IUserService userService, IHttpContextAccessor httpContextAccessor)
         {
             _beneficiaryService = beneficiaryService;
             _savingsAccountService = savingsAccountService;
@@ -28,6 +42,8 @@ namespace BankingApp.WebApp.Controllers
             _loanService = loanService;
             _paymentService = paymentService;
             _userService = userService;
+            _httpContextAccessor = httpContextAccessor;
+            userViewModel = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponseDTO>("user");
         }
 
         public async Task <IActionResult> Index()
@@ -39,7 +55,7 @@ namespace BankingApp.WebApp.Controllers
         public async Task<IActionResult> Beneficiary()
         {
             List<BeneficiaryViewModel> Vm = await _beneficiaryService.BeneficiariesList();
-            return View("Beneficiary",Vm);
+            return View("Beneficiary",Vm.Where(b => b.UserName == userViewModel.UserDTO.UserName));
         }
 
         public async Task<IActionResult> CreateBeneficiary(int accountNumber)

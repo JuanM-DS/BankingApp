@@ -13,12 +13,10 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
     public class SavingsAccountRepository : GenericRepository<SavingsAccount>, ISavingsAccountRepository
     {
         private readonly ApplicationContext _dbContext;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SavingsAccountRepository(ApplicationContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
+        public SavingsAccountRepository(ApplicationContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
-            _httpContextAccessor = httpContextAccessor;
         }
     }
 }
