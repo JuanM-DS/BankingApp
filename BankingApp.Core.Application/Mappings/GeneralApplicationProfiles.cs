@@ -1,5 +1,10 @@
 ﻿using AutoMapper;
+using BankingApp.Core.Application.DTOs.Account.Authentication;
+using BankingApp.Core.Application.DTOs.Account.ConfirmAccount;
+using BankingApp.Core.Application.DTOs.Account.ForgotPassword;
+using BankingApp.Core.Application.DTOs.Account.ResetPassword;
 using BankingApp.Core.Application.DTOs.User;
+using BankingApp.Core.Application.ViewModels.Account;
 using BankingApp.Core.Application.ViewModels.Beneficiary;
 using BankingApp.Core.Application.ViewModels.Payment;
 using BankingApp.Core.Application.ViewModels.SavingsAccount;
@@ -45,6 +50,20 @@ namespace BankingApp.Core.Application.Mappings
                 .ForMember(des => des.ToLoan, opt => opt.Ignore());
 
             CreateMap<Payment, PaymentViewModel>()
+                .ReverseMap();
+            #endregion
+
+            #region Account
+            CreateMap<AuthenticationRequestDTO, LoginViewModel>()
+                .ReverseMap();
+
+            CreateMap<ForgotPasswordViewModel, ForgotPasswordRequestDTO>()
+                .ReverseMap();
+
+            CreateMap<ResetPasswordViewModel, ResetPasswordRequestDTO>()
+                .ReverseMap();
+
+            CreateMap<ConfirmAccountViewModel, ConfirmAccountRequestDTO>()
                 .ReverseMap();
             #endregion
 

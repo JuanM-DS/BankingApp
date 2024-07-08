@@ -1,7 +1,7 @@
 ﻿using BankingApp.Core.Application.CostomEntities;
-using BankingApp.Core.Application.DTOs.User;
 using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.QuerryFiilters;
+using BankingApp.Core.Application.ViewModels.Account;
 using BankingApp.Core.Application.ViewModels.User;
 
 namespace BankingApp.Core.Application.Interfaces.Services
@@ -24,5 +24,16 @@ namespace BankingApp.Core.Application.Interfaces.Services
 
         public Task<Response<IEnumerable<UserViewModel>>> GetAll(RoleTypes roleType);
 
+        public Task<Response<UserViewModel>> LoginAsync(LoginViewModel login);
+
+        public Task<Response<UserViewModel>> RegisterAsync(SaveUserViewModel userViewModel);
+
+        public Task SingOutAsync();
+
+        public Task<Response<bool>> ForgotPasswordAsync(ForgotPasswordViewModel viewModel);
+
+        public Task<Response<bool>> ResetPasswordAsync(ResetPasswordViewModel viewModel);
+
+        public Task<Response<bool>> ConfirmAccountAsync(ConfirmAccountViewModel viewModel);
     }
 }
