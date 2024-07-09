@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.Core.Application.Helpers;
 using BankingApp.Core.Application.ViewModels.User;
+using BankingApp.Core.Application.QueryFilters;
+using BankingApp.Core.Application.Enums;
+using BankingApp.Core.Application.ViewModels.Payment;
 
 namespace BankingApp.WebApp.Controllers
 {
@@ -26,28 +29,40 @@ namespace BankingApp.WebApp.Controllers
             userViewModel = _httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
         }
 
-        public IActionResult Index(int? filterOption)
+        public async Task<IActionResult> Index(int? filterOption)
         {
             if (filterOption == null)
             {
-                return View();
+                ViewBag.ShowTransactions = false;
+                return View(await _paymentService.GetAllViewModel());
             }
-            
+
+            PaymentQueryFilters filters = new();
             switch (filterOption)
             {
                 case 0:
+                    filters.PaymentTypes.Add(PaymentTypes.Transfer);
                     break;
                 case 1:
+                    filters.PaymentTypes.Add(PaymentTypes.Transfer);
+                    filters.Time = DateTime.Now;
                     break;
                 case 2:
+                    filters.PaymentTypes.Add(PaymentTypes.PaymentToLoan);
+                    filters.PaymentTypes.Add(PaymentTypes.PaymentToCreditCard);
                     break;
                 case 3:
+                    filters.PaymentTypes.Add(PaymentTypes.PaymentToLoan);
+                    filters.PaymentTypes.Add(PaymentTypes.PaymentToCreditCard);
+                    filters.Time = DateTime.Now;
                     break;
                 default:
                     break;
             }
 
-            return View();
+            List<PaymentViewModel> payments = await _paymentService.GetAllViewModel(filters);
+            ViewBag.ShowTransactions = true;
+            return View(payments);
         }
     }
 }
