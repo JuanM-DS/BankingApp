@@ -7,8 +7,6 @@
     Success = Success ?? false;
     var error = ViewData["Error"] as string;
 }
-<link rel="stylesheet" href="~/SM.WebApplication.styles.css" asp-append-version="true" />
-
 
 <div class="container-fluid">
     <div class="w50">
@@ -31,9 +29,9 @@
                     }
 
                     <div class="mb-3">
-                        <label asp-for="UserName" for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input asp-for="UserName" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                        <label asp-for="UserName" class="form-label">User Name</label>
+                        <input asp-for="UserName" type="text" class="form-control">
+                        <div class="form-text">We'll never share your user name with anyone else.</div>
                         <span asp-validation-for="UserName" class="text-danger"></span>
                     </div>
 

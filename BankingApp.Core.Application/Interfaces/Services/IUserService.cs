@@ -18,7 +18,7 @@ namespace BankingApp.Core.Application.Interfaces.Services
 
         public Task<Response<SaveUserViewModel>> GetSaveByIdAsync(string id);
 
-        public Task<Response<UserViewModel>> GetByNameAsync(string userName);
+        public Response<UserViewModel> GetByNameAsync(string userName);
 
         public Response<IEnumerable<UserViewModel>> GetAll(UserQueryFilter? filters = null);
 
@@ -26,7 +26,7 @@ namespace BankingApp.Core.Application.Interfaces.Services
 
         public Task<Response<UserViewModel>> LoginAsync(LoginViewModel login);
 
-        public Task<Response<UserViewModel>> RegisterAsync(SaveUserViewModel userViewModel);
+        public Task<Response<SaveUserViewModel>> RegisterAsync(SaveUserViewModel userViewModel);
 
         public Task SingOutAsync();
 

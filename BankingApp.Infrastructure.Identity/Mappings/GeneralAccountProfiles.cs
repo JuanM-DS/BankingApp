@@ -10,7 +10,9 @@ namespace BankingApp.Infrastructure.Identity.Mappings
         public GeneralAccountProfiles()
         {
             CreateMap<ApplicationUser, ApplicationUserDTO>()
-                .ForMember(des => des.Roles, opt => opt.Ignore());
+                .ForMember(des => des.Roles, opt => opt.Ignore())
+                .ReverseMap()
+                .ForMember(des => des.Id, opt => opt.Ignore());
         }
     }
 }

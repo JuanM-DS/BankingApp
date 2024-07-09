@@ -14,7 +14,7 @@ namespace BankingApp.Infrastructure.Identity.Contexts
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var entry in ChangeTracker.Entries<UserAuditableBaseEntity>())
+            foreach (var entry in ChangeTracker.Entries<ApplicationUser>())
             {
                 switch (entry.State)
                 {
