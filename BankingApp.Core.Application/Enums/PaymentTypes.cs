@@ -5,7 +5,7 @@
         Deposit,
         CashAdvance,
         Disbursement,
-        Transfers,
+        Transfer,
         PaymentToCreditCard,
         PaymentToLoan
     }

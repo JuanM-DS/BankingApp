@@ -33,11 +33,17 @@ namespace BankingApp.Core.Application.Services
             var payments = _paymentRepository.GetAllWithInclude(x=>x.FromLoan, x=>x.FromCrediCard, x=>x.FromAccount, x=>x.ToCreditCard, x=>x.ToAccount, x=>x.ToLoan);
             if (filters is not null)
             {
-                if (filters.PaymentTypes is not null)
-                    payments = payments.Where(x => x.Type == (int)filters.PaymentTypes);
+                if (filters.PaymentTypes is not null && filters.PaymentTypes.Count > 1)
+                {
+                    payments = payments.Where(x => x.Type == (byte)PaymentTypes.PaymentToLoan || x.Type == (byte)PaymentTypes.PaymentToCreditCard);
+                }
+                else
+                {
+                    payments = payments.Where(x => x.Type == (byte)PaymentTypes.Transfer);
+                }
 
                 if (filters.Time is not null)
-                    payments = payments.Where(x => x.CreatedTime == filters.Time);
+                    payments = payments.Where(x => x.CreatedTime.Day == filters.Time.Value.Day);
 
                 if (filters.FromProductId is not null)
                     payments = payments.Where(x => x.FromProductId == filters.FromProductId);
@@ -67,7 +73,7 @@ namespace BankingApp.Core.Application.Services
         {
             var payments = _paymentRepository.GetAllWithInclude(x => x.FromLoan, x => x.FromCrediCard, x => x.FromAccount, x => x.ToCreditCard, x => x.ToAccount, x => x.ToLoan);
 
-            var transactionsId = new List<int>() { (int)PaymentTypes.Deposit, (int)PaymentTypes.CashAdvance, (int)PaymentTypes.Transfers, (int)PaymentTypes.Disbursement };
+            var transactionsId = new List<int>() { (int)PaymentTypes.Deposit, (int)PaymentTypes.CashAdvance, (int)PaymentTypes.Transfer, (int)PaymentTypes.Disbursement };
 
             var transactions = payments.Where(x => transactionsId.Contains(x.Type));
 
@@ -99,10 +105,10 @@ namespace BankingApp.Core.Application.Services
         // se encarga de cargar los usuarios en los paymentViewModel
         private async Task<List<PaymentViewModel>> SetUserViewModelToPayments(List<PaymentViewModel> source)
         {
-            var query = await _userRepository.GetAsync(RoleTypes.Client);
+            var users = await _userRepository.GetAsync(RoleTypes.Client);
             foreach (var item in source)
             {
-                var userDto = await query.FirstOrDefaultAsync(u => u.UserName == item.UserName);
+                var userDto = users.FirstOrDefault(u => u.UserName == item.UserName);
                 item.User = _mapper.Map<UserViewModel>(userDto);
             };
 
@@ -111,9 +117,9 @@ namespace BankingApp.Core.Application.Services
 
         private async Task<PaymentViewModel> SetUserViewModelToPayment(PaymentViewModel source)
         {
-            var query = await _userRepository.GetAsync(RoleTypes.Client);
+            var users = await _userRepository.GetAsync(RoleTypes.Client);
 
-            var userDto = await query.FirstOrDefaultAsync(u => u.UserName == source.UserName);
+            var userDto = users.FirstOrDefault(u => u.UserName == source.UserName);
             source.User = _mapper.Map<UserViewModel>(userDto);
             return source;
         }

@@ -1,4 +1,4 @@
-﻿using BankingApp.Core.Application.CostomEntities;
+﻿using BankingApp.Core.Application.CustomEntities;
 using BankingApp.Core.Application.DTOs.Account.Authentication;
 using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.Interfaces.Services;
@@ -47,9 +47,9 @@ namespace BankingApp.WebApp.Controllers
             return View("Index",products);
         }
 
-        public async Task<IActionResult> Beneficiary()
+        public IActionResult Beneficiary()
         {
-            List<BeneficiaryViewModel> Vm = await _beneficiaryService.BeneficiariesList();
+            List<BeneficiaryViewModel> Vm = _beneficiaryService.BeneficiariesList();
             return View("Beneficiary",Vm.Where(b => b.UserName == userViewModel.UserName));
         }
 
@@ -123,7 +123,7 @@ namespace BankingApp.WebApp.Controllers
         public async Task<IActionResult> ConfirmTransactionExpress(SaveExpressPaymentViewModel vm)
         {
             SaveSavingsAccountViewModel savingsAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToAccountId);
-            Response<UserViewModel> user = await _userService.GetByNameAsync(savingsAccount.UserName);
+            Response<UserViewModel> user = _userService.GetByNameAsync(savingsAccount.UserName);
             vm.FirstName = user.Data.FirstName;
             vm.LastName = user.Data.LastName;
 
@@ -144,7 +144,7 @@ namespace BankingApp.WebApp.Controllers
             payment.Amount = vm.Amount;
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToAccountId;
-            payment.Type = ((byte)PaymentTypes.Transfers);
+            payment.Type = ((byte)PaymentTypes.Transfer);
 
             await _paymentService.Add(payment);
 
@@ -298,7 +298,7 @@ namespace BankingApp.WebApp.Controllers
             payment.Amount = vm.Amount;
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToBeneficiaryId;
-            payment.Type = ((byte)PaymentTypes.Transfers);
+            payment.Type = ((byte)PaymentTypes.Transfer);
 
             await _paymentService.Add(payment);
 
@@ -400,7 +400,7 @@ namespace BankingApp.WebApp.Controllers
             payment.Amount = vm.Amount;
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToAccountId;
-            payment.Type = ((byte)PaymentTypes.Transfers);
+            payment.Type = ((byte)PaymentTypes.Transfer);
 
             await _paymentService.Add(payment);
 

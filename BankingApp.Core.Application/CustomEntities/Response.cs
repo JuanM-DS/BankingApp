@@ -1,4 +1,4 @@
-﻿namespace BankingApp.Core.Application.CostomEntities
+﻿namespace BankingApp.Core.Application.CustomEntities
 {
     public class Response<T>
     {

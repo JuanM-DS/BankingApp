@@ -6,7 +6,7 @@ namespace BankingApp.Core.Application.ViewModels.User
 {
     public class SaveUserViewModel
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -24,17 +24,21 @@ namespace BankingApp.Core.Application.ViewModels.User
         [EmailAddress]
         public string Email { get; set; }
 
-        public bool EmailConfirmed { get; set; }
-
         [Required]
         [StringLength(20)]
         public string IdCard { get; set; }
 
         public byte Status { get; set; }
 
-        public List<RoleTypes> Roles { get; set; }
+        public RoleTypes? Role { get; set; }
 
         public string? PhotoUrl { get; set; }
+
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters long.")]
+        public string? Password { get; set; }
+
+        [Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
+        public string? ConfirmPassword { get; set; }
 
         [DataType(DataType.Upload)]
         public IFormFile? File { get; set; }

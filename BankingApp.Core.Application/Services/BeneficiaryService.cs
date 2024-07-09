@@ -23,7 +23,7 @@ namespace BankingApp.Core.Application.Services
             _userRepository = userRepository;
         }
 
-        public async Task<List<BeneficiaryViewModel>> BeneficiariesList()
+        public List<BeneficiaryViewModel> BeneficiariesList()
         {
             List<BeneficiaryViewModel> beneficiaries =  GetAllViewModel().ToList();
             BeneficiaryViewModel beneficiary = new();
@@ -31,8 +31,8 @@ namespace BankingApp.Core.Application.Services
 
             foreach (var bn in beneficiaries)
             {
-                var user = await _userRepository.Get()
-                                              .FirstOrDefaultAsync(x => x.UserName == bn.UserName);
+                var user = _userRepository.Get()
+                                              .FirstOrDefault(x => x.UserName == bn.UserName);
                 beneficiary = bn;
                 beneficiary = _mapper.Map<BeneficiaryViewModel>(user);
                 fullBeneficiaries.Add(beneficiary);

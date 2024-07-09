@@ -15,6 +15,7 @@ namespace BankingApp.Core.Application.ViewModels.Payment
         public int? ToProductId { get; set; }
 
         public double Amount { get; set; }
+        public DateTime CreatedTime { get; set; }
 
         public byte Type { get; set; }
 
