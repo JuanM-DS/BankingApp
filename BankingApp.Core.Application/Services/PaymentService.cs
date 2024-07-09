@@ -37,7 +37,7 @@ namespace BankingApp.Core.Application.Services
                     payments = payments.Where(x => x.Type == (int)filters.PaymentTypes);
 
                 if (filters.Time is not null)
-                    payments = payments.Where(x => x.CreatedTime == filters.Time);
+                    payments = payments.Where(x => x.CreatedTime.Day == filters.Time.Value.Day);
 
                 if (filters.FromProductId is not null)
                     payments = payments.Where(x => x.FromProductId == filters.FromProductId);
