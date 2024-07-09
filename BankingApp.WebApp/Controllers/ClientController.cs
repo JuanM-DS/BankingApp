@@ -10,6 +10,7 @@ using BankingApp.Core.Application.ViewModels.SavingsAccount;
 using BankingApp.Core.Application.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.Core.Application.Helpers;
+using BankingApp.Core.Application.ViewModels.Product;
 
 namespace BankingApp.WebApp.Controllers
 {
@@ -36,10 +37,14 @@ namespace BankingApp.WebApp.Controllers
             userViewModel = _httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
         }
 
-        public async Task <IActionResult> Index()
+        public  IActionResult Index()
         {
+            ProductsViewModel products = new();
+            products.Loans = _loanService.GetAllViewModel().Where(l => l.UserName == userViewModel.UserName).ToList();
+            products.savingsAccounts =  _savingsAccountService.GetAllViewModel().Where(l => l.UserName == userViewModel.UserName).ToList();
+            products.CreditCards = _creditCardService.GetAllViewModel().Where(l => l.UserName == userViewModel.UserName).ToList();
            
-            return View();
+            return View("Index",products);
         }
 
         public async Task<IActionResult> Beneficiary()
