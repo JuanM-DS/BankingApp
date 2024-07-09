@@ -33,7 +33,7 @@ namespace BankingApp.WebApp.Controllers
         {
             if (filterOption == null)
             {
-                ViewBag.ShowTransactions = false;
+                ViewBag.Transactions.Title = "Transacciones de hoy";
                 return View(await _paymentService.GetAllViewModel());
             }
 
@@ -41,17 +41,21 @@ namespace BankingApp.WebApp.Controllers
             switch (filterOption)
             {
                 case 0:
+                    ViewBag.Transactions.Title = "Transferencias Históricas";
                     filters.PaymentTypes.Add(PaymentTypes.Transfer);
                     break;
                 case 1:
+                    ViewBag.Transactions.Title = "Transferencias de hoy";
                     filters.PaymentTypes.Add(PaymentTypes.Transfer);
                     filters.Time = DateTime.Now;
                     break;
                 case 2:
+                    ViewBag.Transactions.Title = "Pagos Históricos";
                     filters.PaymentTypes.Add(PaymentTypes.PaymentToLoan);
                     filters.PaymentTypes.Add(PaymentTypes.PaymentToCreditCard);
                     break;
                 case 3:
+                    ViewBag.Transactions.Title = "Pagos de hoy";
                     filters.PaymentTypes.Add(PaymentTypes.PaymentToLoan);
                     filters.PaymentTypes.Add(PaymentTypes.PaymentToCreditCard);
                     filters.Time = DateTime.Now;
@@ -61,7 +65,6 @@ namespace BankingApp.WebApp.Controllers
             }
 
             List<PaymentViewModel> payments = await _paymentService.GetAllViewModel(filters);
-            ViewBag.ShowTransactions = true;
             return View(payments);
         }
     }
