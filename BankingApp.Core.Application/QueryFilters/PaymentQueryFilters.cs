@@ -6,8 +6,6 @@ namespace BankingApp.Core.Application.QueryFilters
     {
         public PaymentTypes? PaymentTypes { get; set; }
 
-        public ProductTypes? ProductTypes { get; set; }
-
         public DateTime? Time {  get; set; }
 
         public int? FromProductId { get; set; }
