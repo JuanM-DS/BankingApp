@@ -2,7 +2,7 @@
 {
     public class ImageServices
     {
-        public string UploadFile(IFormFile file, int id, string folder, bool isEditMode = false, string imagePath = "")
+        public string UploadFile(IFormFile file, string UserName, string folder, bool isEditMode = false, string imagePath = "")
         {
             if (isEditMode)
             {
@@ -15,7 +15,7 @@
             if (isEditMode && string.IsNullOrEmpty(imagePath))
                 isEditMode = false;
 
-            string basePath = $"/Images/{folder}/{id}";
+            string basePath = $"/Images/{folder}/{UserName}";
             string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot{basePath}");
 
             if (!Directory.Exists(path))

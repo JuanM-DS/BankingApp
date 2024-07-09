@@ -30,11 +30,11 @@ namespace BankingApp.Infrastructure.Identity.Repository
             }
         }
 
-        public IQueryable<ApplicationUserDTO> Get()
+        public IEnumerable<ApplicationUserDTO> Get()
         {
             var users = context.Users.AsQueryable();
 
-            return _mapper.Map<IQueryable<ApplicationUserDTO>>(users);
+            return _mapper.Map<IEnumerable<ApplicationUserDTO>>(users);
         }
 
         public async Task<ApplicationUserDTO> GetAsync(int id)
@@ -46,7 +46,7 @@ namespace BankingApp.Infrastructure.Identity.Repository
             return userDTo;
         }
 
-        public async Task<IQueryable<ApplicationUserDTO>> GetAsync(RoleTypes roleType)
+        public async Task<IEnumerable<ApplicationUserDTO>> GetAsync(RoleTypes roleType)
         {
             var role = await context.Roles.FirstOrDefaultAsync(x => x.Name == roleType.ToString());
 
@@ -59,7 +59,7 @@ namespace BankingApp.Infrastructure.Identity.Repository
 
             var users = context.Users.Where(x => UserIds.Contains(x.Id));
 
-            return _mapper.Map<IQueryable<ApplicationUserDTO>>(users);
+            return _mapper.Map<IEnumerable<ApplicationUserDTO>>(users);
         }
 
         public async Task<ApplicationUserDTO> GetAsync(string id)

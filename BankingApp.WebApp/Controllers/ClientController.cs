@@ -42,9 +42,9 @@ namespace BankingApp.WebApp.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Beneficiary()
+        public IActionResult Beneficiary()
         {
-            List<BeneficiaryViewModel> Vm = await _beneficiaryService.BeneficiariesList();
+            List<BeneficiaryViewModel> Vm = _beneficiaryService.BeneficiariesList();
             return View("Beneficiary",Vm.Where(b => b.UserName == userViewModel.UserName));
         }
 
@@ -118,7 +118,7 @@ namespace BankingApp.WebApp.Controllers
         public async Task<IActionResult> ConfirmTransactionExpress(SaveExpressPaymentViewModel vm)
         {
             SaveSavingsAccountViewModel savingsAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToAccountId);
-            Response<UserViewModel> user = await _userService.GetByNameAsync(savingsAccount.UserName);
+            Response<UserViewModel> user = _userService.GetByNameAsync(savingsAccount.UserName);
             vm.FirstName = user.Data.FirstName;
             vm.LastName = user.Data.LastName;
 

@@ -81,8 +81,8 @@ namespace BankingApp.Infrastructure.Identity.Services
 
         public async Task<ConfirmAccountResponseDTO> ConfirmAccountAsync(ConfirmAccountRequestDTO request)
         {
-            var userById = await _userManager.FindByIdAsync(request.UserId);
-            if (userById is null)
+            var userByEmail = await _userManager.FindByEmailAsync(request.Email);
+            if (userByEmail is null)
                 return new()
                 {
                     Success = false,
@@ -91,7 +91,7 @@ namespace BankingApp.Infrastructure.Identity.Services
 
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
 
-            var result = await _userManager.ConfirmEmailAsync(userById, code);
+            var result = await _userManager.ConfirmEmailAsync(userByEmail, code);
 
             if (!result.Succeeded)
                 return new()
@@ -103,7 +103,6 @@ namespace BankingApp.Infrastructure.Identity.Services
             return new()
             {
                 Success = true,
-                Error = $"Account confirm for {userById.Email}, You can now user the app"
             };
         }
 
@@ -159,7 +158,7 @@ namespace BankingApp.Infrastructure.Identity.Services
                 return new()
                 {
                     Success = false,
-                    Error = $"{request.UserName} is already taken"
+                    Error = $"the user name: {request.UserName} is already taken"
                 };
 
             var userByEmail = await _userManager.FindByEmailAsync(request.Email);
@@ -167,7 +166,7 @@ namespace BankingApp.Infrastructure.Identity.Services
                 return new()
                 {
                     Success = false,
-                    Error = $"{request.Email} is already taken"
+                    Error = $"the email: {request.Email} is already taken"
                 };
 
             var userByIdCard = await _userManager.Users.Where(x => x.IdCard == request.IdCard).FirstOrDefaultAsync();
@@ -175,12 +174,12 @@ namespace BankingApp.Infrastructure.Identity.Services
                 return new()
                 {
                     Success = false,
-                    Error = $"{request.IdCard} is already taken"
+                    Error = $"the idCard: {request.IdCard} is already taken"
                 };
 
             var user = _mapper.Map<ApplicationUser>(request);
 
-            var result = await _userManager.CreateAsync(user);
+            var result = await _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
                 return new()
                 {
@@ -193,7 +192,7 @@ namespace BankingApp.Infrastructure.Identity.Services
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            var url = _urlService.GetConfimrEmailUrl(token, userByEmail.Email);
+            var url = _urlService.GetConfimrEmailUrl(token, request.Email);
             var email = new EmailRequestDTO()
             {
                 To = user.Email,

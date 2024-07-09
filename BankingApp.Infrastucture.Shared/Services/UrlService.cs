@@ -9,7 +9,7 @@ namespace BankingApp.Infrastructure.Shared.Services
 
         public string GetConfimrEmailUrl(string token, string email)
         {
-            var route = "Login/ConfirmEmail";
+            var route = "/Login/ConfirmAccount";
 
             var uri = new Uri(string.Concat(origin, route));
             var finalUrl = QueryHelpers.AddQueryString(uri.ToString(), "Token", token);
@@ -19,7 +19,7 @@ namespace BankingApp.Infrastructure.Shared.Services
 
         public string GetResetPasswordUrl(string token, string email)
         {
-            var route = "Login/ResetPassword";
+            var route = "/Login/ResetPassword";
 
             var uri = new Uri(string.Concat(origin, route));
             var finalUrl = QueryHelpers.AddQueryString(uri.ToString(), "Token", token);

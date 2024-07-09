@@ -4,25 +4,22 @@
 @{
     ViewData["Title"] = "Home Page";
     var Success = ViewData["Success"] as bool?;
-    Success = Success ?? false;
+    Success = Success ?? true;
     var error = ViewData["Error"] as string;
 }
-<link rel="stylesheet" href="~/SM.WebApplication.styles.css" asp-append-version="true" />
-
 
 <div class="container-fluid">
-    <div class="w50">
+    <div class="w40">
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
                     <h5>Log in</h5>
-                    <a asp-controller="Login" asp-action="Register" class="btn btn-light btn-sm">Register</a>
                 </div>
             </div>
             <div class="card-body">
                 <form method="post" asp-controller="Login" asp-action="Index">
 
-                    @if (Success.Value)
+                    @if (!Success.Value)
                     {
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             @error
@@ -31,9 +28,9 @@
                     }
 
                     <div class="mb-3">
-                        <label asp-for="UserName" for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input asp-for="UserName" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                        <label asp-for="UserName" class="form-label">User Name</label>
+                        <input asp-for="UserName" type="text" class="form-control">
+                        <div class="form-text">We'll never share your user name with anyone else.</div>
                         <span asp-validation-for="UserName" class="text-danger"></span>
                     </div>
 
@@ -43,9 +40,9 @@
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
 
-                    <div class="btn-form d-flex align-items-center">
+                    <div class="btn-form d-flex align-items-center" style="gap: 3px;">
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <a asp-controller="Login" asp-action="ForgotPassword" class="btn btn-light btn-sm">Forget Password</a>
+                        <a asp-controller="Login" asp-action="ForgotPassword" class="btn btn-light btn-sm">Forgot Password</a>
                     </div>
                 </form>
             </div>

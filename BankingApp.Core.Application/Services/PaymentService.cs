@@ -99,10 +99,10 @@ namespace BankingApp.Core.Application.Services
         // se encarga de cargar los usuarios en los paymentViewModel
         private async Task<List<PaymentViewModel>> SetUserViewModelToPayments(List<PaymentViewModel> source)
         {
-            var query = await _userRepository.GetAsync(RoleTypes.Client);
+            var users = await _userRepository.GetAsync(RoleTypes.Client);
             foreach (var item in source)
             {
-                var userDto = await query.FirstOrDefaultAsync(u => u.UserName == item.UserName);
+                var userDto = users.FirstOrDefault(u => u.UserName == item.UserName);
                 item.User = _mapper.Map<UserViewModel>(userDto);
             };
 
@@ -111,9 +111,9 @@ namespace BankingApp.Core.Application.Services
 
         private async Task<PaymentViewModel> SetUserViewModelToPayment(PaymentViewModel source)
         {
-            var query = await _userRepository.GetAsync(RoleTypes.Client);
+            var users = await _userRepository.GetAsync(RoleTypes.Client);
 
-            var userDto = await query.FirstOrDefaultAsync(u => u.UserName == source.UserName);
+            var userDto = users.FirstOrDefault(u => u.UserName == source.UserName);
             source.User = _mapper.Map<UserViewModel>(userDto);
             return source;
         }
