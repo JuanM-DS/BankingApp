@@ -1,4 +1,6 @@
-﻿namespace BankingApp.Core.Application.QuerryFiilters
+﻿using BankingApp.Core.Application.Enums;
+
+namespace BankingApp.Core.Application.QueryFilters
 {
     public class UserQueryFilter
     {
@@ -7,5 +9,7 @@
         public string? IdCard { get; set; }
 
         public byte? Status { get; set; }
+
+        public RoleTypes? Role { get; set; }
     }
 }

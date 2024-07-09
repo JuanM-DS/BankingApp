@@ -5,6 +5,9 @@ using BankingApp.Core.Application.ViewModels.User;
 using BankingApp.Core.Application.QueryFilters;
 using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.ViewModels.Payment;
+using BankingApp.Core.Application.CustomEntities;
+using BankingApp.Core.Application.Services;
+using BankingApp.WebApp.Services;
 
 namespace BankingApp.WebApp.Controllers
 {
@@ -31,9 +34,24 @@ namespace BankingApp.WebApp.Controllers
 
         public async Task<IActionResult> Index(int? filterOption)
         {
+            UserQueryFilter userFilter = new();
+            userFilter.Role = RoleTypes.Client;
+
+            var users = _userService.GetAll(userFilter).Result.Data;
+
+            if (users != null)
+            {
+                ViewBag.ActiveClients = users.Where(x => x.Status == (byte)UserStatus.Active).Count();
+                ViewBag.InactiveClients = users.Where(x => x.Status == (byte)UserStatus.Inactive).Count();
+            }
+
+            ViewBag.TotalProducts = _savingsAccountService.GetAllViewModel().Count() +
+                                    _creditCardService.GetAllViewModel().Count() +
+                                    _loanService.GetAllViewModel().Count();
+
             if (filterOption == null)
             {
-                ViewBag.Transactions.Title = "Transacciones de hoy";
+                ViewBag.TransactionsTitle = "Transacciones de hoy";
                 return View(await _paymentService.GetAllViewModel());
             }
 
@@ -41,21 +59,21 @@ namespace BankingApp.WebApp.Controllers
             switch (filterOption)
             {
                 case 0:
-                    ViewBag.Transactions.Title = "Transferencias Históricas";
+                    ViewBag.TransactionsTitle = "Transferencias Históricas";
                     filters.PaymentTypes.Add(PaymentTypes.Transfer);
                     break;
                 case 1:
-                    ViewBag.Transactions.Title = "Transferencias de hoy";
+                    ViewBag.TransactionsTitle = "Transferencias de hoy";
                     filters.PaymentTypes.Add(PaymentTypes.Transfer);
                     filters.Time = DateTime.Now;
                     break;
                 case 2:
-                    ViewBag.Transactions.Title = "Pagos Históricos";
+                    ViewBag.TransactionsTitle = "Pagos Históricos";
                     filters.PaymentTypes.Add(PaymentTypes.PaymentToLoan);
                     filters.PaymentTypes.Add(PaymentTypes.PaymentToCreditCard);
                     break;
                 case 3:
-                    ViewBag.Transactions.Title = "Pagos de hoy";
+                    ViewBag.TransactionsTitle = "Pagos de hoy";
                     filters.PaymentTypes.Add(PaymentTypes.PaymentToLoan);
                     filters.PaymentTypes.Add(PaymentTypes.PaymentToCreditCard);
                     filters.Time = DateTime.Now;
@@ -66,6 +84,40 @@ namespace BankingApp.WebApp.Controllers
 
             List<PaymentViewModel> payments = await _paymentService.GetAllViewModel(filters);
             return View(payments);
+        }
+
+        //public IActionResult Users()
+        //{
+        //    return View(_userService.GetAll());
+        //}
+        public IActionResult Register() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> Register(SaveUserViewModel viewModel)
+        {
+            if (!ModelState.IsValid) return View(viewModel);
+
+
+            var result = await _userService.RegisterAsync(viewModel);
+            if (!result.Success)
+            {
+                ViewData["Success"] = result.Success;
+                ViewData["Error"] = result.Error;
+                return View(viewModel);
+            }
+            var newUser = result.Data;
+
+            //newUser.PhotoUrl = _imageService.UploadFile(viewModel.File, newUser.UserName, "Users");
+
+            var updateResponse = await _userService.UpdateAsync(newUser);
+            if (!updateResponse.Success)
+            {
+                ViewData["Success"] = result.Success;
+                ViewData["Error"] = result.Error;
+                return View();
+            }
+
+            return View(nameof(Index));
         }
     }
 }

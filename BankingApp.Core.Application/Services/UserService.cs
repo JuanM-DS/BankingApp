@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BankingApp.Core.Application.CostomEntities;
+using BankingApp.Core.Application.CustomEntities;
 using BankingApp.Core.Application.DTOs.Account.Authentication;
 using BankingApp.Core.Application.DTOs.Account.ConfirmAccount;
 using BankingApp.Core.Application.DTOs.Account.ForgotPassword;
@@ -8,9 +8,10 @@ using BankingApp.Core.Application.DTOs.User;
 using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.Interfaces.Repositories;
 using BankingApp.Core.Application.Interfaces.Services;
-using BankingApp.Core.Application.QuerryFiilters;
+using BankingApp.Core.Application.QueryFilters;
 using BankingApp.Core.Application.ViewModels.Account;
 using BankingApp.Core.Application.ViewModels.User;
+using System.Data;
 
 namespace BankingApp.Core.Application.Services
 {
@@ -68,9 +69,10 @@ namespace BankingApp.Core.Application.Services
             };
         }
 
-        public Response<IEnumerable<UserViewModel>> GetAll(UserQueryFilter? filters = null)
+        public async Task<Response<IEnumerable<UserViewModel>>> GetAll(UserQueryFilter? filters = null)
         {
-            var users = _userRepository.Get();
+            var users = await _userRepository.GetAsync((RoleTypes)filters.Role);
+
             if (filters is not null)
             {
                 if (filters.Email is not null)
@@ -81,6 +83,9 @@ namespace BankingApp.Core.Application.Services
 
                 if (filters.Status is not null)
                     users = users.Where(x => x.Status == filters.Status);
+
+                //if (filters.Role is not null)
+                //    users = users.Where(x => x.Roles.Contains((RoleTypes)filters.Role));
             }
 
             var userViewModels = _mapper.Map<IEnumerable<UserViewModel>>(users.AsEnumerable());

@@ -30,7 +30,7 @@ namespace BankingApp.Core.Application.ViewModels.User
 
         public byte Status { get; set; }
 
-        public List<RoleTypes>? Roles { get; set; }
+        public RoleTypes? Role { get; set; }
 
         public string? PhotoUrl { get; set; }
 

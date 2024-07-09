@@ -1,4 +1,4 @@
-﻿using BankingApp.Core.Application.CostomEntities;
+﻿using BankingApp.Core.Application.CustomEntities;
 using BankingApp.Core.Application.DTOs.Account.Authentication;
 using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.Interfaces.Services;
