@@ -16,15 +16,18 @@ namespace BankingApp.Infrastructure.Identity.Seeds
                 Email = "ClientUser@gmail.com",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
+                CreatedTime = DateTime.Now,
+                CreatedBy = "System",
+                IdCard = "0",
             };
 
             var userByUserName = await userManager.FindByNameAsync(user.UserName);
-            if (userByUserName is null) return;
+            if (userByUserName is not null) return;
 
             var userByEmail = await userManager.FindByEmailAsync(user.Email);
-            if (userByEmail is null) return;
+            if (userByEmail is not null) return;
 
-            await userManager.CreateAsync(user);
+            await userManager.CreateAsync(user, "123Pa$$word!");
 
             await userManager.AddToRoleAsync(user, RoleTypes.Client.ToString());
         }

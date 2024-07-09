@@ -1,10 +1,10 @@
+using BankingApp.Core.Application.Enums;
+using BankingApp.Core.Application.Helpers;
 using BankingApp.Core.Application.Interfaces.Services;
 using BankingApp.Core.Application.ViewModels.Account;
 using BankingApp.Core.Application.ViewModels.User;
-using BankingApp.Core.Application.Helpers;
 using BankingApp.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
-using BankingApp.Core.Application.Enums;
 
 namespace BankingApp.WebApp.Controllers
 {
@@ -35,5 +35,22 @@ namespace BankingApp.WebApp.Controllers
 
             return View(login);
         }
+
+        public async Task<IActionResult> ConfirmAccount(ConfirmAccountViewModel viewModel)
+        {
+
+            var result = await _userServices.ConfirmAccountAsync(viewModel);
+            if (!result.Success)
+            {
+                ViewData["Success"] = result.Success;
+                ViewData["Error"] = result.Error;
+               
+                return View(viewModel);
+            }
+
+            ViewData["Message"] = $"Account confirm for {viewModel.Email}, You can now user the app";
+
+            return View();
+        }  
     }
 }
