@@ -33,8 +33,14 @@ namespace BankingApp.Core.Application.Services
             var payments = _paymentRepository.GetAllWithInclude(x=>x.FromLoan, x=>x.FromCrediCard, x=>x.FromAccount, x=>x.ToCreditCard, x=>x.ToAccount, x=>x.ToLoan);
             if (filters is not null)
             {
-                if (filters.PaymentTypes is not null)
-                    payments = payments.Where(x => x.Type == (int)filters.PaymentTypes);
+                if (filters.PaymentTypes is not null && filters.PaymentTypes.Count > 1)
+                {
+                    payments = payments.Where(x => x.Type == (byte)PaymentTypes.PaymentToLoan || x.Type == (byte)PaymentTypes.PaymentToCreditCard);
+                }
+                else
+                {
+                    payments = payments.Where(x => x.Type == (byte)PaymentTypes.Transfer);
+                }
 
                 if (filters.Time is not null)
                     payments = payments.Where(x => x.CreatedTime.Day == filters.Time.Value.Day);
