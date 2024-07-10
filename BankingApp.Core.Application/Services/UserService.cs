@@ -71,10 +71,15 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<Response<IEnumerable<UserViewModel>>> GetAll(UserQueryFilter? filters = null)
         {
-            var users = await _userRepository.GetAsync((RoleTypes)filters.Role);
+            var users = _userRepository.Get();
 
             if (filters is not null)
             {
+                if (filters.Role is not null)
+                {
+                    users = await _userRepository.GetAsync((RoleTypes)filters.Role);
+                }
+
                 if (filters.Email is not null)
                     users = users.Where(x => x.Email == filters.Email);
 
@@ -84,8 +89,6 @@ namespace BankingApp.Core.Application.Services
                 if (filters.Status is not null)
                     users = users.Where(x => x.Status == filters.Status);
 
-                //if (filters.Role is not null)
-                //    users = users.Where(x => x.Roles.Contains((RoleTypes)filters.Role));
             }
 
             var userViewModels = _mapper.Map<IEnumerable<UserViewModel>>(users.AsEnumerable());
