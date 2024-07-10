@@ -9,13 +9,14 @@
     <div class="col-6 offset-3">
         <div class="card">
             <div class="card-header bg-danger text-light">
-                <h4>Esta seguro que desea eliminar el beneficiario?</h4>
+                <h4>Esta seguro que desea eliminar el beneficiario @Model.AccountNumber?</h4>
             </div>
             <div class="card-body">
 
                 <form method="post" asp-controller="Client" asp-action="DeleteBeneficiaryPost">
 
-                    <input type="hidden" asp-for="BeneficiaryUserName" />
+                    <input type="hidden" asp-for="UserName" />
+                    <input type="hidden" asp-for="AccountNumber" />
 
                     <button type="submit" class="btn btn-danger">Eliminar</button>
                     <a asp-controller="Client" asp-action="Beneficiary" class="btn btn-warning">Cancelar</a>
