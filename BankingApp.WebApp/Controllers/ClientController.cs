@@ -152,6 +152,16 @@ namespace BankingApp.WebApp.Controllers
                 ViewBag.Message = "El monto no puede ser cero, agrega uno mayor.";
                 return View("ExpressPayment", vm);
             }
+            if (vm.ToAccountId == vm.FromAccountId)
+            {
+                ViewBag.Message = "No se puede realizar una transaccion entre la misma cuenta.";
+                return View("ExpressPayment", vm);
+            }
+            if (ToAccount.UserName == userViewModel.UserName)
+            {
+                ViewBag.Message = "Para hacer transaciones entre cuentas propias vaya a tranferencia entre mis cuentas.";
+                return View("ExpressPayment", vm);
+            }
 
             return RedirectToAction("ConfirmTransactionExpress", vm);
         }
@@ -203,6 +213,8 @@ namespace BankingApp.WebApp.Controllers
             vm.FromAccounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
 
             SaveSavingsAccountViewModel FromAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.FromAccountId);
+            SaveCreditCardViewModel ToCreditCard = await _creditCardService.GetByIdSaveViewModel(vm.ToCreditCardId);
+
 
             if (!ModelState.IsValid)
             {
@@ -225,9 +237,13 @@ namespace BankingApp.WebApp.Controllers
                 ViewBag.Message = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto menor o igual a RD$"+FromAccount.Balance;
                 return View("CreditCardPayment", vm);
             }
+            if (ToCreditCard.CreditLimit == ToCreditCard.Balance)
+            {
+                ViewBag.Message = "Ya pagaste todo lo que debias de esa tarjeta de credito, selecciona otra o vuelve atras.";
+                return View("CreditCardPayment", vm);
+            }
 
 
-            SaveCreditCardViewModel ToCreditCard = await _creditCardService.GetByIdSaveViewModel(vm.ToCreditCardId);
             double transferAmount = Math.Min(vm.Amount, ToCreditCard.CreditLimit - ToCreditCard.Balance);
 
             ToCreditCard.Balance += transferAmount;
@@ -343,7 +359,7 @@ namespace BankingApp.WebApp.Controllers
 
             if (FromAccount.Balance < vm.Amount)
             {
-                ViewBag.Message = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto menor";
+                ViewBag.Message = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto menor o igual a RD$"+FromAccount.Balance;
                 return View("PaymentToBeneficiaries",vm);
             }
             if (vm.Amount == 0)
