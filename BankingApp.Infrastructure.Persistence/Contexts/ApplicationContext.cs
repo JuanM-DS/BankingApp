@@ -68,7 +68,7 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
                 .HasKey(s => s.Id);
 
             modelBuilder.Entity<Beneficiary>()
-                .HasKey(b => new {b.UserName,b.BeneficiaryUserName,b.AccountNumber});
+                .HasKey(b => new {b.UserName,b.AccountNumber});
 
             #endregion
 

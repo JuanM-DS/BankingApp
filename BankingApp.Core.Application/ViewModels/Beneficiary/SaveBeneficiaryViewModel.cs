@@ -9,7 +9,6 @@ namespace BankingApp.Core.Application.ViewModels.Beneficiary
     public class SaveBeneficiaryViewModel
     {
         public string UserName { get; set; }
-        public string BeneficiaryUserName { get; set; }
         public int AccountNumber { get; set; }
     }
 }

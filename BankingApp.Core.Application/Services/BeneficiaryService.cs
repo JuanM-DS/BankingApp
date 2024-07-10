@@ -34,7 +34,8 @@ namespace BankingApp.Core.Application.Services
                 var user = _userRepository.Get()
                                               .FirstOrDefault(x => x.UserName == bn.UserName);
                 beneficiary = bn;
-                beneficiary = _mapper.Map<BeneficiaryViewModel>(user);
+                beneficiary.FirstName = user.FirstName;
+                beneficiary.LastName = user.LastName;
                 fullBeneficiaries.Add(beneficiary);
             }
 

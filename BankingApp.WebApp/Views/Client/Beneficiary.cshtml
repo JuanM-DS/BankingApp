@@ -5,63 +5,61 @@
 }
 
 <div class="container-fluid">
-
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+            <h5 class="fw-bold">@ViewBag.Message</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    }
     <div class="row mb-3">
-        <div class="col-3 offset-9">
+        <div class="col-3 offset-0">
             <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addBeneficiaryModal">Añadir beneficiario</button>
-
         </div>
     </div>
 
-    <div class="row">
-        @if (ViewBag.Message != null)
-        {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <p>@ViewBag.Message</p>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-            </div>
-        }
-        @if (Model == null || Model.Count == 0)
-        {
-            <h2>No hay beneficiarios</h2>
-        }
-        else
-        {
-            @foreach (var beneficiary in Model)
+    <div class="shadow p-3 mb-5 bg-body-tertiary rounded border">
+        <div class="row mb-12">
+            <h2 class="text-center fw-bold text-success mb-5">Beneficiarios</h2>
+
+            @if (Model == null || Model.Count == 0)
             {
-                <div class="col-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <th>Nombre:</th>
-                                        <td>@beneficiary.FirstName</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Apellido:</th>
-                                        <td>@beneficiary.LastName</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Numero de cuenta:</th>
-                                        <td>@beneficiary.AccountNumber</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <a asp-controller="Client" asp-action="DeleteBeneficiary" asp-route-BeneficiaryUserName="AccountNumber" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                <h4 class="text-center text-muted">No hay beneficiarios</h4>
+            }
+            else
+            {
+                @foreach (var beneficiary in Model)
+                {
+                    <div class="col-4">
+                        <div class="full-height">
+                            <div class="product-grid">
+                                <div class="mb-3">
+                                    <div class="card border-success">
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <div class="d-flex align-items-center justify-content-start gap-1">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h5 class="fw-bold">Nombre: <span class="fw-bold text-success">@beneficiary.FirstName</span></h5>
+                                                <h5 class="fw-bold">Apellido: <span class="fw-bold text-success">@beneficiary.LastName</span></h5>
+                                                <h5 class="fw-bold">Numero de cuenta: <span class="fw-bold text-success">@beneficiary.AccountNumber</span></h5>
+                                            </div>
+                                            <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
+                                                <a asp-controller="Client" asp-action="DeleteBeneficiary" asp-route-AccountNumber="@beneficiary.AccountNumber" class="btn btn-danger">Eliminar</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             }
-        }
+
+        </div>
     </div>
-
 </div>
-
 
 <div class="modal fade" id="addBeneficiaryModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -71,7 +69,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form asp-controller="Client" asp-action="CreateBeneficiary" method="post">
-                <input required type="text" class="form-control" name="accountNumber" />
+                <input placeholder="Numero de cuenta" required type="text" class="form-control" name="accountNumber" />
 
 
                 <div class="modal-footer">
@@ -82,3 +80,6 @@
         </div>
     </div>
 </div>
+
+
+
