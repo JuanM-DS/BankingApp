@@ -78,7 +78,6 @@ namespace BankingApp.Core.Application.Services
                 if (filters.Role is not null)
                 {
                     users = await _userRepository.GetAsync((RoleTypes)filters.Role);
-                    users = users.Where(x => x.Roles.Contains((RoleTypes)filters.Role));
                 }
                     
                 if (filters.Email is not null)
