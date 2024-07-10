@@ -19,7 +19,7 @@ namespace BankingApp.Core.Application.Services
 
         public List<SavingsAccount> GetAllByUserWithInclude(string userName)
         {
-            var savingsAccount = _savingsAccountRepository.GetAllWithInclude(x => x.PaymentsFrom, x => x.PaymentsTo, x=>x.Beneficiaries);
+            var savingsAccount = _savingsAccountRepository.GetAllWithInclude();
 
             var savingsAccounts = savingsAccount.Where(x => x.UserName == userName)
                                                .ToList();

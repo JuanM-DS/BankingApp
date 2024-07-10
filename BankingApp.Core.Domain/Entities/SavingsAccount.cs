@@ -3,8 +3,9 @@
 
 namespace BankingApp.Core.Domain.Entities
 {
-    public class SavingsAccount: Product
+    public class SavingsAccount: BaseEntity
     {
+        public double Balance { get; set; }
         public bool IsPrincipal { get; set; }
         public ICollection<Beneficiary> Beneficiaries { get;}
     }

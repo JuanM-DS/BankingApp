@@ -2,8 +2,9 @@
 
 namespace BankingApp.Core.Domain.Entities
 {
-    public class Loan: Product
+    public class Loan: BaseEntity
     {
+        public double Balance { get; set; }
         public double InterestRate { get; set; }
 
         public double Installment {  get; set; }

@@ -93,8 +93,6 @@ namespace BankingApp.Core.Application.Mappings
             #region SavingsAccount
             CreateMap<SavingsAccount, SaveSavingsAccountViewModel>()
                .ReverseMap()
-               .ForMember(des => des.PaymentsTo, opt => opt.Ignore())
-               .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())
                .ForMember(des => des.Beneficiaries, opt => opt.Ignore())
                .ForMember(des => des.CreatedBy, opt => opt.Ignore())
                .ForMember(des => des.CreatedTime, opt => opt.Ignore())
@@ -103,11 +101,9 @@ namespace BankingApp.Core.Application.Mappings
 
             CreateMap<SavingsAccount, SavingsAccountViewModel>()
                .ReverseMap()
-               .ForMember(des => des.PaymentsTo, opt => opt.Ignore())
                .ForMember(des => des.UserName, opt => opt.Ignore())
                .ForMember(des => des.Balance, opt => opt.Ignore())
                .ForMember(des => des.IsPrincipal, opt => opt.Ignore())
-               .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())
                .ForMember(des => des.Beneficiaries, opt => opt.Ignore())
                .ForMember(des => des.CreatedBy, opt => opt.Ignore())
                .ForMember(des => des.CreatedTime, opt => opt.Ignore())
@@ -118,8 +114,6 @@ namespace BankingApp.Core.Application.Mappings
             #region Loans
             CreateMap<Loan, LoanViewModel>()
                .ReverseMap()
-               .ForMember(des => des.PaymentsTo, opt => opt.Ignore())
-               .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())
                .ForMember(des => des.Installment, opt => opt.Ignore())
                .ForMember(des => des.PaymentDay, opt => opt.Ignore())
                .ForMember(des => des.InterestRate, opt => opt.Ignore())
@@ -130,8 +124,6 @@ namespace BankingApp.Core.Application.Mappings
 
             CreateMap<Loan, SaveLoanViewModel>()
                .ReverseMap()
-               .ForMember(des => des.PaymentsTo, opt => opt.Ignore())
-               .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())
                .ForMember(des => des.Installment, opt => opt.Ignore())
                .ForMember(des => des.PaymentDay, opt => opt.Ignore())
                .ForMember(des => des.InterestRate, opt => opt.Ignore())
@@ -144,8 +136,6 @@ namespace BankingApp.Core.Application.Mappings
             #region CreditCard
             CreateMap<CreditCard, CreditCardViewModel>()
                .ReverseMap()
-               .ForMember(des => des.PaymentsTo, opt => opt.Ignore())
-               .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())
                .ForMember(des => des.CutoffDay, opt => opt.Ignore())
                .ForMember(des => des.PaymentDay, opt => opt.Ignore())
                .ForMember(des => des.CreatedBy, opt => opt.Ignore())
@@ -155,8 +145,6 @@ namespace BankingApp.Core.Application.Mappings
 
             CreateMap<CreditCard, SaveCreditCardViewModel>()
                .ReverseMap()
-               .ForMember(des => des.PaymentsTo, opt => opt.Ignore())
-               .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())
                .ForMember(des => des.CutoffDay, opt => opt.Ignore())
                .ForMember(des => des.PaymentDay, opt => opt.Ignore())
                .ForMember(des => des.CreditLimit, opt => opt.Ignore())

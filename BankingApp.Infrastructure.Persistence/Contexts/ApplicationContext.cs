@@ -42,6 +42,9 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
             modelBuilder.Entity<Beneficiary>()
                 .ToTable("Beneficiaries");
 
+            modelBuilder.Entity<Product>()
+                .ToTable("Products");
+
             modelBuilder.Entity<CreditCard>()
                 .ToTable("CreditCards");
 
@@ -53,21 +56,24 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
 
             modelBuilder.Entity<SavingsAccount>()
                 .ToTable("SavingsAccounts");
-
-            modelBuilder.Entity<Product>()
-                .ToTable("Products");
             #endregion
 
             #region Primary Keys
+
+            modelBuilder.Entity<CreditCard>()
+                .HasKey(p => p.Id);
+
+            modelBuilder.Entity<Loan>()
+                .HasKey(p => p.Id);
+
+            modelBuilder.Entity<SavingsAccount>()
+                .HasKey(p => p.Id);
 
             modelBuilder.Entity<Payment>()
                 .HasKey(p => p.Id);
 
             modelBuilder.Entity<Beneficiary>()
                 .HasKey(b => new {b.UserName,b.AccountNumber});
-
-            modelBuilder.Entity<Product>()
-                .HasKey(p => p.Id);
             #endregion
 
             #region Relationships
@@ -94,10 +100,20 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
 
             #region Property configurations
 
+            #region Product
+
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Id)
+                .ValueGeneratedNever();
+
+            #endregion
+
             #region CreditCard
 
             modelBuilder.Entity<CreditCard>(creditCard =>
             {
+                creditCard.Property(c => c.Id)
+                .UseIdentityColumn(400100100, 1);
                 creditCard.Property(c => c.Balance)
                 .IsRequired();
 
@@ -123,9 +139,38 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
             });
             #endregion
 
+            #region Savings Account
+            modelBuilder.Entity<SavingsAccount>(savingsAcount =>
+            {
+                savingsAcount.Property(s => s.Id)
+                .UseIdentityColumn(100100100, 1);
+
+                savingsAcount.Property(s => s.Balance)
+                .IsRequired();
+
+                savingsAcount.Property(s => s.IsPrincipal)
+                .IsRequired();
+
+                savingsAcount.Property(l => l.CreatedBy)
+                .IsRequired();
+
+                savingsAcount.Property(l => l.CreatedTime)
+                .HasColumnType("datetime");
+
+                savingsAcount.Property(l => l.LastModifiedBy);
+
+                savingsAcount.Property(l => l.LastModifiedTime)
+                .HasColumnType("datetime");
+            });
+
+            #endregion
+
             #region Loan
             modelBuilder.Entity<Loan>(loan =>
             {
+                loan.Property(l => l.Id)
+                .UseIdentityColumn(700100100, 1);
+
                 loan.Property(l => l.Balance)
                 .IsRequired();
 
@@ -152,10 +197,6 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
 
             #endregion
 
-            #region Product
-            modelBuilder.Entity<Product>()
-                .Ignore(p => p.Balance);
-            #endregion
             #region Payment
             modelBuilder.Entity<Payment>(payment =>
             {
@@ -183,29 +224,8 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
 
             #endregion
 
-            #region Savings Account
-            modelBuilder.Entity<SavingsAccount>(savingsAcount =>
-            {
-                savingsAcount.Property(s => s.Balance)
-                .IsRequired();
-
-                savingsAcount.Property(s => s.IsPrincipal)
-                .IsRequired();
-
-                savingsAcount.Property(l => l.CreatedBy)
-                .IsRequired();
-
-                savingsAcount.Property(l => l.CreatedTime)
-                .HasColumnType("datetime");
-
-                savingsAcount.Property(l => l.LastModifiedBy);
-
-                savingsAcount.Property(l => l.LastModifiedTime)
-                .HasColumnType("datetime");
-            });
-
             #endregion
-            #endregion
+
         }
     }
 }

@@ -19,7 +19,7 @@ namespace BankingApp.Core.Application.Services
          
         public List<CreditCardViewModel> GetAllByUserWithInclude(string userName)
         {
-            var creditCards = _creditCardRepository.GetAllWithInclude(x=>x.PaymentsFrom, x=>x.PaymentsTo);
+            var creditCards = _creditCardRepository.GetAllWithInclude();
 
             var creditCardsByUser = creditCards.Where(x => x.UserName == userName)
                                                .ToList();

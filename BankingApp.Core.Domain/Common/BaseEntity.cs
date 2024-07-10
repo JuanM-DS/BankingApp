@@ -2,7 +2,7 @@
 {
     public abstract class BaseEntity : UserAuditableBaseEntity
     {
-        public int Id { get; set; }
+        public virtual int Id { get; set; }
     }
 
 }

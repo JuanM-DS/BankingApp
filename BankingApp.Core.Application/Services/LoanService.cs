@@ -19,7 +19,7 @@ namespace BankingApp.Core.Application.Services
 
         public List<LoanViewModel> GetAllByUserWithInclude(string userName)
         {
-            var loans = _loanRepository.GetAllWithInclude(x => x.PaymentsFrom, x => x.PaymentsTo);
+            var loans = _loanRepository.GetAllWithInclude();
 
             var loansByUser = loans.Where(x => x.UserName == userName)
                                                .ToList();
