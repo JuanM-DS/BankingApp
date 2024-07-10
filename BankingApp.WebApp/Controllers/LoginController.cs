@@ -34,6 +34,9 @@ namespace BankingApp.WebApp.Controllers
             if (result.Data.Roles.Contains(RoleTypes.Admin))
                 return RedirectToAction("Index", "Admin");
 
+            if (result.Data.Roles.Contains(RoleTypes.Client))
+                return RedirectToAction("Index", "Client");
+
             return View(login);
         }
 

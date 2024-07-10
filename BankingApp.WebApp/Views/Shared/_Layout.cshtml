@@ -21,7 +21,14 @@
     <header>
         <nav class="navbar navbar-expand-sm fw-bold fs-5 navbar-toggleable-sm navbar-light bg-success border-bottom box-shadow mb-3">
             <div class="container-fluid d-flex align-items-center bg-success">
-                <a class="navbar-brand fs-4 text-white"asp-controller="Home" asp-action="Index">BankingApp</a>
+                @if(user != null)
+                {
+                    <a class="navbar-brand fs-4 text-white" asp-controller="@(user.Roles.Contains(RoleTypes.Admin) ? "Admin" : "Client")" asp-action="Index">BankingApp</a>
+                }
+                else
+                {
+                    <a class="navbar-brand fs-4 text-white" asp-controller="Login" asp-action="Index">BankingApp</a>
+                }                
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -31,57 +38,109 @@
                 {
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between mb-0">
 
-                        <ul class="navbar-nav d-flex align-items-center justify-content-between flex-grow-1">
-                            <div class="d-flex align-items-center">
+                        @if(user.Roles.Contains(RoleTypes.SuperAdmin))
+                        {
+                            <ul class="navbar-nav d-flex align-items-center justify-content-between flex-grow-1">
+                                <div class="d-flex align-items-center">
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-white" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Opciones de Administrador
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item text-success" asp-controller="Admin" asp-action="Index">Dashboard</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-success" asp-controller="Admin" asp-action="Users">Usuarios</a></li>
+                                        </ul>
+                                    </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Opciones de Cliente
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item text-success" asp-controller="Client" asp-action="Index">Home</a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="ExpressPayment">Pagos Expresos</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="CreditCardPayment">Pagos a Tarjetas de Crédito</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="LoanPayment">Pagos a Préstamos</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="PaymentToBeneficiaries">Pagos a Beneficiarios</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="Beneficiary">Beneficiarios</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="CashAdvances">Avance de Efectivo</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="TransferBetweenAccounts">Transferencia entre mis cuentas</a></li>
+                                        
+                                    </ul>
+                                </li>
+                        </div>
+                        <li class="nav-item">
+                            <a class="nav-link fw-bold text-white float-end" asp-controller="Login" asp-action="LogOut"><h5 class="fw-bold">Cerrar Sesión</h5></a>
+                        </li>
+
+                        </ul>
+                        }
+                        else
+                        {
+                            <ul class="navbar-nav d-flex align-items-center justify-content-between flex-grow-1">
+                                <div class="d-flex align-items-center">
 
                                 <li class="nav-item">
                                     <a class="nav-link text-white" asp-controller="@(user.Roles.Contains(RoleTypes.Admin) ? "Admin" : "Client")" asp-action="Index">@(user.Roles.Contains(RoleTypes.Admin) ? "Dashboard" : "Home")</a>
                                 </li>
 
-                                @if (user.Roles.Contains(RoleTypes.Admin))
-                                {
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Admin" asp-action="Users">Usuarios</a>
-                                </li>
-                                }
-                                else
-                                {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-white" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Pagos
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="ExpressPayment">Expresos</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="CreditCardPayment">Tarjetas de Crédito</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="LoanPayment">Préstamos</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="PaymentToBeneficiaries">Beneficiarios</a></li>
-                                    </ul>
-                                </li>
+                                    @if (user.Roles.Contains(RoleTypes.Admin))
+                                    {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" asp-controller="Admin" asp-action="Users">Usuarios</a>
+                                    </li>
+                                    }
+                                    else
+                                    {
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-white" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Pagos
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="ExpressPayment">Expresos</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="CreditCardPayment">Tarjetas de Crédito</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="LoanPayment">Préstamos</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="PaymentToBeneficiaries">Beneficiarios</a></li>
+                                        </ul>
+                                    </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Client" asp-action="Beneficiary">Beneficiarios</a>
-                                </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" asp-controller="Client" asp-action="Beneficiary">Beneficiarios</a>
+                                    </li>
 
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-white" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Más opciones
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="CashAdvances">Avance de Efectivo</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="TransferBetweenAccounts">Transferencia entre mis cuentas</a></li>
-                                    </ul>
-                                </li>
-                                }
-                            </div>
-                            <li class="nav-item">
-                                <a class="nav-link fw-bold text-white float-end" asp-controller="Login" asp-action="LogOut"><h5 class="fw-bold">Cerrar Sesión</h5></a>
-                            </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-white" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Más opciones
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="CashAdvances">Avance de Efectivo</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="TransferBetweenAccounts">Transferencia entre mis cuentas</a></li>
+                                        </ul>
+                                    </li>
+                                    }
+                        </div>
+                        <li class="nav-item">
+                            <a class="nav-link fw-bold text-white float-end" asp-controller="Login" asp-action="LogOut"><h5 class="fw-bold">Cerrar Sesión</h5></a>
+                        </li>
 
                         </ul>
+                        }
+
                     </div>
                 }
 

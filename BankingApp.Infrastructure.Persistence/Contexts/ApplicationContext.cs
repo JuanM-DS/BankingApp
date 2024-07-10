@@ -1,6 +1,7 @@
 ﻿using BankingApp.Core.Domain.Common;
 using BankingApp.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace BankingApp.Infrastructure.Persistence.Contexts
 {
