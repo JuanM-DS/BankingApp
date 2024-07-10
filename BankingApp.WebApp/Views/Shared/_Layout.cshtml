@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using BankingApp.Core.Application.Helpers;
+@using BankingApp.Core.Application.ViewModels.User;
+@using BankingApp.Core.Application.Enums;
+
+@inject IHttpContextAccessor httpContextAccessor;
+@{
+    var user = httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -17,22 +26,65 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-white"asp-controller="Admin" asp-action="Index">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white"asp-controller="Admin" asp-action="Users">Usuarios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Client" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Client" asp-action="Beneficiary">Beneficiario</a>
-                        </li>
-                    </ul>
-                </div>
+
+                @if(user != null)
+                {
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between mb-0">
+
+                        <ul class="navbar-nav d-flex align-items-center justify-content-between flex-grow-1">
+                            <div class="d-flex align-items-center">
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="@(user.Roles.Contains(RoleTypes.Admin) ? "Admin" : "Client")" asp-action="Index">@(user.Roles.Contains(RoleTypes.Admin) ? "Dashboard" : "Home")</a>
+                                </li>
+
+                                @if (user.Roles.Contains(RoleTypes.Admin))
+                                {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Admin" asp-action="Users">Usuarios</a>
+                                </li>
+                                }
+                                else
+                                {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Pagos
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="ExpressPayment">Expresos</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="CreditCardPayment">Tarjetas de Crédito</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="LoanPayment">Préstamos</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="PaymentToBeneficiaries">Beneficiarios</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Client" asp-action="Beneficiary">Beneficiarios</a>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Más opciones
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="CashAdvances">Avance de Efectivo</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-success" asp-controller="Client" asp-action="TransferBetweenAccounts">Transferencia entre mis cuentas</a></li>
+                                    </ul>
+                                </li>
+                                }
+                            </div>
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold text-white float-end" asp-controller="Login" asp-action="LogOut"><h5 class="fw-bold">Cerrar Sesión</h5></a>
+                            </li>
+
+                        </ul>
+                    </div>
+                }
+
             </div>
         </nav>
     </header>
