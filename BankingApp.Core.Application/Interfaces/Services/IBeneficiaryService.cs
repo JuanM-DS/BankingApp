@@ -1,5 +1,6 @@
 ﻿using BankingApp.Core.Domain.Entities;
 using BankingApp.Core.Application.ViewModels.Beneficiary;
+using BankingApp.Core.Application.CustomEntities;
 
 namespace BankingApp.Core.Application.Interfaces.Services
 {
@@ -7,5 +8,6 @@ namespace BankingApp.Core.Application.Interfaces.Services
     {
         List<BeneficiaryViewModel> BeneficiariesList();
         Task DeleteBeneficiary(string userName, int accountNumber);
+        Task<Response<List<BeneficiaryViewModel>>> CreateBeneficiary(int accountNumber, string UserName);
     }
 }

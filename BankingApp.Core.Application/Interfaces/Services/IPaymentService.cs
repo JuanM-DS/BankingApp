@@ -1,4 +1,5 @@
-﻿using BankingApp.Core.Application.Enums;
+﻿using BankingApp.Core.Application.CustomEntities;
+using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.QueryFilters;
 using BankingApp.Core.Application.ViewModels.Payment;
 using BankingApp.Core.Domain.Entities;
@@ -14,5 +15,12 @@ namespace BankingApp.Core.Application.Interfaces.Services
         Task<List<PaymentViewModel>> GetAllTransactions(List<PaymentTypes> paymentTypes);
 
         Task<List<PaymentViewModel>> GetAllTransfersOfToday(DateTime time);
+        Task<Response<SaveExpressPaymentViewModel>> ExpressPayment(SaveExpressPaymentViewModel vm, string UserName);
+        Task ConfirmTransactionExpressPost(SaveExpressPaymentViewModel vm, string UserName);
+        Task<Response<SaveCreditCardPaymentViewModel>> CreditCardPayment(SaveCreditCardPaymentViewModel vm, string UserName);
+        Task<Response<SaveLoanPaymentViewModel>> LoanPayment(SaveLoanPaymentViewModel vm, string UserName);
+        Task<Response<SavePaymentToBeneficiariesViewModel>> PaymentToBeneficiaries(SavePaymentToBeneficiariesViewModel vm, string UserName);
+        Task<Response<SaveCashAdvancesViewModel>> CashAdvances(SaveCashAdvancesViewModel vm, string UserName);
+        Task<Response<SaveTransferBetweenAccountsViewModel>> TransferBetweenAccounts(SaveTransferBetweenAccountsViewModel vm, string UserName);
     }
 }
