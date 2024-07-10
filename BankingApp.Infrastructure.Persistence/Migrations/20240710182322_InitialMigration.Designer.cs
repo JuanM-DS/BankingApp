@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240710142921_ProductsIdsStartValuesDefined")]
-    partial class ProductsIdsStartValuesDefined
+    [Migration("20240710182322_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,33 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("BankingApp.Core.Domain.Common.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products", (string)null);
+                });
 
             modelBuilder.Entity("BankingApp.Core.Domain.Entities.Beneficiary", b =>
                 {
@@ -232,57 +259,22 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("BankingApp.Core.Domain.Entities.Payment", b =>
                 {
-                    b.HasOne("BankingApp.Core.Domain.Entities.CreditCard", "FromCrediCard")
+                    b.HasOne("BankingApp.Core.Domain.Common.Product", "FromProduct")
                         .WithMany("PaymentsFrom")
                         .HasForeignKey("FromProductId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("BankingApp.Core.Domain.Entities.Loan", "FromLoan")
-                        .WithMany("PaymentsFrom")
-                        .HasForeignKey("FromProductId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("BankingApp.Core.Domain.Entities.SavingsAccount", "FromAccount")
-                        .WithMany("PaymentsFrom")
-                        .HasForeignKey("FromProductId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("BankingApp.Core.Domain.Entities.CreditCard", "ToCreditCard")
+                    b.HasOne("BankingApp.Core.Domain.Common.Product", "ToProduct")
                         .WithMany("PaymentsTo")
                         .HasForeignKey("ToProductId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("BankingApp.Core.Domain.Entities.Loan", "ToLoan")
-                        .WithMany("PaymentsTo")
-                        .HasForeignKey("ToProductId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                    b.Navigation("FromProduct");
 
-                    b.HasOne("BankingApp.Core.Domain.Entities.SavingsAccount", "ToAccount")
-                        .WithMany("PaymentsTo")
-                        .HasForeignKey("ToProductId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("FromAccount");
-
-                    b.Navigation("FromCrediCard");
-
-                    b.Navigation("FromLoan");
-
-                    b.Navigation("ToAccount");
-
-                    b.Navigation("ToCreditCard");
-
-                    b.Navigation("ToLoan");
+                    b.Navigation("ToProduct");
                 });
 
-            modelBuilder.Entity("BankingApp.Core.Domain.Entities.CreditCard", b =>
-                {
-                    b.Navigation("PaymentsFrom");
-
-                    b.Navigation("PaymentsTo");
-                });
-
-            modelBuilder.Entity("BankingApp.Core.Domain.Entities.Loan", b =>
+            modelBuilder.Entity("BankingApp.Core.Domain.Common.Product", b =>
                 {
                     b.Navigation("PaymentsFrom");
 
@@ -292,10 +284,6 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("BankingApp.Core.Domain.Entities.SavingsAccount", b =>
                 {
                     b.Navigation("Beneficiaries");
-
-                    b.Navigation("PaymentsFrom");
-
-                    b.Navigation("PaymentsTo");
                 });
 #pragma warning restore 612, 618
         }
