@@ -9,7 +9,11 @@
                 <h3 class="text-center fw-bold mb-5 mt-2 text-success">Cuentas de ahorro</h3>
                 <div class="full-height">
                     <div class="product-grid">
-                        @if(Model.savingsAccounts != null || Model.savingsAccounts.Count != 0)
+                        @if(Model.savingsAccounts == null || Model.savingsAccounts.Count == 0)
+                        {
+                            <h5 class="text-muted text-center">No tienes cuentas de ahorro</h5>
+                        }
+                        else
                         {
                             @foreach (var account in Model.savingsAccounts)
                             {
@@ -29,10 +33,6 @@
                                 </div>
                             }
                         }
-                        else
-                        {
-                            <h3>No tienes cuentas de ahorro.</h3>
-                        }
                     </div>
                 </div>
             </div>
@@ -40,7 +40,11 @@
                 <h3 class="text-center fw-bold mb-5 mt-2 text-success ">Prestamos</h3>
                 <div class="full-height">
                     <div class="product-grid">
-                        @if (Model.Loans != null || Model.Loans.Count != 0)
+                        @if (Model.Loans == null || Model.Loans.Count == 0)
+                        {
+                            <h5 class="text-muted text-center">No tienes prestamos</h5>
+                        }
+                        else
                         {
                             @foreach (var loan in Model.Loans)
                             {
@@ -53,16 +57,12 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <h5 class="fw-bold">Balance: <span class="fw-bold text-success">RD$@loan.Balance</span></h5>
+                                                <h5 class="fw-bold">Balance a la fecha: <span class="fw-bold text-success">RD$@loan.Balance</span></h5>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             }
-                        }
-                        else
-                        {
-                            <h3>No tienes prestamos.</h3>
                         }
                     </div>
                 </div>
@@ -71,7 +71,11 @@
                 <h3 class="text-center fw-bold mb-5 mt-2 text-success">Tarjetas de crédito</h3>
                 <div class="full-height">
                     <div class="product-grid">
-                        @if (Model.CreditCards != null || Model.CreditCards.Count != 0)
+                        @if (Model.CreditCards == null || Model.CreditCards.Count == 0)
+                        {
+                            <h5 class="text-muted text-center">No tienes tarjetas de credito</h5>
+                        }
+                        else
                         {
                             @foreach (var CreditCard in Model.CreditCards)
                             {
@@ -84,16 +88,12 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <h5 class="fw-bold">Balance: <span class="fw-bold text-success">RD$@CreditCard.Balance</span></h5>
+                                                <h5 class="fw-bold">Balance a la fecha: <span class="fw-bold text-success">RD$@CreditCard.Balance</span></h5>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             }
-                        }
-                        else
-                        {
-                            <h3>No tienes tarjetas de credito.</h3>
                         }
                     </div>
                 </div>

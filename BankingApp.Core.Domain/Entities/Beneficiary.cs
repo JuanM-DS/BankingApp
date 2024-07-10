@@ -6,8 +6,6 @@ namespace BankingApp.Core.Domain.Entities
     public class Beneficiary : UserAuditableBaseEntity
     {
 
-        public string BeneficiaryUserName {  get; set; }
-
         public int AccountNumber { get; set; }
 
         //Navigation Properties

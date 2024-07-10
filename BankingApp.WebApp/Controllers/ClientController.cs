@@ -49,21 +49,30 @@ namespace BankingApp.WebApp.Controllers
 
         public IActionResult Beneficiary()
         {
-            List<BeneficiaryViewModel> Vm = _beneficiaryService.BeneficiariesList();
-            return View("Beneficiary",Vm.Where(b => b.UserName == userViewModel.UserName));
+            List<BeneficiaryViewModel> Vm = _beneficiaryService.BeneficiariesList().Where(b => b.UserName == userViewModel.UserName).ToList();
+            return View("Beneficiary",Vm);
         }
 
         public async Task<IActionResult> CreateBeneficiary(int accountNumber)
         {
             SaveSavingsAccountViewModel savingsAccount = await _savingsAccountService.GetByIdSaveViewModel(accountNumber);
+            var beneficiary =  _beneficiaryService.GetAllViewModel().Where(b => b.AccountNumber == accountNumber && b.UserName == userViewModel.UserName).ToList();
 
             if (savingsAccount == null)
             {
                 ViewBag.Message = "El numero de cuenta no existe";
-                return View("Beneficiary");
+                List<BeneficiaryViewModel> Vm = _beneficiaryService.BeneficiariesList().Where(b => b.UserName == userViewModel.UserName).ToList();
+                return View("Beneficiary",Vm);
+            }
+            if (beneficiary != null || beneficiary.Count != 0)
+            {
+                ViewBag.Message = "Ya tienes ese beneficiario agregado";
+                List<BeneficiaryViewModel> Vm = _beneficiaryService.BeneficiariesList().Where(b => b.UserName == userViewModel.UserName).ToList();
+                return View("Beneficiary",Vm);
             }
             SaveBeneficiaryViewModel vm = new();
             vm.AccountNumber = accountNumber;
+            vm.UserName = userViewModel.UserName;
             await _beneficiaryService.Add(vm);
 
             return View("Beneficiary");
@@ -73,6 +82,7 @@ namespace BankingApp.WebApp.Controllers
         {
             SaveBeneficiaryViewModel vm = new();
             vm.AccountNumber = AccountNumber;
+            vm.UserName = userViewModel.UserName;
             return View("DeleteBeneficiary", vm);
         }
 

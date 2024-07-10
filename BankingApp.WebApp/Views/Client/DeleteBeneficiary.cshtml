@@ -15,7 +15,8 @@
 
                 <form method="post" asp-controller="Client" asp-action="DeleteBeneficiaryPost">
 
-                    <input type="hidden" asp-for="BeneficiaryUserName" />
+                    <input type="hidden" asp-for="UserName" />
+                    <input type="hidden" asp-for="AccountNumber" />
 
                     <button type="submit" class="btn btn-danger">Eliminar</button>
                     <a asp-controller="Client" asp-action="Beneficiary" class="btn btn-warning">Cancelar</a>

@@ -6,6 +6,8 @@ using BankingApp.Core.Application.DTOs.Account.ResetPassword;
 using BankingApp.Core.Application.DTOs.User;
 using BankingApp.Core.Application.ViewModels.Account;
 using BankingApp.Core.Application.ViewModels.Beneficiary;
+using BankingApp.Core.Application.ViewModels.CreditCard;
+using BankingApp.Core.Application.ViewModels.Loan;
 using BankingApp.Core.Application.ViewModels.Payment;
 using BankingApp.Core.Application.ViewModels.SavingsAccount;
 using BankingApp.Core.Application.ViewModels.User;
@@ -107,6 +109,34 @@ namespace BankingApp.Core.Application.Mappings
                .ForMember(des => des.IsPrincipal, opt => opt.Ignore())
                .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())
                .ForMember(des => des.Beneficiaries, opt => opt.Ignore())
+               .ForMember(des => des.CreatedBy, opt => opt.Ignore())
+               .ForMember(des => des.CreatedTime, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedTime, opt => opt.Ignore());
+            #endregion
+
+            #region Loans
+            CreateMap<Loan, LoanViewModel>()
+               .ReverseMap()
+               .ForMember(des => des.PaymentsTo, opt => opt.Ignore())
+               .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())
+               .ForMember(des => des.Installment, opt => opt.Ignore())
+               .ForMember(des => des.PaymentDay, opt => opt.Ignore())
+               .ForMember(des => des.InterestRate, opt => opt.Ignore())
+               .ForMember(des => des.CreatedBy, opt => opt.Ignore())
+               .ForMember(des => des.CreatedTime, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedTime, opt => opt.Ignore());
+            #endregion
+
+            #region CreditCard
+            CreateMap<CreditCard, CreditCardViewModel>()
+               .ReverseMap()
+               .ForMember(des => des.PaymentsTo, opt => opt.Ignore())
+               .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())
+               .ForMember(des => des.CutoffDay, opt => opt.Ignore())
+               .ForMember(des => des.PaymentDay, opt => opt.Ignore())
+               .ForMember(des => des.CreditLimit, opt => opt.Ignore())
                .ForMember(des => des.CreatedBy, opt => opt.Ignore())
                .ForMember(des => des.CreatedTime, opt => opt.Ignore())
                .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
