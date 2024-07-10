@@ -231,7 +231,7 @@ namespace BankingApp.Core.Application.Services
             payment.Type = ((byte)PaymentTypes.Transfer);
             payment.UserName = UserName;
 
-            await Add(payment);
+            await base.Add(payment);
         }
 
         public async Task<Response<SaveCreditCardPaymentViewModel>> CreditCardPayment(SaveCreditCardPaymentViewModel vm, string UserName)
@@ -300,7 +300,7 @@ namespace BankingApp.Core.Application.Services
             payment.Type = ((byte)PaymentTypes.PaymentToCreditCard);
             payment.UserName = UserName;
 
-            //await _paymentService.Add(payment);
+            await base.Add(payment);
 
             return new()
             {
@@ -369,7 +369,7 @@ namespace BankingApp.Core.Application.Services
             payment.Type = ((byte)PaymentTypes.PaymentToLoan);
             payment.UserName = UserName;
 
-            //await _paymentService.Add(payment);
+            await base.Add(payment);
 
             return new()
             {
@@ -438,7 +438,7 @@ namespace BankingApp.Core.Application.Services
             payment.Type = ((byte)PaymentTypes.Transfer);
             payment.UserName = UserName;
 
-            //await _paymentService.Add(payment);
+            await base.Add(payment);
 
             return new()
             {
@@ -510,7 +510,7 @@ namespace BankingApp.Core.Application.Services
             payment.Type = ((byte)PaymentTypes.CashAdvance);
             payment.UserName = UserName;
 
-            //await _paymentService.Add(payment);
+            await base.Add(payment);
 
             return new()
             {
