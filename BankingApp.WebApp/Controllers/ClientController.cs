@@ -11,6 +11,7 @@ using BankingApp.Core.Application.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.Core.Application.Helpers;
 using BankingApp.Core.Application.ViewModels.Product;
+using BankingApp.Core.Application.ViewModels.Message;
 
 namespace BankingApp.WebApp.Controllers
 {
@@ -37,45 +38,63 @@ namespace BankingApp.WebApp.Controllers
             userViewModel = _httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
         }
 
-        public  IActionResult Index()
+        public  IActionResult Index(string message ="")
         {
+            ViewBag.Message = message;
             ProductsViewModel products = new();
             products.Loans = _loanService.GetAllViewModel().Where(l => l.UserName == userViewModel.UserName).ToList();
-            products.savingsAccounts =  _savingsAccountService.GetAllViewModel().Where(l => l.UserName == userViewModel.UserName).ToList();
-            products.CreditCards = _creditCardService.GetAllViewModel().Where(l => l.UserName == userViewModel.UserName).ToList();
-           
+            products.savingsAccounts =  _savingsAccountService.GetAllViewModel().Where(s => s.UserName == userViewModel.UserName).ToList();
+            products.CreditCards = _creditCardService.GetAllViewModel()
+                .Where(c => c.UserName == userViewModel.UserName)
+                .Select(c => new CreditCardViewModel
+                {
+                    Id = c.Id,
+                    UserName = c.UserName,
+                    CreditLimit = c.CreditLimit,
+                    Balance = c.CreditLimit - c.Balance
+                })
+                .ToList();
+
             return View("Index",products);
         }
 
-        public IActionResult Beneficiary()
+        public IActionResult Beneficiary(string message = "")
         {
+            ViewBag.Message = message;
             List<BeneficiaryViewModel> Vm = _beneficiaryService.BeneficiariesList().Where(b => b.UserName == userViewModel.UserName).ToList();
             return View("Beneficiary",Vm);
         }
 
         public async Task<IActionResult> CreateBeneficiary(int accountNumber)
         {
+            List<BeneficiaryViewModel> VmList = new();
             SaveSavingsAccountViewModel savingsAccount = await _savingsAccountService.GetByIdSaveViewModel(accountNumber);
             var beneficiary =  _beneficiaryService.GetAllViewModel().Where(b => b.AccountNumber == accountNumber && b.UserName == userViewModel.UserName).ToList();
 
             if (savingsAccount == null)
             {
                 ViewBag.Message = "El numero de cuenta no existe";
-                List<BeneficiaryViewModel> Vm = _beneficiaryService.BeneficiariesList().Where(b => b.UserName == userViewModel.UserName).ToList();
-                return View("Beneficiary",Vm);
+                VmList = _beneficiaryService.BeneficiariesList().Where(b => b.UserName == userViewModel.UserName).ToList();
+                return View("Beneficiary", VmList);
             }
-            if (beneficiary != null || beneficiary.Count != 0)
+            if (savingsAccount.UserName == userViewModel.UserName)
+            {
+                ViewBag.Message = "No puedes agregar un numero de cuenta propio como beneficiario.";
+                VmList = _beneficiaryService.BeneficiariesList().Where(b => b.UserName == userViewModel.UserName).ToList();
+                return View("Beneficiary", VmList);
+            }
+            if (beneficiary.Count != 0)
             {
                 ViewBag.Message = "Ya tienes ese beneficiario agregado";
-                List<BeneficiaryViewModel> Vm = _beneficiaryService.BeneficiariesList().Where(b => b.UserName == userViewModel.UserName).ToList();
-                return View("Beneficiary",Vm);
+                VmList = _beneficiaryService.BeneficiariesList().Where(b => b.UserName == userViewModel.UserName).ToList();
+                return View("Beneficiary",VmList);
             }
             SaveBeneficiaryViewModel vm = new();
             vm.AccountNumber = accountNumber;
             vm.UserName = userViewModel.UserName;
             await _beneficiaryService.Add(vm);
 
-            return View("Beneficiary");
+            return RedirectToAction("Beneficiary");
         }
 
         public async Task<IActionResult> DeleteBeneficiary( int AccountNumber)
@@ -89,20 +108,21 @@ namespace BankingApp.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteBeneficiaryPost(SaveBeneficiaryViewModel vm)
         {
-            await _beneficiaryService.Delete(vm.AccountNumber);
-            return RedirectToRoute(new { controller = "Client", action = "Beneficiary" });
+            await _beneficiaryService.DeleteBeneficiary(vm.UserName,vm.AccountNumber);
+            return RedirectToAction("Beneficiary");
         }
 
         public async Task<IActionResult> ExpressPayment()
         {
             SaveExpressPaymentViewModel vm = new();
-            vm.FromAccounts = _savingsAccountService.GetAllViewModel();
+            vm.FromAccounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
             return View("ExpressPayment",vm);
         }
 
         [HttpPost]
         public async Task<IActionResult> ExpressPayment(SaveExpressPaymentViewModel vm)
         {
+            vm.FromAccounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
 
             if (!ModelState.IsValid)
             {
@@ -113,21 +133,27 @@ namespace BankingApp.WebApp.Controllers
 
             if (ToAccount == null)
             {
-                ViewBag.Message = "El número de cuenta no existe, se ha cancelado la transacción.";
-                return View();
+                ViewBag.Message = "El número de cuenta de destino no existe.";
+                return View("ExpressPayment",vm);
             }
             if (FromAccount.Balance == 0)
             {
                 ViewBag.Message = "No tienes dinero en esta cuenta.";
-                return View();
+                return View("ExpressPayment",vm);
             }
 
             if (FromAccount.Balance < vm.Amount)
             {
-                ViewBag.InsufficientMoney = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto menor";
-                return View();
+                ViewBag.Message = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto menor o igual a RD$"+FromAccount.Balance;
+                return View("ExpressPayment", vm);
             }
-            return View("ConfirmTransactionExpress", vm);
+            if (vm.Amount == 0)
+            {
+                ViewBag.Message = "El monto no puede ser cero, agrega uno mayor.";
+                return View("ExpressPayment", vm);
+            }
+
+            return RedirectToAction("ConfirmTransactionExpress", vm);
         }
 
         public async Task<IActionResult> ConfirmTransactionExpress(SaveExpressPaymentViewModel vm)
@@ -155,20 +181,27 @@ namespace BankingApp.WebApp.Controllers
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToAccountId;
             payment.Type = ((byte)PaymentTypes.Transfer);
+            payment.UserName = userViewModel.UserName;
 
-            await _paymentService.Add(payment);
+            //await _paymentService.Add(payment);
 
-            return View("Index");
+            return RedirectToAction("Index", new { message = "Se ha realizado la transacción" });
         }
 
-        public async Task<IActionResult> CreditCardPayment()
+        public  IActionResult CreditCardPayment()
         {
-            return View();
+            SaveCreditCardPaymentViewModel vm = new();
+            vm.ToCreditCards = _creditCardService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+            vm.FromAccounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+            return View("CreditCardPayment", vm);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreditCardPayment(SaveCreditCardPaymentViewModel vm)
         {
+            vm.ToCreditCards = _creditCardService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+            vm.FromAccounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+
             SaveSavingsAccountViewModel FromAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.FromAccountId);
 
             if (!ModelState.IsValid)
@@ -179,15 +212,20 @@ namespace BankingApp.WebApp.Controllers
             if (FromAccount.Balance == 0)
             {
                 ViewBag.Message = "No tienes dinero en esta cuenta.";
-                return View();
+                return View("CreditCardPayment", vm);
+            }
+            if (vm.Amount == 0)
+            {
+                ViewBag.Message = "El monto no puede ser cero, agrega uno mayor.";
+                return View("CreditCardPayment", vm);
             }
 
             if (FromAccount.Balance < vm.Amount)
             {
-                ViewBag.InsufficientMoney = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto menor";
-                return View();
+                ViewBag.Message = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto menor o igual a RD$"+FromAccount.Balance;
+                return View("CreditCardPayment", vm);
             }
-           
+
 
             SaveCreditCardViewModel ToCreditCard = await _creditCardService.GetByIdSaveViewModel(vm.ToCreditCardId);
             double transferAmount = Math.Min(vm.Amount, ToCreditCard.CreditLimit - ToCreditCard.Balance);
@@ -203,40 +241,52 @@ namespace BankingApp.WebApp.Controllers
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToCreditCardId;
             payment.Type = ((byte)PaymentTypes.PaymentToCreditCard);
+            payment.UserName = userViewModel.UserName;
 
-            await _paymentService.Add(payment);
+            //await _paymentService.Add(payment);
 
-            return View("Index", vm);
+            return RedirectToAction("Index", new { message = "Se ha realizado la transacción" });
         }
 
 
-        public async Task<IActionResult> LoanRepayment()
+        public async Task<IActionResult> LoanPayment()
         {
-            return View();
+            SaveLoanPaymentViewModel vm = new();
+            vm.ToLoans = _loanService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+            vm.FromAccounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+            return View("LoanPayment", vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoanRepayment(SaveLoanPaymentViewModel vm)
+        public async Task<IActionResult> LoanPayment(SaveLoanPaymentViewModel vm)
         {
+            vm.ToLoans = _loanService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+            vm.FromAccounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+
             SaveSavingsAccountViewModel FromAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.FromAccountId);
 
             if (!ModelState.IsValid)
             {
-                return View("LoanRepayment", vm);
+                return View("LoanPayment", vm);
             }
 
             if (FromAccount.Balance == 0)
             {
                 ViewBag.Message = "No tienes dinero en esta cuenta.";
-                return View();
+                return View("LoanPayment", vm);
             }
 
             if (FromAccount.Balance < vm.Amount)
             {
-                ViewBag.InsufficientMoney = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto menor";
-                return View();
+                ViewBag.Message = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto igual o menor a RD$"+FromAccount.Balance;
+                return View("LoanPayment", vm);
             }
-           
+            if (vm.Amount == 0)
+            {
+                ViewBag.Message = "El monto no puede ser cero, agrega uno mayor.";
+                return View("LoanPayment", vm);
+            }
+
 
             SaveLoanViewModel ToLoan = await _loanService.GetByIdSaveViewModel(vm.ToLoanId);
             if(vm.Amount >= ToLoan.Balance)
@@ -256,21 +306,28 @@ namespace BankingApp.WebApp.Controllers
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToLoanId;
             payment.Type = ((byte)PaymentTypes.PaymentToLoan);
+            payment.UserName = userViewModel.UserName;
 
-            await _paymentService.Add(payment);
+            //await _paymentService.Add(payment);
 
-            return View("Index", vm);
+            return RedirectToAction("Index", new { message = "Se ha realizado la transacción" });
         }
 
 
         public async Task<IActionResult> PaymentToBeneficiaries()
         {
-            return View();
+            SavePaymentToBeneficiariesViewModel vm = new();
+            vm.FromAccounts =_savingsAccountService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+            vm.ToBeneficiaries = _beneficiaryService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+            return View("PaymentToBeneficiaries",vm);
         }
 
         [HttpPost]
         public async Task<IActionResult> PaymentToBeneficiaries(SavePaymentToBeneficiariesViewModel vm)
         {
+            vm.FromAccounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+            vm.ToBeneficiaries = _beneficiaryService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+
             SaveSavingsAccountViewModel FromAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.FromAccountId);
 
             if (!ModelState.IsValid)
@@ -281,15 +338,20 @@ namespace BankingApp.WebApp.Controllers
             if (FromAccount.Balance == 0)
             {
                 ViewBag.Message = "No tienes dinero en esta cuenta.";
-                return View();
+                return View("PaymentToBeneficiaries",vm);
             }
 
             if (FromAccount.Balance < vm.Amount)
             {
-                ViewBag.InsufficientMoney = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto menor";
-                return View();
+                ViewBag.Message = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto menor";
+                return View("PaymentToBeneficiaries",vm);
             }
-            
+            if (vm.Amount == 0)
+            {
+                ViewBag.Message = "El monto no puede ser cero, agrega uno mayor.";
+                return View("PaymentToBeneficiaries", vm);
+            }
+
 
             SaveSavingsAccountViewModel Tobeneficiary = await _savingsAccountService.GetByIdSaveViewModel(vm.ToBeneficiaryId);
             if (vm.Amount >= Tobeneficiary.Balance)
@@ -309,41 +371,53 @@ namespace BankingApp.WebApp.Controllers
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToBeneficiaryId;
             payment.Type = ((byte)PaymentTypes.Transfer);
+            payment.UserName = userViewModel.UserName;
 
-            await _paymentService.Add(payment);
+            //await _paymentService.Add(payment);
 
-            return View("Index", vm);
+            return RedirectToAction("Index", new { message = "Se ha realizado la transacción" });
         }
 
         public async Task<IActionResult> CashAdvances()
         {
-            return View();
+            SaveCashAdvancesViewModel vm = new();
+            vm.FromCreditCards = _creditCardService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+            vm.ToAccounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+            return View("CashAdvances", vm);
         }
 
         [HttpPost]
         public async Task<IActionResult> CashAdvances(SaveCashAdvancesViewModel vm)
         {
+            vm.FromCreditCards = _creditCardService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+            vm.ToAccounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+
             SaveCreditCardViewModel FromCreditCard = await _creditCardService.GetByIdSaveViewModel(vm.FromCreditCardId);
             if (!ModelState.IsValid)
             {
-                return View("CreditCardPayment", vm);
+                return View("CashAdvances", vm);
             }
 
             if (FromCreditCard.Balance == 0)
             {
                 ViewBag.Message = "No tienes dinero en esta tarjeta de credito.";
-                return View();
+                return View("CashAdvances", vm);
             }
             if (FromCreditCard.CreditLimit < vm.Amount)
             {
-                ViewBag.InsufficientMoney = "Ese monto es mayor al limite de la tarjeta de credito, agrega uno menor";
-                return View("CashAdvances");
+                ViewBag.Message = "Ese monto es mayor al limite de la tarjeta de credito, agrega uno menor al limite de RD$"+FromCreditCard.CreditLimit;
+                return View("CashAdvances",vm);
+            }
+            if (vm.Amount == 0)
+            {
+                ViewBag.Message = "El monto no puede ser cero, agrega uno mayor.";
+                return View("CashAdvances", vm);
             }
 
             if (FromCreditCard.Balance < vm.Amount)
             {
-                ViewBag.InsufficientMoney = "No tienes en esta tarjeta de credito el dinero suficiente para realizar la transacción, agrega un monto menor";
-                return View("CashAdvances");
+                ViewBag.Message = "No tienes en esta tarjeta de credito el dinero suficiente para realizar la transacción, agrega un monto igual o menor a RD$"+FromCreditCard.Balance;
+                return View("CashAdvances",vm);
             }
            
             SaveSavingsAccountViewModel ToAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToAccountId);
@@ -358,38 +432,52 @@ namespace BankingApp.WebApp.Controllers
             payment.FromProductId = vm.FromCreditCardId;
             payment.ToProductId = vm.ToAccountId;
             payment.Type = ((byte)PaymentTypes.CashAdvance);
+            payment.UserName = userViewModel.UserName;
 
-            await _paymentService.Add(payment);
+            //await _paymentService.Add(payment);
 
-            return View("Index", vm);
+            return RedirectToAction("Index", new { message = "Se ha realizado la transacción" });
         }
 
 
         public async Task<IActionResult> TransferBetweenAccounts()
         {
-            return View();
+            SaveTransferBetweenAccountsViewModel vm =new();
+            vm.Accounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
+            return View("TransferBetweenAccounts", vm);
         }
 
         [HttpPost]
         public async Task<IActionResult> TransferBetweenAccounts(SaveTransferBetweenAccountsViewModel vm)
         {
+            vm.Accounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == userViewModel.UserName).ToList();
             SaveSavingsAccountViewModel FromAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.FromAccountId);
 
             if (!ModelState.IsValid)
             {
-                return View("PaymentToBeneficiaries", vm);
+                return View("TransferBetweenAccounts", vm);
             }
 
             if (FromAccount.Balance == 0)
             {
                 ViewBag.Message = "No tienes dinero en esta cuenta.";
-                return View();
+                return View("TransferBetweenAccounts",vm);
+            }
+            if (vm.FromAccountId == vm.ToAccountId)
+            {
+                ViewBag.Message = "No se puede realizar una transaccion entre la misma cuenta.";
+                return View("TransferBetweenAccounts", vm);
+            }
+            if (vm.Amount == 0)
+            {
+                ViewBag.Message = "El monto no puede ser cero, agrega uno mayor.";
+                return View("TransferBetweenAccounts", vm);
             }
 
             if (FromAccount.Balance < vm.Amount)
             {
-                ViewBag.InsufficientMoney = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto menor";
-                return View();
+                ViewBag.Message = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto igual o menor a RD$"+FromAccount.Balance +"";
+                return View("TransferBetweenAccounts", vm);
             }
 
 
@@ -411,10 +499,11 @@ namespace BankingApp.WebApp.Controllers
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToAccountId;
             payment.Type = ((byte)PaymentTypes.Transfer);
+            payment.UserName = userViewModel.UserName;
 
-            await _paymentService.Add(payment);
+            //await _paymentService.Add(payment);
 
-            return View("Index", vm);
+            return RedirectToAction("Index", new { message = "Se ha realizado la transacción" });
         }
 
     }

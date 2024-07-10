@@ -33,6 +33,10 @@ namespace BankingApp.Core.Application.Mappings
                .ForMember(des => des.AccountNumber, opt => opt.Ignore())
                .ForMember(des => des.UserName, opt => opt.Ignore());
 
+            CreateMap<ApplicationUserDTO, UserViewModel>()
+               .ReverseMap()
+               .ForMember(des => des.Password, opt => opt.Ignore());
+
             CreateMap<ApplicationUserDTO, SaveUserViewModel>()
                 .ForMember(des => des.File, obj => obj.Ignore())
                 .ReverseMap();
@@ -127,10 +131,33 @@ namespace BankingApp.Core.Application.Mappings
                .ForMember(des => des.CreatedTime, opt => opt.Ignore())
                .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
                .ForMember(des => des.LastModifiedTime, opt => opt.Ignore());
+
+            CreateMap<Loan, SaveLoanViewModel>()
+               .ReverseMap()
+               .ForMember(des => des.PaymentsTo, opt => opt.Ignore())
+               .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())
+               .ForMember(des => des.Installment, opt => opt.Ignore())
+               .ForMember(des => des.PaymentDay, opt => opt.Ignore())
+               .ForMember(des => des.InterestRate, opt => opt.Ignore())
+               .ForMember(des => des.CreatedBy, opt => opt.Ignore())
+               .ForMember(des => des.CreatedTime, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedTime, opt => opt.Ignore());
             #endregion
 
             #region CreditCard
             CreateMap<CreditCard, CreditCardViewModel>()
+               .ReverseMap()
+               .ForMember(des => des.PaymentsTo, opt => opt.Ignore())
+               .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())
+               .ForMember(des => des.CutoffDay, opt => opt.Ignore())
+               .ForMember(des => des.PaymentDay, opt => opt.Ignore())
+               .ForMember(des => des.CreatedBy, opt => opt.Ignore())
+               .ForMember(des => des.CreatedTime, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
+               .ForMember(des => des.LastModifiedTime, opt => opt.Ignore());
+
+            CreateMap<CreditCard, SaveCreditCardViewModel>()
                .ReverseMap()
                .ForMember(des => des.PaymentsTo, opt => opt.Ignore())
                .ForMember(des => des.PaymentsFrom, opt => opt.Ignore())

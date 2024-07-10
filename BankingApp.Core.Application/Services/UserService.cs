@@ -126,7 +126,7 @@ namespace BankingApp.Core.Application.Services
         public Response<UserViewModel> GetByNameAsync(string userName)
         {
             var user = _userRepository.Get()
-                                      .Where(x => x.UserName == userName);
+                                      .FirstOrDefault(x => x.UserName == userName);
 
             var userViewModels = _mapper.Map<UserViewModel>(user);
 

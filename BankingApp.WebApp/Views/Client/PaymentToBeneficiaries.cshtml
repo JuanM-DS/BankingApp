@@ -10,10 +10,10 @@
 
     <div class="row">
         <div class="col-6 offset-3">
-            @if (ViewBag.InsufficientMoney != null)
+            @if (ViewBag.Message != null)
             {
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <p>@ViewBag.Message</p>
+                <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                    <h5>@ViewBag.Message</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
                 </div>
             }
@@ -23,7 +23,7 @@
                 </div>
                 <div class="card-body">
 
-                    <form method="post" asp-controller="" asp-action="" enctype="multipart/form-data">
+                    <form method="post" asp-controller="Client" asp-action="PaymentToBeneficiaries" enctype="multipart/form-data">
 
                         <div class="mb-3">
                             <label asp-for="ToBeneficiaryId" class="form-label">Beneficiario</label>
@@ -54,10 +54,6 @@
                             <input asp-for="Amount" type="number" class="form-control" />
                             <span asp-validation-for="Amount" class="text-danger"></span>
                         </div>
-
-
-                        @*                         <input type="hidden" asp-for="Id" />
-                        *@
                         <button type="submit" class="btn btn-primary">Realizar pago</button>
                         <a asp-controller="Client" asp-action="Index" class="btn btn-warning">Volver atras</a>
 

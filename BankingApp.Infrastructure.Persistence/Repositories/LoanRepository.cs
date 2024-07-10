@@ -18,5 +18,13 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
         {
             _dbContext = dbContext;
         }
+
+
+        public override async Task UpdateAsync(Loan entity, int id)
+        {
+            var entry = await _dbContext.Set<Loan>().FindAsync(id);
+            entry.Balance = entity.Balance;
+            await base.UpdateAsync(entry, id);
+        }
     }
 }

@@ -23,5 +23,11 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
             _dbContext = dbContext;
         }
 
+        public override async Task UpdateAsync(CreditCard entity, int id)
+        {
+            var entry = await _dbContext.Set<CreditCard>().FindAsync(id);
+            entry.Balance = entity.Balance;
+            await base.UpdateAsync(entry, id);
+        }
     }
 }

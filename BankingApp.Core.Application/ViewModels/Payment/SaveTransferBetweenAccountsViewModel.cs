@@ -21,8 +21,6 @@ namespace BankingApp.Core.Application.ViewModels.Payment
         [DataType(DataType.Text)]
         public double Amount { get; set; }
 
-        public List<BeneficiaryViewModel> ToAccounts { get; set; }
-
-        public List<SavingsAccountViewModel> FromAccounts { get; set; }
+        public List<SavingsAccountViewModel>? Accounts { get; set; }
     }
 }

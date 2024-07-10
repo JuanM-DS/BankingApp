@@ -2,6 +2,13 @@
 @model ProductsViewModel
 
 <div class="container-fluid">
+    @if (ViewBag.Message != "")
+    {
+        <div class="alert alert-info alert-dismissible fade show text-center" role="alert">
+            <h5 class="fw-bold">@ViewBag.Message</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    }
     <div class="shadow p-3 mb-5 bg-body-tertiary rounded border">
         <div class="row mb-4">
             <h2 class="text-center fw-bold text-success mb-5">Tus productos</h2>
