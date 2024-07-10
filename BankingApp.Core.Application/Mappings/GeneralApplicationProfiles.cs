@@ -48,12 +48,8 @@ namespace BankingApp.Core.Application.Mappings
             #region payments
             CreateMap<Payment, SavePaymentViewModel>()
                 .ReverseMap()
-                .ForMember(des => des.FromAccount, opt => opt.Ignore())
-                .ForMember(des => des.FromCrediCard, opt => opt.Ignore())
-                .ForMember(des => des.FromLoan, opt => opt.Ignore())
-                .ForMember(des => des.ToAccount, opt => opt.Ignore())
-                .ForMember(des => des.ToCreditCard, opt => opt.Ignore())
-                .ForMember(des => des.ToLoan, opt => opt.Ignore());
+                .ForMember(des => des.FromProduct, opt => opt.Ignore())
+                .ForMember(des => des.ToProduct, opt => opt.Ignore());
 
             CreateMap<Payment, PaymentViewModel>()
                 .ReverseMap();

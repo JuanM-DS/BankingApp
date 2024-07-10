@@ -43,7 +43,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<List<PaymentViewModel>> GetAllViewModel(PaymentQueryFilters? filters = null)
         {
-            var payments = _paymentRepository.GetAllWithInclude(x=>x.FromLoan, x=>x.FromCrediCard, x=>x.FromAccount, x=>x.ToCreditCard, x=>x.ToAccount, x=>x.ToLoan);
+            var payments = _paymentRepository.GetAllWithInclude(x=>x.FromProduct, x=>x.ToProduct);
             if (filters is not null)
             {
                 if (filters.PaymentTypes is not null && filters.PaymentTypes.Count > 1)
@@ -71,7 +71,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<List<PaymentViewModel>> GetAllTransactions(List<PaymentTypes> paymentTypes)
         {
-            var payments =  _paymentRepository.GetAllWithInclude(x => x.FromLoan, x => x.FromCrediCard, x => x.FromAccount, x => x.ToCreditCard, x => x.ToAccount, x => x.ToLoan);
+            var payments =  _paymentRepository.GetAllWithInclude(x => x.FromProduct, x => x.ToProduct);
 
             var transactionsId = paymentTypes.Select(x => (int)x).ToList();
 
@@ -84,7 +84,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<List<PaymentViewModel>> GetAllTransfersOfToday(DateTime time)
         {
-            var payments = _paymentRepository.GetAllWithInclude(x => x.FromLoan, x => x.FromCrediCard, x => x.FromAccount, x => x.ToCreditCard, x => x.ToAccount, x => x.ToLoan);
+            var payments = _paymentRepository.GetAllWithInclude(x => x.FromProduct, x => x.ToProduct);
 
             var transactionsId = new List<int>() { (int)PaymentTypes.Deposit, (int)PaymentTypes.CashAdvance, (int)PaymentTypes.Transfer, (int)PaymentTypes.Disbursement };
 
@@ -99,7 +99,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<List<PaymentViewModel>> GetAllWithInclude()
         {
-            var payments =  _paymentRepository.GetAllWithInclude(x => x.FromLoan, x => x.FromCrediCard, x => x.FromAccount, x => x.ToCreditCard, x => x.ToAccount, x => x.ToLoan);
+            var payments =  _paymentRepository.GetAllWithInclude(x => x.FromProduct, x => x.ToProduct);
 
             var paymentsViewModel = _mapper.Map<List<PaymentViewModel>>(payments);
 
@@ -108,7 +108,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<PaymentViewModel> GetByIdWithInclude(int id)
         {
-            var payments =  _paymentRepository.GetAllWithInclude(x => x.FromLoan, x => x.FromCrediCard, x => x.FromAccount, x => x.ToCreditCard, x => x.ToAccount, x => x.ToLoan);
+            var payments =  _paymentRepository.GetAllWithInclude(x => x.FromProduct, x => x.ToProduct);
 
             var paymentViewModel = _mapper.Map<PaymentViewModel>(payments.FirstOrDefault(x => x.Id == id));
 

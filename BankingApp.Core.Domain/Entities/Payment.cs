@@ -15,13 +15,7 @@ namespace BankingApp.Core.Domain.Entities
 
 
         //Navigation Property
-        public SavingsAccount? FromAccount { get; set; }
-        public CreditCard? FromCrediCard { get; set; }
-        public Loan? FromLoan { get; set; }
-
-        public SavingsAccount? ToAccount { get; set; }
-
-        public CreditCard? ToCreditCard { get; set; }
-        public Loan? ToLoan { get; set; }
+        public Product? FromProduct { get; set; }
+        public Product? ToProduct { get; set; }
     }
 }

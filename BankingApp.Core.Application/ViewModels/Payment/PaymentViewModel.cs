@@ -24,15 +24,15 @@ namespace BankingApp.Core.Application.ViewModels.Payment
         public string UserName { get; set; }
 
 
-        //Navigation Property
-        public SavingsAccountViewModel? FromAccount { get; set; }
-        public CreditCardViewModel? FromCrediCard { get; set; }
-        public LoanViewModel? FromLoan { get; set; }
+        ////Navigation Property
+        //public SavingsAccountViewModel? FromAccount { get; set; }
+        //public CreditCardViewModel? FromCrediCard { get; set; }
+        //public LoanViewModel? FromLoan { get; set; }
 
-        public SavingsAccountViewModel? ToAccount { get; set; }
+        //public SavingsAccountViewModel? ToAccount { get; set; }
 
-        public CreditCardViewModel? ToCreditCard { get; set; }
-        public LoanViewModel? ToLoan { get; set; }
+        //public CreditCardViewModel? ToCreditCard { get; set; }
+        //public LoanViewModel? ToLoan { get; set; }
 
         public UserViewModel User { get; set; }
     }
