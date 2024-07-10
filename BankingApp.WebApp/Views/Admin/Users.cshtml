@@ -1,8 +1,13 @@
-﻿@using BankingApp.Core.Application.ViewModels.User;
+﻿@using BankingApp.Core.Application.Enums
+@using BankingApp.Core.Application.ViewModels.User;
 @model List<UserViewModel>;
 
 @{
     ViewData["Title"] = "Usuarios";
+    var activeClients = Model.Where(u => u.Status == (byte)UserStatus.Active && u.Roles.Contains(RoleTypes.Client));
+    var inactiveClients = Model.Where(u => u.Status == (byte)UserStatus.Inactive && u.Roles.Contains(RoleTypes.Client));
+    var activeAdmins = Model.Where(u => u.Status == (byte)UserStatus.Active && u.Roles.Contains(RoleTypes.Admin));
+    var inactiveAdmins = Model.Where(u => u.Status == (byte)UserStatus.Inactive && u.Roles.Contains(RoleTypes.Client));
 }
 
 
@@ -33,32 +38,35 @@
                 <div class="full-height">
                     <div class="users-grid">
 
-                        <div class="mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title">
-                                        <div class="d-flex align-items-center justify-content-start gap-1">
-                                            <div class="border border-2 border-warning p-1 rounded-circle">
-                                                <div class="bg-success shadow-lg p-3 rounded-circle">
-                                                    <h4 class="mb-0 text-white fw-bold">NA</h4>
+                        @foreach (var cliente in activeClients)
+                        {
+                            <div class="mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            <div class="d-flex align-items-center justify-content-start gap-1">
+                                                <div class="border border-2 border-warning p-1 rounded-circle">
+                                                    <div class="bg-success shadow-lg p-3 rounded-circle">
+                                                        <h4 class="mb-0 text-white fw-bold">NA</h4>
+                                                    </div>
                                                 </div>
+                                                <h4 class="mb-0 text-decoration-underline text-wrap">Nombre Apellido Prueba</h4>
                                             </div>
-                                            <h4 class="mb-0 text-decoration-underline text-wrap">Nombre Apellido Prueba</h4>
                                         </div>
-                                    </div>
-                                    <div class="">
-                                        <h5 class="fw-bold">Usuario: <span class="fw-normal">nombreapellido</span></h5>
-                                        <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
-                                        <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
-                                    </div>
+                                        <div class="">
+                                            <h5 class="fw-bold">Usuario: <span class="fw-normal">nombreapellido</span></h5>
+                                            <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
+                                            <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
+                                        </div>
 
-                                    <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
-                                        <a class="btn btn-warning">Editar</a>
-                                        <a class="btn btn-danger">Eliminar</a>
+                                        <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
+                                            <a class="btn btn-warning">Editar</a>
+                                            <a class="btn btn-danger">Eliminar</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        }
 
                     </div>
 
@@ -71,30 +79,35 @@
                 <div class="full-height">
                     <div class="users-grid">
 
-                        <div class="mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title">
-                                        <div class="d-flex align-items-center justify-content-start gap-1">
-                                            <div class=" bg-success p-3 rounded-circle">
-                                                <h4 class="mb-0 text-white">NA</h4>
+                        @foreach (var cliente in activeAdmins)
+                        {
+                            <div class="mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            <div class="d-flex align-items-center justify-content-start gap-1">
+                                                <div class="border border-2 border-warning p-1 rounded-circle">
+                                                    <div class="bg-success shadow-lg p-3 rounded-circle">
+                                                        <h4 class="mb-0 text-white fw-bold">NA</h4>
+                                                    </div>
+                                                </div>
+                                                <h4 class="mb-0 text-decoration-underline text-wrap">Nombre Apellido Prueba</h4>
                                             </div>
-                                            <h4 class="mb-0 text-decoration-underline text-wrap">Nombre Apellido Prueba</h4>
                                         </div>
-                                    </div>
-                                    <div class="">
-                                        <h5 class="fw-bold">Usuario: <span class="fw-normal">nombreapellido</span></h5>
-                                        <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
-                                        <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
-                                    </div>
+                                        <div class="">
+                                            <h5 class="fw-bold">Usuario: <span class="fw-normal">nombreapellido</span></h5>
+                                            <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
+                                            <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
+                                        </div>
 
-                                    <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
-                                        <a class="btn btn-warning">Editar</a>
-                                        <a class="btn btn-danger">Eliminar</a>
+                                        <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
+                                            <a class="btn btn-warning">Editar</a>
+                                            <a class="btn btn-danger">Eliminar</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        }
 
                     </div>
 
@@ -114,30 +127,35 @@
                 <div class="full-height">
                     <div class="users-grid">
 
-                        <div class="mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title">
-                                        <div class="d-flex align-items-center justify-content-start gap-1">
-                                            <div class=" bg-success p-3 rounded-circle">
-                                                <h4 class="mb-0 text-white">NA</h4>
+                        @foreach (var cliente in inactiveClients)
+                        {
+                            <div class="mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            <div class="d-flex align-items-center justify-content-start gap-1">
+                                                <div class="border border-2 border-warning p-1 rounded-circle">
+                                                    <div class="bg-success shadow-lg p-3 rounded-circle">
+                                                        <h4 class="mb-0 text-white fw-bold">NA</h4>
+                                                    </div>
+                                                </div>
+                                                <h4 class="mb-0 text-decoration-underline text-wrap">Nombre Apellido Prueba</h4>
                                             </div>
-                                            <h4 class="mb-0 text-decoration-underline text-wrap">Nombre Apellido Prueba</h4>
                                         </div>
-                                    </div>
-                                    <div class="">
-                                        <h5 class="fw-bold">Usuario: <span class="fw-normal">nombreapellido</span></h5>
-                                        <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
-                                        <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
-                                    </div>
+                                        <div class="">
+                                            <h5 class="fw-bold">Usuario: <span class="fw-normal">nombreapellido</span></h5>
+                                            <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
+                                            <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
+                                        </div>
 
-                                    <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
-                                        <a class="btn btn-warning">Editar</a>
-                                        <a class="btn btn-danger">Eliminar</a>
+                                        <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
+                                            <a class="btn btn-warning">Editar</a>
+                                            <a class="btn btn-danger">Eliminar</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        }
 
                     </div>
 
@@ -150,30 +168,35 @@
                 <div class="full-height">
                     <div class="users-grid">
 
-                        <div class="mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title">
-                                        <div class="d-flex align-items-center justify-content-start gap-1">
-                                            <div class=" bg-success p-3 rounded-circle">
-                                                <h4 class="mb-0 text-white">NA</h4>
+                        @foreach (var cliente in inactiveAdmins)
+                        {
+                            <div class="mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            <div class="d-flex align-items-center justify-content-start gap-1">
+                                                <div class="border border-2 border-warning p-1 rounded-circle">
+                                                    <div class="bg-success shadow-lg p-3 rounded-circle">
+                                                        <h4 class="mb-0 text-white fw-bold">NA</h4>
+                                                    </div>
+                                                </div>
+                                                <h4 class="mb-0 text-decoration-underline text-wrap">Nombre Apellido Prueba</h4>
                                             </div>
-                                            <h4 class="mb-0 text-decoration-underline text-wrap">Nombre Apellido Prueba</h4>
                                         </div>
-                                    </div>
-                                    <div class="">
-                                        <h5 class="fw-bold">Usuario: <span class="fw-normal">nombreapellido</span></h5>
-                                        <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
-                                        <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
-                                    </div>
+                                        <div class="">
+                                            <h5 class="fw-bold">Usuario: <span class="fw-normal">nombreapellido</span></h5>
+                                            <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
+                                            <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
+                                        </div>
 
-                                    <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
-                                        <a class="btn btn-warning">Editar</a>
-                                        <a class="btn btn-danger">Eliminar</a>
+                                        <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
+                                            <a class="btn btn-warning">Editar</a>
+                                            <a class="btn btn-danger">Eliminar</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        }
 
                     </div>
 

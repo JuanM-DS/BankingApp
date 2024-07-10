@@ -86,10 +86,10 @@ namespace BankingApp.WebApp.Controllers
             return View(payments);
         }
 
-        //public IActionResult Users()
-        //{
-        //    return View(_userService.GetAll());
-        //}
+        public IActionResult Users()
+        {
+            return View(_userService.GetAll().Result.Data);
+        }
         public IActionResult Register() => View();
 
         [HttpPost]
