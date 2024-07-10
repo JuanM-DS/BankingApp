@@ -12,11 +12,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-<<<<<<<< HEAD:BankingApp.Infrastructure.Persistence/Migrations/20240710181951_InitialMigration.Designer.cs
+
     [Migration("20240710181951_InitialMigration")]
-========
-    [Migration("20240710182322_InitialMigration")]
->>>>>>>> 332a291085dc6eb77b6b4c2d370d4948f46db637:BankingApp.Infrastructure.Persistence/Migrations/20240710182322_InitialMigration.Designer.cs
+
     partial class InitialMigration
     {
         /// <inheritdoc />
