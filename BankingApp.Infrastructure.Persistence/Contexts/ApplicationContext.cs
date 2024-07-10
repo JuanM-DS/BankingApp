@@ -1,6 +1,7 @@
 ﻿using BankingApp.Core.Domain.Common;
 using BankingApp.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace BankingApp.Infrastructure.Persistence.Contexts
 {
@@ -122,6 +123,9 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
 
             modelBuilder.Entity<CreditCard>(creditCard =>
             {
+                creditCard.Property(c => c.Id)
+                .UseIdentityColumn(400100100, 1);
+
                 creditCard.Property(c => c.Balance)
                 .IsRequired();
 
@@ -150,6 +154,9 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
             #region Loan
             modelBuilder.Entity<Loan>(loan =>
             {
+                loan.Property(c => c.Id)
+                .UseIdentityColumn(700100100, 1);
+
                 loan.Property(l => l.Balance)
                 .IsRequired();
 
@@ -206,6 +213,9 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
             #region Savings Account
             modelBuilder.Entity<SavingsAccount>(savingsAcount =>
             {
+                savingsAcount.Property(c => c.Id)
+                .UseIdentityColumn(100100100, 1);
+
                 savingsAcount.Property(s => s.Balance)
                 .IsRequired();
 
