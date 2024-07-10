@@ -202,7 +202,7 @@ namespace BankingApp.Core.Application.Services
                 {
                     Data = vm,
                     View = "ExpressPayment",
-                    Error = "Transacion cancelada. Para hacer transaciones entre cuentas propias vaya a tranferencia entre mis cuentas.",
+                    Error = "Transacion cancelada. Para hacer transaciones entre cuentas propias vaya a \"Tranferencia entre mis cuentas\".",
                     Success = false
                 };
             }
