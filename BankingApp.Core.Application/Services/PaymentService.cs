@@ -231,7 +231,7 @@ namespace BankingApp.Core.Application.Services
             payment.Type = ((byte)PaymentTypes.Transfer);
             payment.UserName = UserName;
 
-            //await _paymentService.Add(payment);
+            await Add(payment);
         }
 
         public async Task<Response<SaveCreditCardPaymentViewModel>> CreditCardPayment(SaveCreditCardPaymentViewModel vm, string UserName)
