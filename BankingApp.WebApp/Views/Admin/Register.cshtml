@@ -74,7 +74,7 @@
                     <div class="mb-3">
                         <label asp-for="Role" class="form-label"></label>
                         <select asp-for="Role" class="form-select" id="Select">
-                            <option value="">Seleccione el tipo de usuario</option>
+                            <option value="-1">Seleccione el tipo de usuario</option>
                             <option value="@((int)RoleTypes.Client)">Cliente</option>
                             <option value="@((int)RoleTypes.Admin)">Administrador</option>
                         </select>
@@ -100,11 +100,10 @@
         var select = document.getElementById('Select');
         var div = document.getElementById('initialAmountDiv');
 
-
-        select.addEventListener('change', function () {
+        select.addEventListener('click', function () {
 
             var selectedValue = select.value;
-            
+
             if (selectedValue == 0) {
                 div.classList.remove('d-none');
             }
