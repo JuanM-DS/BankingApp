@@ -71,3 +71,8 @@ body {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
+
+.profile-pic {
+    width: 55px;
+    height: 55px;
+}
