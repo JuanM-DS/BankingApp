@@ -9,10 +9,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BankingApp.Infrastructure.Identity.Repository
 {
-    public class UserRepository(BankingAppIdentityDbContext context, IMapper mapper) : IUserRepository
+    public class UserRepository(BankingAppIdentityDbContext context, IMapper mapper, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager) : IUserRepository
     {
         private readonly BankingAppIdentityDbContext context = context;
         private readonly IMapper _mapper = mapper;
+        private readonly RoleManager<IdentityRole> roleManager = roleManager;
+        private readonly UserManager<ApplicationUser> userManager = userManager;
 
         public async Task<bool> DeleteAsycn(ApplicationUserDTO userDto)
         {
@@ -30,11 +32,25 @@ namespace BankingApp.Infrastructure.Identity.Repository
             }
         }
 
-        public IEnumerable<ApplicationUserDTO> Get()
+        public async Task<IEnumerable<ApplicationUserDTO>> Get()
         {
             var users = context.Users.AsQueryable();
+            List<ApplicationUserDTO> usersDTO = [];
 
-            return _mapper.Map<IEnumerable<ApplicationUserDTO>>(users);
+
+            
+
+            foreach (var user in users)
+            {
+                var roles = await userManager.GetRolesAsync(user);
+                var rolesEnums = roles.Select(x => (RoleTypes)Enum.Parse(typeof(RoleTypes),x));
+                var userDTO = _mapper.Map<ApplicationUserDTO>(user);
+                userDTO.Roles = rolesEnums.ToList();
+
+                usersDTO.Add(userDTO);
+            }
+
+            return usersDTO;
         }
 
         public async Task<ApplicationUserDTO> GetAsync(int id)

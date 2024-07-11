@@ -28,7 +28,7 @@ namespace BankingApp.Core.Application.Services
             _savingsAccountService = savingsAccountService;
         }
 
-        public List<BeneficiaryViewModel> BeneficiariesList()
+        public async Task<List<BeneficiaryViewModel>> BeneficiariesList()
         {
             List<BeneficiaryViewModel> beneficiaries =  GetAllViewModel().ToList();
             BeneficiaryViewModel beneficiary = new();
@@ -36,7 +36,7 @@ namespace BankingApp.Core.Application.Services
 
             foreach (var bn in beneficiaries)
             {
-                var user = _userRepository.Get()
+                var user = (await _userRepository.Get())
                                               .FirstOrDefault(x => x.UserName == bn.UserName);
                 beneficiary = bn;
                 beneficiary.FirstName = user.FirstName;
@@ -61,7 +61,7 @@ namespace BankingApp.Core.Application.Services
 
             if (savingsAccount == null)
             {
-                VmList = BeneficiariesList().Where(b => b.UserName == UserName).ToList();
+                VmList = (await BeneficiariesList()).Where(b => b.UserName == UserName).ToList();
                 return new()
                 {
                     Data = VmList,
@@ -72,7 +72,7 @@ namespace BankingApp.Core.Application.Services
             }
             if (savingsAccount.UserName == UserName)
             {
-                VmList = BeneficiariesList().Where(b => b.UserName == UserName).ToList();
+                VmList = (await BeneficiariesList()).Where(b => b.UserName == UserName).ToList();
                 return new()
                 {
                     Data = VmList,
@@ -83,7 +83,7 @@ namespace BankingApp.Core.Application.Services
             }
             if (beneficiary.Count != 0)
             {
-                VmList = BeneficiariesList().Where(b => b.UserName == UserName).ToList();
+                VmList = (await BeneficiariesList()).Where(b => b.UserName == UserName).ToList();
                 return new()
                 {
                     Data = VmList,
