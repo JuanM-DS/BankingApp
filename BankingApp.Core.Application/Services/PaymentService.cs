@@ -106,7 +106,7 @@ namespace BankingApp.Core.Application.Services
             return await SetUserViewModelToPayments(paymentsViewModel);
         }
 
-        public async Task<PaymentViewModel> GetByIdWithInclude(int id)
+        public async Task<PaymentViewModel> GetByIdWithInclude(Guid id)
         {
             var payments =  _paymentRepository.GetAllWithInclude(x => x.FromProduct, x => x.ToProduct);
 

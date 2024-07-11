@@ -182,6 +182,7 @@ namespace BankingApp.Core.Application.Services
                 };
 
             var userDto = _mapper.Map<ApplicationUserDTO>(userViewModel);
+            userDto.Roles.Add((RoleTypes)userViewModel.Role);
 
             var result = await _userRepository.UpdateAsync(userDto);
             if (!result)
@@ -223,6 +224,7 @@ namespace BankingApp.Core.Application.Services
         public async Task<Response<SaveUserViewModel>> RegisterAsync(SaveUserViewModel userViewModel)
         {
             var userDto = _mapper.Map<ApplicationUserDTO>(userViewModel);
+            userDto.Roles.Add((RoleTypes)userViewModel.Role);
 
             var result = await _accountService.RegisterAsync(userDto);
             if (!result.Success)

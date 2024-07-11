@@ -22,7 +22,7 @@ namespace BankingApp.Core.Application.DTOs.User
 
         public string Password { get; set; } = null!;
 
-        public List<RoleTypes> Roles { get; set; }
+        public List<RoleTypes> Roles { get; set; } = [];
 
         public string? PhotoUrl { get; set; }
 

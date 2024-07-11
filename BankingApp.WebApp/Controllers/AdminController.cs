@@ -24,7 +24,7 @@ namespace BankingApp.WebApp.Controllers
         private readonly UserViewModel userViewModel;
         private readonly ImageServices _imageService;
 
-        public AdminController(ISavingsAccountService savingsAccountService, ICreditCardService creditCardService, ILoanService loanService, IPaymentService paymentService, IUserService userService, IHttpContextAccessor httpContextAccessor)
+        public AdminController(ISavingsAccountService savingsAccountService, ICreditCardService creditCardService, ILoanService loanService, IPaymentService paymentService, IUserService userService, IHttpContextAccessor httpContextAccessor, ImageServices imageServices)
         {
             _savingsAccountService = savingsAccountService;
             _creditCardService = creditCardService;
@@ -33,6 +33,7 @@ namespace BankingApp.WebApp.Controllers
             _userService = userService;
             _httpContextAccessor = httpContextAccessor;
             userViewModel = _httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
+            _imageService = imageServices;
         }
 
         public async Task<IActionResult> Index(int? filterOption)
@@ -91,8 +92,6 @@ namespace BankingApp.WebApp.Controllers
 
         public async Task<IActionResult> Users()
         {
-            //var users = (await _userService.GetAll()).Data;
-
             return View((await _userService.GetAll()).Data);
         }
 
@@ -129,6 +128,7 @@ namespace BankingApp.WebApp.Controllers
             var newUser = result.Data;
 
             newUser.PhotoUrl = _imageService.UploadFile(viewModel.File, newUser.UserName, "Users");
+            newUser.Role = viewModel.Role;
 
             var updateResponse = await _userService.UpdateAsync(newUser);
             if (!updateResponse.Success)
@@ -146,7 +146,7 @@ namespace BankingApp.WebApp.Controllers
 
             await _savingsAccountService.Add(savingsAccount);
 
-            return View(nameof(Users));
+            return RedirectToAction("Users");
         }
 
         public IActionResult EditUser() { return View(); }

@@ -4,6 +4,7 @@ using BankingApp.Core.Application.DTOs.Account.ConfirmAccount;
 using BankingApp.Core.Application.DTOs.Account.ForgotPassword;
 using BankingApp.Core.Application.DTOs.Account.ResetPassword;
 using BankingApp.Core.Application.DTOs.User;
+using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.ViewModels.Account;
 using BankingApp.Core.Application.ViewModels.Beneficiary;
 using BankingApp.Core.Application.ViewModels.CreditCard;
@@ -41,7 +42,9 @@ namespace BankingApp.Core.Application.Mappings
 
             CreateMap<ApplicationUserDTO, SaveUserViewModel>()
                 .ForMember(des => des.File, obj => obj.Ignore())
-                .ReverseMap();
+                .ForMember(des => des.Role, opt => opt.Ignore())
+                .ReverseMap()
+                .ForMember(des => des.Roles, opt => opt.Ignore());
 
             CreateMap<ApplicationUserDTO, UserViewModel>()
                 .ReverseMap();
