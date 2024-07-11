@@ -138,13 +138,16 @@ namespace BankingApp.WebApp.Controllers
                 return View();
             }
 
-            SaveSavingsAccountViewModel savingsAccount = new();
+            if (viewModel.Role == RoleTypes.Client)
+            {
+                SaveSavingsAccountViewModel savingsAccount = new();
 
-            savingsAccount.Balance = viewModel.InitialAmount ?? 0;
-            savingsAccount.UserName = viewModel.UserName;
-            savingsAccount.IsPrincipal = true;
+                savingsAccount.Balance = viewModel.InitialAmount ?? 0;
+                savingsAccount.UserName = viewModel.UserName;
+                savingsAccount.IsPrincipal = true;
 
-            await _savingsAccountService.Add(savingsAccount);
+                await _savingsAccountService.Add(savingsAccount);
+            }
 
             return RedirectToAction("Users");
         }
