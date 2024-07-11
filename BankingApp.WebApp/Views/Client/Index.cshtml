@@ -14,7 +14,7 @@
             <h2 class="text-center fw-bold text-success mb-5">Tus productos</h2>
             <div class="col-4 border-end">
                 <h3 class="text-center fw-bold mb-5 mt-2 text-success">Cuentas de ahorro</h3>
-                <div class="full-height">
+                <div class="">
                     <div class="product-grid">
                         @if(Model.savingsAccounts == null || Model.savingsAccounts.Count == 0)
                         {
@@ -45,7 +45,7 @@
             </div>
             <div class="col-4 border-end">
                 <h3 class="text-center fw-bold mb-5 mt-2 text-success ">Prestamos</h3>
-                <div class="full-height">
+                <div class="">
                     <div class="product-grid">
                         @if (Model.Loans == null || Model.Loans.Count == 0)
                         {
@@ -64,7 +64,7 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <h5 class="fw-bold">Balance a la fecha: <span class="fw-bold text-success">RD$@loan.Balance</span></h5>
+                                                <h5 class="fw-bold">Monto por pagar: <span class="fw-bold text-success">RD$@loan.Balance</span></h5>
                                             </div>
                                         </div>
                                     </div>
@@ -76,7 +76,7 @@
             </div>
             <div class="col-4">
                 <h3 class="text-center fw-bold mb-5 mt-2 text-success">Tarjetas de crédito</h3>
-                <div class="full-height">
+                <div class="">
                     <div class="product-grid">
                         @if (Model.CreditCards == null || Model.CreditCards.Count == 0)
                         {
@@ -95,7 +95,7 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <h5 class="fw-bold">Balance a la fecha: <span class="fw-bold text-success">RD$@CreditCard.Balance</span></h5>
+                                                <h5 class="fw-bold">Monto por pagar: <span class="fw-bold text-success">RD$@CreditCard.Balance</span></h5>
                                             </div>
                                         </div>
                                     </div>

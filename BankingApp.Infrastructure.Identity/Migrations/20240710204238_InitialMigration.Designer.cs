@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingApp.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(BankingAppIdentityDbContext))]
-    [Migration("20240705000736_AddingAuditableproperties")]
-    partial class AddingAuditableproperties
+    [Migration("20240710204238_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
