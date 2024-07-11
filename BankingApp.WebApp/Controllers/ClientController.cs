@@ -237,7 +237,7 @@ namespace BankingApp.WebApp.Controllers
         public async Task<IActionResult> ConfirmTransactionBeneficiary(SavePaymentToBeneficiariesViewModel vm)
         {
             SaveSavingsAccountViewModel savingsAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToBeneficiaryId);
-            Response<UserViewModel> user = _userService.GetByNameAsync(savingsAccount.UserName);
+            var user = _userService.GetByNameAsync(savingsAccount.UserName);
             vm.FirstName = user.Data.FirstName;
             vm.LastName = user.Data.LastName;
 
