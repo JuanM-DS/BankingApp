@@ -4,12 +4,18 @@
 
 @{
     ViewData["Title"] = "Usuarios";
-    var activeClients = Model.Where(u => u.Status == (byte)UserStatus.Active && u.Roles.Contains(RoleTypes.Client));
-    var inactiveClients = Model.Where(u => u.Status == (byte)UserStatus.Inactive && u.Roles.Contains(RoleTypes.Client));
-    var activeAdmins = Model.Where(u => u.Status == (byte)UserStatus.Active && u.Roles.Contains(RoleTypes.Admin));
-    var inactiveAdmins = Model.Where(u => u.Status == (byte)UserStatus.Inactive && u.Roles.Contains(RoleTypes.Client));
+    
+    var activeClients = Model.Where(u => u.Status == (byte)UserStatus.Active && u.Roles.Contains((RoleTypes.Client)));
+    var inactiveClients = Model.Where(u => u.Status == (byte)UserStatus.Inactive && u.Roles.Contains((RoleTypes.Client)));
+    var activeAdmins = Model.Where(u => u.Status == (byte)UserStatus.Active && u.Roles.Contains((RoleTypes.Admin)));
+    var inactiveAdmins = Model.Where(u => u.Status == (byte)UserStatus.Inactive && u.Roles.Contains((RoleTypes.Admin)));
 }
 
+<div class="row mb-3">
+    <div class="col-3">
+        <a asp-controller="Admin" asp-action="Register" type="button" class="btn btn-outline-success">Añadir usuario</a>
+    </div>
+</div>
 
 <div class="container-fluid">
     <div class="shadow p-3 mb-5 bg-body-tertiary rounded border">
@@ -17,9 +23,9 @@
         <h1 class="text-center fw-bold text-success mb-5">Usuarios</h1>
 
         <div class="row mb-4">
-            <form class="col-6 offset-3" method="post" asp-controller="User" asp-action="FindByUserName">
+            <form class="col-6 offset-3" method="post" asp-controller="Admin" asp-action="FindByUserName">
                 <div class="btn-group d-flex mb-3 mb-md-0">
-                    <input type="text" name="userName" placeholder="Buscar Usuario" class="form-control me-2" />
+                    <input required type="text" name="userName" placeholder="Buscar Usuario" class="form-control me-2" />
                     <button type="submit" class="btn-success px-3 py-2 rounded-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
@@ -29,174 +35,93 @@
             </form>
         </div>
 
-        <div class="row mb-4">
-            @* Activos *@
+        @if(ViewBag.ErrorMessage != null)
+        {
+            <h2 class="text-center alert alert-danger mb-5">@ViewBag.ErrorMessage</h2>
+        }
+        else
+        {
+            <div class="row mb-4">
+                @* Activos *@
 
-            <h2 class="text-center fw-bold text-success mb-5">Activos</h2>
-            <div class="col-6 border-end">
-                <h3 class="text-center fw-bold mb-5 mt-2 text-success">Clientes</h3>
-                <div class="full-height">
-                    <div class="users-grid">
+                <h2 class="text-center fw-bold text-success mb-5">Activos</h2>
+                <div class="col-6 border-end">
+                    <h3 class="text-center @(activeClients.Count() > 0 ? "text-success" : "alert alert-info") fw-bold mb-5 mt-2">@(activeClients.Count() > 0 ? "Clientes" : "No hay clientes activos")</h3>
+                    <div class="full-height">
+                        <div class="users-grid">
 
-                        @foreach (var cliente in activeClients)
-                        {
-                            <div class="mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-title">
-                                            <div class="d-flex align-items-center justify-content-start gap-1">
-                                                <div class="border border-2 border-warning p-1 rounded-circle">
-                                                    <div class="bg-success shadow-lg p-3 rounded-circle">
-                                                        <h4 class="mb-0 text-white fw-bold">NA</h4>
+                            @foreach (var client in activeClients)
+                            {
+                                <div class="mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <div class="d-flex align-items-center justify-content-start gap-1">
+                                                    <div class="border border-2 border-warning p-1 rounded-circle">
+                                                        <div class="bg-success shadow-lg p-3 rounded-circle">
+                                                            <h4 class="mb-0 text-white fw-bold">@client.FirstName.Substring(0, 1)@client.LastName.Substring(0, 1)</h4>
+                                                        </div>
                                                     </div>
+                                                    <h4 class="mb-0 text-decoration-underline text-wrap">@client.FirstName @client.LastName</h4>
                                                 </div>
-                                                <h4 class="mb-0 text-decoration-underline text-wrap">Nombre Apellido Prueba</h4>
                                             </div>
-                                        </div>
-                                        <div class="">
-                                            <h5 class="fw-bold">Usuario: <span class="fw-normal">nombreapellido</span></h5>
-                                            <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
-                                            <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
-                                        </div>
+                                            <div class="">
+                                                <h5 class="fw-bold">Usuario: <span class="fw-normal">@client.UserName</span></h5>
+                                                <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
+                                                <h5 class="fw-bold">Estado: <span class="fw-normal">Activo</span></h5>
+                                            </div>
 
-                                        <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
-                                            <a class="btn btn-warning">Editar</a>
-                                            <a class="btn btn-danger">Eliminar</a>
+                                            <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
+                                                <a class="btn btn-warning">Editar</a>
+                                                <a class="btn btn-danger">Eliminar</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
+                            }
+
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
+                <div class="col-6 border-end">
+                    <h3 class="text-center @(activeAdmins.Count() > 0 ? "text-success" : "alert alert-info") fw-bold mb-5 mt-2">@(activeAdmins.Count() > 0 ? "Administradores" : "No hay administradores activos")</h3>
+                    <div class="full-height">
+                        <div class="users-grid">
 
-            <div class="col-6 border-end">
-                <h3 class="text-center fw-bold mb-5 mt-2 text-success">Administradores</h3>
-                <div class="full-height">
-                    <div class="users-grid">
-
-                        @foreach (var cliente in activeAdmins)
-                        {
-                            <div class="mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-title">
-                                            <div class="d-flex align-items-center justify-content-start gap-1">
-                                                <div class="border border-2 border-warning p-1 rounded-circle">
-                                                    <div class="bg-success shadow-lg p-3 rounded-circle">
-                                                        <h4 class="mb-0 text-white fw-bold">NA</h4>
+                            @foreach (var admin in activeAdmins)
+                            {
+                                <div class="mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <div class="d-flex align-items-center justify-content-start gap-1">
+                                                    <div class="border border-2 border-warning p-1 rounded-circle">
+                                                        <div class="bg-success shadow-lg p-3 rounded-circle">
+                                                            <h4 class="mb-0 text-white fw-bold">@admin.FirstName.Substring(0, 1)@admin.LastName.Substring(0, 1)</h4>
+                                                        </div>
                                                     </div>
+                                                    <h4 class="mb-0 text-decoration-underline text-wrap">@admin.FirstName @admin.LastName</h4>
                                                 </div>
-                                                <h4 class="mb-0 text-decoration-underline text-wrap">Nombre Apellido Prueba</h4>
                                             </div>
-                                        </div>
-                                        <div class="">
-                                            <h5 class="fw-bold">Usuario: <span class="fw-normal">nombreapellido</span></h5>
-                                            <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
-                                            <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
-                                        </div>
+                                            <div class="">
+                                                <h5 class="fw-bold">Usuario: <span class="fw-normal">@admin.UserName</span></h5>
+                                                <h5 class="fw-bold">Tipo: <span class="fw-normal">Administrador</span></h5>
+                                                <h5 class="fw-bold">Estado: <span class="fw-normal">Activo</span></h5>
+                                            </div>
 
-                                        <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
-                                            <a class="btn btn-warning">Editar</a>
-                                            <a class="btn btn-danger">Eliminar</a>
+                                            <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
+                                                <a class="btn btn-warning">Editar</a>
+                                                <a class="btn btn-danger">Eliminar</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
+                            }
 
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="row">
-            @* Inactivos *@
-
-            <h2 class="text-center fw-bold text-success mb-5">Inactivos</h2>
-            <div class="col-6 border-end">
-                <h3 class="text-center fw-bold mb-5 mt-2 text-success">Clientes</h3>
-                <div class="full-height">
-                    <div class="users-grid">
-
-                        @foreach (var cliente in inactiveClients)
-                        {
-                            <div class="mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-title">
-                                            <div class="d-flex align-items-center justify-content-start gap-1">
-                                                <div class="border border-2 border-warning p-1 rounded-circle">
-                                                    <div class="bg-success shadow-lg p-3 rounded-circle">
-                                                        <h4 class="mb-0 text-white fw-bold">NA</h4>
-                                                    </div>
-                                                </div>
-                                                <h4 class="mb-0 text-decoration-underline text-wrap">Nombre Apellido Prueba</h4>
-                                            </div>
-                                        </div>
-                                        <div class="">
-                                            <h5 class="fw-bold">Usuario: <span class="fw-normal">nombreapellido</span></h5>
-                                            <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
-                                            <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
-                                        </div>
-
-                                        <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
-                                            <a class="btn btn-warning">Editar</a>
-                                            <a class="btn btn-danger">Eliminar</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-6 border-end">
-                <h3 class="text-center fw-bold mb-5 mt-2 text-success">Administradores</h3>
-                <div class="full-height">
-                    <div class="users-grid">
-
-                        @foreach (var cliente in inactiveAdmins)
-                        {
-                            <div class="mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-title">
-                                            <div class="d-flex align-items-center justify-content-start gap-1">
-                                                <div class="border border-2 border-warning p-1 rounded-circle">
-                                                    <div class="bg-success shadow-lg p-3 rounded-circle">
-                                                        <h4 class="mb-0 text-white fw-bold">NA</h4>
-                                                    </div>
-                                                </div>
-                                                <h4 class="mb-0 text-decoration-underline text-wrap">Nombre Apellido Prueba</h4>
-                                            </div>
-                                        </div>
-                                        <div class="">
-                                            <h5 class="fw-bold">Usuario: <span class="fw-normal">nombreapellido</span></h5>
-                                            <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
-                                            <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
-                                        </div>
-
-                                        <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
-                                            <a class="btn btn-warning">Editar</a>
-                                            <a class="btn btn-danger">Eliminar</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
+                        </div>
 
                     </div>
 
@@ -205,9 +130,97 @@
             </div>
 
 
+            <div class="row">
+                @* Inactivos *@
+
+                <h2 class="text-center fw-bold text-success mb-5">Inactivos</h2>
+                <div class="col-6 border-end">
+                    <h3 class="text-center @(inactiveClients.Count() > 0 ? "text-success" : "alert alert-info") fw-bold mb-5 mt-2">@(inactiveClients.Count() > 0 ? "Clientes" : "No hay clientes inactivos")</h3>
+                    <div class="full-height">
+                        <div class="users-grid">
+
+                            @foreach (var client in inactiveClients)
+                            {
+                                <div class="mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <div class="d-flex align-items-center justify-content-start gap-1">
+                                                    <div class="border border-2 border-warning p-1 rounded-circle">
+                                                        <div class="bg-success shadow-lg p-3 rounded-circle">
+                                                            <h4 class="mb-0 text-white fw-bold">@client.FirstName.Substring(0, 1)@client.LastName.Substring(0, 1)</h4>
+                                                        </div>
+                                                    </div>
+                                                    <h4 class="mb-0 text-decoration-underline text-wrap">@client.FirstName @client.LastName</h4>
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <h5 class="fw-bold">Usuario: <span class="fw-normal">@client.UserName</span></h5>
+                                                <h5 class="fw-bold">Tipo: <span class="fw-normal">Cliente</span></h5>
+                                                <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
+                                            </div>
+
+                                            <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
+                                                <a class="btn btn-warning">Editar</a>
+                                                <a class="btn btn-danger">Eliminar</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-6 border-end">
+                    <h3 class="text-center @(inactiveAdmins.Count() > 0 ? "text-success" : "alert alert-info") fw-bold mb-5 mt-2">@(inactiveAdmins.Count() > 0 ? "Administradores" : "No hay administradores activos")</h3>
+                    <div class="full-height">
+                        <div class="users-grid">
+
+                            @foreach (var admin in inactiveAdmins)
+                            {
+                                <div class="mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <div class="d-flex align-items-center justify-content-start gap-1">
+                                                    <div class="border border-2 border-warning p-1 rounded-circle">
+                                                        <div class="bg-success shadow-lg p-3 rounded-circle">
+                                                            <h4 class="mb-0 text-white fw-bold">@admin.FirstName.Substring(0, 1)@admin.LastName.Substring(0, 1)</h4>
+                                                        </div>
+                                                    </div>
+                                                    <h4 class="mb-0 text-decoration-underline text-wrap">@admin.FirstName @admin.LastName</h4>
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <h5 class="fw-bold">Usuario: <span class="fw-normal">@admin.UserName</span></h5>
+                                                <h5 class="fw-bold">Tipo: <span class="fw-normal">Administrador</span></h5>
+                                                <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
+                                            </div>
+
+                                            <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
+                                                <a class="btn btn-warning">Editar</a>
+                                                <a class="btn btn-danger">Eliminar</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
 
 
-        </div>
+
+
+            </div>
+        }
 
 
     </div>

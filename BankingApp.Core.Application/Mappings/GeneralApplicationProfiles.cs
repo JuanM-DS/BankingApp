@@ -9,8 +9,10 @@ using BankingApp.Core.Application.ViewModels.Beneficiary;
 using BankingApp.Core.Application.ViewModels.CreditCard;
 using BankingApp.Core.Application.ViewModels.Loan;
 using BankingApp.Core.Application.ViewModels.Payment;
+using BankingApp.Core.Application.ViewModels.Product;
 using BankingApp.Core.Application.ViewModels.SavingsAccount;
 using BankingApp.Core.Application.ViewModels.User;
+using BankingApp.Core.Domain.Common;
 using BankingApp.Core.Domain.Entities;
 
 namespace BankingApp.Core.Application.Mappings
@@ -152,6 +154,18 @@ namespace BankingApp.Core.Application.Mappings
                .ForMember(des => des.CreatedTime, opt => opt.Ignore())
                .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
                .ForMember(des => des.LastModifiedTime, opt => opt.Ignore());
+            #endregion
+
+            #region Product
+
+            CreateMap<SaveProductViewModel, Product>()
+                .ReverseMap();
+
+            CreateMap<ProductViewModel, Product>()
+                .ReverseMap();
+
+            CreateMap<SaveProductViewModel, ProductViewModel>()
+                .ReverseMap();
             #endregion
 
             #region nex region

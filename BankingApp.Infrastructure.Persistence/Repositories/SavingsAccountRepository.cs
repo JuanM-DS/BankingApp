@@ -1,7 +1,9 @@
 ﻿using BankingApp.Core.Application.Interfaces.Repositories;
+using BankingApp.Core.Application.ViewModels.SavingsAccount;
 using BankingApp.Core.Domain.Entities;
 using BankingApp.Infrastructure.Persistence.Contexts;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +21,17 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
             _dbContext = dbContext;
         }
 
+        public override async Task<SavingsAccount> AddAsync(SavingsAccount savingsAccount)
+        {
+            await base.AddAsync(savingsAccount);
+            await _dbContext.SaveChangesAsync();
+            return savingsAccount;
+        }
+
+        public async Task<SavingsAccount> GetPrincipalAccountAsync(string userName)
+        {
+            return await _dbContext.SavingsAccounts.FirstAsync(ac => ac.UserName == userName && ac.IsPrincipal == true);
+        }
         public override async Task UpdateAsync(SavingsAccount entity, int id)
         {
             var entry = await _dbContext.Set<SavingsAccount>().FindAsync(id);

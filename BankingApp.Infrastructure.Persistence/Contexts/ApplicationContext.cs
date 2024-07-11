@@ -1,5 +1,6 @@
 ﻿using BankingApp.Core.Domain.Common;
 using BankingApp.Core.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
