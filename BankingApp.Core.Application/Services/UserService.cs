@@ -125,10 +125,10 @@ namespace BankingApp.Core.Application.Services
             };
         }
 
-        public async Task<Response<IEnumerable<UserViewModel>>> GetByNameAsync(string userName)
+        public async Task<Response<IEnumerable<UserViewModel>>> GetByNameAsync(string filter)
         {
             var users = (await _userRepository.Get())
-                                      .Where(x => x.UserName.Contains(userName));
+                                      .Where(x => x.UserName.Contains(filter) || x.FirstName.Contains(filter) || x.LastName.Contains(filter));
 
             var userViewModels = _mapper.Map<IEnumerable<UserViewModel>>(users);
 

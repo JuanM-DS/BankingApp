@@ -96,9 +96,9 @@ namespace BankingApp.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> FindByUserName(string userName)
+        public async Task<IActionResult> FindByUserName(string filter)
         {
-            var users = (await _userService.GetByNameAsync(userName)).Data;
+            var users = (await _userService.GetByNameAsync(filter)).Data;
 
             if (users != null)
             {
