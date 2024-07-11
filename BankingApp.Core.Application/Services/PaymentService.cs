@@ -356,8 +356,12 @@ namespace BankingApp.Core.Application.Services
                 FromAccount.Balance -= vm.Amount;
                 ToLoan.Balance -= vm.Amount;
             }
-            FromAccount.Balance -= vm.Amount;
-            ToLoan.Balance -= vm.Amount;
+            else
+            {
+                FromAccount.Balance -= vm.Amount;
+                ToLoan.Balance -= vm.Amount;
+            }
+            
 
             await _loanService.Update(ToLoan, ToLoan.Id);
             await _savingsAccountService.Update(FromAccount, FromAccount.Id);
@@ -586,6 +590,7 @@ namespace BankingApp.Core.Application.Services
             payment.ToProductId = vm.ToAccountId;
             payment.Type = ((byte)PaymentTypes.Transfer);
             payment.UserName = UserName;
+            await base.Add(payment);
 
             return new()
             {

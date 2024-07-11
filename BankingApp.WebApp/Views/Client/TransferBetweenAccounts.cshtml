@@ -26,7 +26,7 @@
                         <div class="mb-3">
                             <label asp-for="FromAccountId" class="form-label">Cuenta de ahorro origen</label>
                             <select asp-for="FromAccountId" class="form-select">
-                                <option value="" class="text-muted">Seleccione una opcion</option>
+                                <option selected value="0" class="text-muted">Seleccione una opcion</option>
                                 @foreach (var Account in Model.Accounts)
                                 {
                                     <option value="@Account.Id">@Account.Id</option>
@@ -38,7 +38,7 @@
                         <div class="mb-3">
                             <label asp-for="ToAccountId" class="form-label">Cuenta de ahorro de destino</label>
                             <select asp-for="ToAccountId" class="form-select">
-                                <option value="" class="text-muted">Seleccione una opcion</option>
+                                <option selected value="0" class="text-muted">Seleccione una opcion</option>
                                 @foreach (var Account in Model.Accounts)
                                 {
                                     <option value="@Account.Id">@Account.Id</option>

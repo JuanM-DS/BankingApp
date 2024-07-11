@@ -1,0 +1,37 @@
+﻿@* @using BankingApp.Core.Application.ViewModels.Payment
+@model SavePaymentToBeneficiariesViewModel
+@{
+    ViewData["Title"] = "Confirmar transacción";
+}
+
+<div class="row">
+
+    <div class="col-6 offset-3">
+        <div class="card">
+            <div class="card-header bg-danger text-light">
+                <h4>¿Esta seguro que desea realizar la transaccion?</h4>
+            </div>
+            <div class="card-body">
+
+                <form method="post" asp-controller="Client" asp-action="ConfirmTransactionExpressPost">
+
+                    <input type="hidden" asp-for="FromAccountId" />
+                    <input type="hidden" asp-for="ToAccountId" />
+                    <input type="hidden" asp-for="Amount" />
+
+                    <div class="form-group mb-3">
+                        <label for="nombre">Nombre y apellido del destinatario:</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" value="@Model.FirstName @Model.LastName" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-success">Realizar</button>
+                    <a asp-controller="Client" asp-action="Index" class="btn btn-warning">Cancelar</a>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+ *@
