@@ -19,6 +19,8 @@ namespace BankingApp.Core.Application.ViewModels.Payment
         [Required(ErrorMessage = "Debe ingresar un monto.")]
         [DataType(DataType.Text)]
         public double Amount { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
 
         public List<BeneficiaryViewModel>? ToBeneficiaries { get; set; }
 
