@@ -6,6 +6,7 @@ using BankingApp.Infrastructure.Identity.Contexts;
 using BankingApp.Infrastructure.Identity.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace BankingApp.Infrastructure.Identity.Repository
 {
@@ -82,17 +83,28 @@ namespace BankingApp.Infrastructure.Identity.Repository
         {
             var user = await context.Users.FindAsync(id);
             var userDto = _mapper.Map<ApplicationUserDTO>(user);
+            var role = await userManager.GetRolesAsync(user);
+            var roleEnum = role.Select(x => (RoleTypes)Enum.Parse(typeof(RoleTypes), x));
+            userDto.Roles = roleEnum.ToList();
             return userDto;
         }
 
         public async Task<bool> UpdateAsync(ApplicationUserDTO userDto)
         {
             var user = await context.Users.FindAsync(userDto.Id);
+            string photoUrl = "";
+            if (user.PhotoUrl != null)
+            {
+                photoUrl = user.PhotoUrl;
+            }
+            bool emailConfirmed = user.EmailConfirmed;
 
             _mapper.Map(userDto, user);
-
+            
             try
             {
+                user.PhotoUrl = photoUrl;
+                user.EmailConfirmed = emailConfirmed;
                 context.Users.Update(user);
                 var result = await context.SaveChangesAsync();
                 return result > 0;

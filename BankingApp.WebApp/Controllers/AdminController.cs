@@ -152,7 +152,11 @@ namespace BankingApp.WebApp.Controllers
             return RedirectToAction("Users");
         }
 
-        public IActionResult EditUser() { return View(); }
+        public async Task<IActionResult> EditUser(string id)
+        {
+            SaveUserViewModel user = (await _userService.GetSaveByIdAsync(id)).Data;
+            return View(user);
+        }
 
         [HttpPost]
         public async Task<IActionResult> EditUser(SaveUserViewModel viewModel)
@@ -184,7 +188,23 @@ namespace BankingApp.WebApp.Controllers
 
             await _savingsAccountService.Update(principalAccount, principalAccount.Id);
 
-            return View(nameof(Users));
+            return RedirectToAction("Users");
+        }
+        public async Task<IActionResult> ChangeUserStatus(string id)
+        {
+            SaveUserViewModel user = (await _userService.GetSaveByIdAsync(id)).Data;
+            if (user.Status == (byte)UserStatus.Active)
+            {
+                user.Status = (byte)UserStatus.Inactive;
+            }
+            else
+            {
+                user.Status = (byte)UserStatus.Active;
+            }
+
+            await _userService.UpdateAsync(user);
+
+            return RedirectToAction("Users");
         }
     }
 }
