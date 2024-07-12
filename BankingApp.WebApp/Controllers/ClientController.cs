@@ -42,6 +42,7 @@ namespace BankingApp.WebApp.Controllers
         {
             ViewBag.Message = message;
             ProductsViewModel products = new();
+            products.User = userViewModel;
             products.Loans = _loanService.GetAllViewModel().Where(l => l.UserName == userViewModel.UserName).ToList();
             products.SavingsAccounts =  _savingsAccountService.GetAllViewModel().Where(s => s.UserName == userViewModel.UserName).ToList();
             products.CreditCards = _creditCardService.GetAllViewModel().Where(c => c.UserName == userViewModel.UserName).ToList();
