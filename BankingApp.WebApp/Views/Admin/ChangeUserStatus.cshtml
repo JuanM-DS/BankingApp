@@ -1,0 +1,26 @@
+﻿@using BankingApp.Core.Application.Enums
+@using BankingApp.Core.Application.ViewModels.User
+@model SaveUserViewModel
+@{
+    ViewData["Title"] = "Activar/Desactivar Usuario";
+}
+
+<div class="row mt-4">
+    <div class="col-6 offset-3">
+        <div class="card">
+            <div class="card-header bg-@(Model.Status == (byte)UserStatus.Active ? "danger" : "success") text-light">
+                <h4>¿Está seguro de que desea @(Model.Status == (byte)UserStatus.Active ? "desactivar" : "activar") el usuario @Model.UserName?</h4>
+            </div>
+
+            <div class="card-body">
+
+                <form method="post" asp-controller="Admin" asp-action="ChangeUserStatus">
+                    <input type="hidden" asp-for="Id">
+
+                    <button type="submit" class="btn btn-@(Model.Status == (byte)UserStatus.Active ? "danger" : "success")">Sí, @(Model.Status == (byte)UserStatus.Active ? "desactivar" : "activar") usuario</button>
+                    <a asp-controller="Admin" asp-action="Users" class="btn btn-warning">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

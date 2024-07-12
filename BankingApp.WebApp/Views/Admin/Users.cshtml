@@ -85,7 +85,7 @@
 
                                             <div class="d-flex justify-content-between gap-2 align-items-center mt-3">
 
-                                                <a asp-controller="Admin" asp-action="ClientProducts" class="btn btn-outline-success p-3 fw-bold">Ver productos</a>
+                                                <a asp-controller="Admin" asp-action="Products" asp-route-id="@client.Id" class="btn btn-outline-success p-2 fw-bold">Ver productos</a>
                                                 @if (user.UserName != client.UserName)
                                                 {
                                                     
@@ -185,7 +185,7 @@
                                             </div>
 
                                             <div class="d-flex justify-content-between gap-2 align-items-center mt-3">
-                                                <a asp-controller="Admin" asp-action="ClientProducts" class="btn btn-outline-success p-3 fw-bold">Ver productos</a>
+                                                <a asp-controller="Admin" asp-action="Products" asp-route-id="@client.Id" class="btn btn-outline-success p-2 fw-bold">Ver productos</a>
                                                 @if (user.UserName != client.UserName)
                                                 {
                                                     <div>
