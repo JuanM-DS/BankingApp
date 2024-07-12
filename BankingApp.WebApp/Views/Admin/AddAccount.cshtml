@@ -5,14 +5,14 @@
     <div class="w50">
         <div class="card">
             <div class="card-header bg-success fs-4 text-white">
-                Nueva cuenta de ahorro para el usuario @ViewBag.User.UserName
+                Nueva cuenta de ahorro para para @ViewBag.User.FirstName @ViewBag.User.LastName
             </div>
             <div class="card-body">
                 <form asp-controller="Admin" asp-action="AddAccount" method="post">
                     
 
                     <div class="mb-3">
-                        <label asp-for="Balance" class="form-label">Depósito Inicial</label>
+                        <label asp-for="Balance" class="form-label">Depósito Inicial:</label>
                         <input type="number" asp-for="Balance" class="form-control">
                         <span asp-validation-for="Balance" class="text-danger"></span>
                     </div>

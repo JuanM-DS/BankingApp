@@ -276,7 +276,7 @@ namespace BankingApp.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddLoan(SaveLoanViewModel loan)
         {
-            
+            loan.PaymentDay = (byte)DateTime.Now.Day;
             await _loanService.Add(loan);
 
             var user = _userService.GetByNameAsync(loan.UserName).Data;
