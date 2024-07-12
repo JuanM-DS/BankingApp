@@ -10,7 +10,7 @@
 }
 
 <div class="container">
-    @if (ViewBag.Message != null)
+    @if (ViewBag.Message != null && ViewBag.Message != "")
     {
         <div class="alert alert-info alert-dismissible fade show text-center" role="alert">
             <h5 class="fw-bold">@ViewBag.Message</h5>
@@ -52,9 +52,13 @@
 
                                             @if (!account.IsPrincipal)
                                             {
-                                                <div class="mt-2">
-                                                    <a asp-controller="Admin" asp-action="DeleteAccount" asp-route-id="@account.Id" class="btn btn-outline-danger p-2 fw-bold">Eliminar</a>
-                                                </div>
+                                                @if (user.Roles.Contains(RoleTypes.Admin))
+                                                {
+                                                    <div class="mt-2 float-end">
+                                                        <a asp-controller="Admin" asp-action="DeleteAccount" asp-route-id="@account.Id" class="btn btn-outline-danger p-2 fw-bold">Eliminar</a>
+                                                    </div>
+                                                }
+                                                
                                             }
                                         </div>
                                     </div>
@@ -94,9 +98,13 @@
                                                 <h5 class="fw-bold">Balance: <span class="fw-bold text-success">RD$@loan.Balance</span></h5>
                                             </div>
 
-                                            <div class="mt-2">
-                                                <a asp-controller="Admin" asp-action="DeleteLoan" asp-route-id="@loan.Id" class="btn btn-outline-danger p-2 fw-bold">Eliminar</a>
-                                            </div>
+                                            @if (user.Roles.Contains(RoleTypes.Admin))
+                                            {
+                                                <div class="mt-2 float-end">
+                                                    <a asp-controller="Admin" asp-action="DeleteLoan" asp-route-id="@loan.Id" class="btn btn-outline-danger p-2 fw-bold">Eliminar</a>
+                                                </div>
+                                            }
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -135,9 +143,13 @@
                                                 <h5 class="fw-bold">Balance: <span class="fw-bold text-success">RD$@creditCard.Balance</span></h5>
                                             </div>
 
-                                            <div class="mt-2">
-                                                <a asp-controller="Admin" asp-action="DeleteCreditCard" asp-route-id="@creditCard.Id" class="btn btn-outline-danger p-2 fw-bold">Eliminar</a>
-                                            </div>
+                                            @if (user.Roles.Contains(RoleTypes.Admin))
+                                            {
+                                                <div class="mt-2 float-end">
+                                                    <a asp-controller="Admin" asp-action="DeleteCreditCard" asp-route-id="@creditCard.Id" class="btn btn-outline-danger p-2 fw-bold">Eliminar</a>
+                                                </div>
+                                            }
+                                            
                                         </div>
                                     </div>
                                 </div>
