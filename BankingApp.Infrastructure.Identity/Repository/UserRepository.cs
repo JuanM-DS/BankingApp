@@ -97,6 +97,10 @@ namespace BankingApp.Infrastructure.Identity.Repository
             {
                 photoUrl = user.PhotoUrl;
             }
+            if(userDto.PhotoUrl != null)
+            {
+                photoUrl = userDto.PhotoUrl;
+            }
             bool emailConfirmed = user.EmailConfirmed;
 
             _mapper.Map(userDto, user);
