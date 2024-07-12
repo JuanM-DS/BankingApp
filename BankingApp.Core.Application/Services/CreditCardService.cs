@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.Interfaces.Repositories;
 using BankingApp.Core.Application.Interfaces.Services;
 using BankingApp.Core.Application.ViewModels.CreditCard;
@@ -30,7 +31,7 @@ namespace BankingApp.Core.Application.Services
             product.UserName = creditCard.UserName;
             product.CreatedTime = creditCard.CreatedTime;
             product.CreatedBy = creditCard.CreatedBy;
-
+            product.Type = (byte)ProductTypes.CreditCard;
             await _productRepository.AddAsync(product);
         }
 

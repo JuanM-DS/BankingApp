@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.Interfaces.Repositories;
 using BankingApp.Core.Application.Interfaces.Services;
 using BankingApp.Core.Application.ViewModels.Loan;
+using BankingApp.Core.Application.ViewModels.SavingsAccount;
 using BankingApp.Core.Domain.Common;
 using BankingApp.Core.Domain.Entities;
 
@@ -11,13 +13,17 @@ namespace BankingApp.Core.Application.Services
     {
         private readonly ILoanRepository _loanRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IPaymentRepository _paymentRepository;
+        private readonly ISavingsAccountService _savingsAccountService;
         private readonly IMapper _mapper;
 
-        public LoanService(ILoanRepository loanRepository, IMapper mapper, IProductRepository productRepository) : base(loanRepository, mapper)
+        public LoanService(ILoanRepository loanRepository, IMapper mapper, IProductRepository productRepository, ISavingsAccountService savingsAccountService, IPaymentRepository paymentRepository) : base(loanRepository, mapper)
         {
             _loanRepository = loanRepository;
             _mapper = mapper;
             _productRepository = productRepository;
+            _savingsAccountService = savingsAccountService;
+            _paymentRepository = paymentRepository;
         }
 
         public override async Task Add(SaveLoanViewModel saveLoanViewModel)
@@ -30,8 +36,20 @@ namespace BankingApp.Core.Application.Services
             product.UserName = loan.UserName;
             product.CreatedTime = loan.CreatedTime;
             product.CreatedBy = loan.CreatedBy;
-
+            product.Type = (byte)ProductTypes.Loan;
             await _productRepository.AddAsync(product);
+
+            Payment payment = new();
+            payment.Amount = loan.Principal;
+            payment.FromProductId = loan.Id;
+            payment.ToProductId = (await _savingsAccountService.GetPrincipalAccount(loan.UserName)).Id;
+            payment.UserName = loan.UserName;
+            payment.Type = (byte)PaymentTypes.Disbursement;
+
+            await _paymentRepository.AddAsync(payment);
+
+            await _savingsAccountService.TransferFromLoan(loan.Principal, (int)payment.ToProductId);
+
         }
         public List<LoanViewModel> GetAllByUserWithInclude(string userName)
         {

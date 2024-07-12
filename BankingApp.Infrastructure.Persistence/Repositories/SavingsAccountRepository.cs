@@ -30,7 +30,8 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
 
         public async Task<SavingsAccount> GetPrincipalAccountAsync(string userName)
         {
-            return await _dbContext.SavingsAccounts.FirstAsync(ac => ac.UserName == userName && ac.IsPrincipal == true);
+            var savingsAccount = await _dbContext.SavingsAccounts.FirstOrDefaultAsync(ac => ac.UserName == userName && ac.IsPrincipal == true);
+            return savingsAccount;
         }
         public override async Task UpdateAsync(SavingsAccount entity, int id)
         {

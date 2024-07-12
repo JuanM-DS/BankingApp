@@ -9,6 +9,7 @@ namespace BankingApp.Core.Domain.Common
 {
     public class Product : BaseEntity
     {
+        public byte Type { get; set; }
         //Navigation Property
         public ICollection<Payment> PaymentsTo { get; set; }
         public ICollection<Payment> PaymentsFrom { get; set; }

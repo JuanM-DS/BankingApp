@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.Interfaces.Repositories;
 using BankingApp.Core.Application.Interfaces.Services;
+using BankingApp.Core.Application.ViewModels.Payment;
 using BankingApp.Core.Application.ViewModels.SavingsAccount;
 using BankingApp.Core.Domain.Common;
 using BankingApp.Core.Domain.Entities;
@@ -11,13 +13,15 @@ namespace BankingApp.Core.Application.Services
     {
         private readonly ISavingsAccountRepository _savingsAccountRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IPaymentRepository _paymentRepository;
         private readonly IMapper _mapper;
 
-        public SavingsAccountService(ISavingsAccountRepository savingsAccountRepository, IMapper mapper, IProductRepository productRepository) : base(savingsAccountRepository, mapper)
+        public SavingsAccountService(ISavingsAccountRepository savingsAccountRepository, IMapper mapper, IProductRepository productRepository, IPaymentRepository paymentRepository) : base(savingsAccountRepository, mapper)
         {
             _savingsAccountRepository = savingsAccountRepository;
             _mapper = mapper;
             _productRepository = productRepository;
+            _paymentRepository = paymentRepository;
         }
 
         public override async Task Add(SaveSavingsAccountViewModel savesavingsAccountViewModel)
@@ -25,15 +29,56 @@ namespace BankingApp.Core.Application.Services
             var savingsAccount = _mapper.Map<SavingsAccount>(savesavingsAccountViewModel);
             
             savingsAccount = await _savingsAccountRepository.AddAsync(savingsAccount);
+
             Product product = new();
             product.Id = savingsAccount.Id;
             product.UserName = savingsAccount.UserName;
             product.CreatedTime = savingsAccount.CreatedTime;
             product.CreatedBy = savingsAccount.CreatedBy;
-
+            product.Type = (byte)ProductTypes.SavingsAccount;
             await _productRepository.AddAsync(product);
+
+            if (savingsAccount.Balance > 0)
+            {
+                Payment payment = new();
+                payment.Amount = (double)savingsAccount.Balance;
+                payment.ToProductId = savingsAccount.Id;
+                payment.UserName = savingsAccount.UserName;
+                payment.Type = (byte)PaymentTypes.Deposit;
+
+                await _paymentRepository.AddAsync(payment);
+
+                savingsAccount.Balance = payment.Amount;
+                await _savingsAccountRepository.UpdateAsync(savingsAccount, savingsAccount.Id);
+            }
         }
 
+        public override async Task Update(SaveSavingsAccountViewModel savesavingsAccountViewModel, int id)
+        {
+            var savingsAccount = await _savingsAccountRepository.GetByIdAsync(id);
+
+            if (savesavingsAccountViewModel.Balance > 0)
+            {
+                Payment payment = new();
+                payment.Amount = (double)savesavingsAccountViewModel.Balance;
+                payment.ToProductId = savingsAccount.Id;
+                payment.UserName = savingsAccount.UserName;
+                payment.Type = (byte)PaymentTypes.Deposit;
+
+                await _paymentRepository.AddAsync(payment);
+
+                savingsAccount.Balance += payment.Amount;
+                await _savingsAccountRepository.UpdateAsync(savingsAccount, savingsAccount.Id);
+            }
+        }
+
+        public async Task TransferFromLoan(double amount, int id)
+        {
+            var savingsAccount = await _savingsAccountRepository.GetByIdAsync(id);
+            savingsAccount.Balance += amount;
+
+            await _savingsAccountRepository.UpdateAsync(savingsAccount, savingsAccount.Id);
+        }
         public async Task<SaveSavingsAccountViewModel> GetPrincipalAccount(string userName)
         {
             return _mapper.Map<SaveSavingsAccountViewModel>(await _savingsAccountRepository.GetPrincipalAccountAsync(userName));

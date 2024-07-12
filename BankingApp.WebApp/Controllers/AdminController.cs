@@ -14,6 +14,8 @@ using BankingApp.Core.Application.ViewModels.Product;
 using System.Drawing;
 using BankingApp.Core.Application.ViewModels.CreditCard;
 using BankingApp.Core.Application.ViewModels.Loan;
+using BankingApp.Core.Domain.Common;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace BankingApp.WebApp.Controllers
 {
@@ -186,11 +188,14 @@ namespace BankingApp.WebApp.Controllers
                 return View();
             }
 
-            SaveSavingsAccountViewModel principalAccount = await _savingsAccountService.GetPrincipalAccount(newUser.UserName);
+            if (viewModel.AditionalAmount != null && viewModel.AditionalAmount > 0)
+            {
+                SaveSavingsAccountViewModel principalAccount = await _savingsAccountService.GetPrincipalAccount(newUser.UserName);
 
-            principalAccount.Balance += viewModel.AditionalAmount ?? 0;
+                principalAccount.Balance = (double)viewModel.AditionalAmount;
 
-            await _savingsAccountService.Update(principalAccount, principalAccount.Id);
+                await _savingsAccountService.Update(principalAccount, principalAccount.Id);
+            }
 
             return RedirectToAction("Users");
         }
@@ -240,12 +245,12 @@ namespace BankingApp.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAccount(SaveSavingsAccountViewModel account)
+        public async Task<IActionResult> AddAccount(SaveSavingsAccountViewModel savingsAccount)
         {
-            account.IsPrincipal = false;
-            await _savingsAccountService.Add(account);
-
-            var user = _userService.GetByNameAsync(account.UserName).Data;
+            savingsAccount.IsPrincipal = false;
+            await _savingsAccountService.Add(savingsAccount);
+            
+            var user = _userService.GetByNameAsync(savingsAccount.UserName).Data;
             return RedirectToAction("Products", new {id = user.Id, message = "Cuenta asignada exitosamente" });
         }
 
@@ -259,7 +264,10 @@ namespace BankingApp.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCreditCard(SaveCreditCardViewModel creditCard)
         {
-            creditCard.PaymentDay = (byte)((int)creditCard.CutoffDay - 5);
+            if ((int)creditCard.CutoffDay > 5) creditCard.PaymentDay = (byte)((int)creditCard.CutoffDay - 5);
+            
+            else creditCard.PaymentDay = (byte)(30 - (5 - (int)creditCard.CutoffDay));
+
             await _creditCardService.Add(creditCard);
 
             var user = _userService.GetByNameAsync(creditCard.UserName).Data;
@@ -280,6 +288,7 @@ namespace BankingApp.WebApp.Controllers
             await _loanService.Add(loan);
 
             var user = _userService.GetByNameAsync(loan.UserName).Data;
+            
             return RedirectToAction("Products", new { id = user.Id, message = "Préstamo asignado exitosamente" });
         }
     }
