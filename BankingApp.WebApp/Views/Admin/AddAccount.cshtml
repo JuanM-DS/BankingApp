@@ -1,1 +1,25 @@
-﻿
+﻿@using BankingApp.Core.Application.ViewModels.SavingsAccount
+@model SaveSavingsAccountViewModel
+
+<div class="container">
+    <div class="w50">
+        <div class="card">
+            <div class="card-header bg-success fs-4 text-white">
+                Registrar nuevo usuario
+            </div>
+            <div class="card-body">
+                <form asp-controller="Admin" asp-action="Register" method="post" enctype="multipart/form-data">
+                    
+
+                    @* <div class="mb-3">
+                        <label asp-for="LastName" class="form-label">Apellido</label>
+                        <input asp-for="LastName" class="form-control">
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div> *@
+
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
