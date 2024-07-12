@@ -24,7 +24,7 @@
                 @if (user.Roles.Contains(RoleTypes.Admin))
                 {
                     <div class="mb-4">
-                        <a asp-controller="Admin" asp-action="AddAccount" asp-route-userName="@Model.User.UserName" class="col-12 btn btn-outline-success fs-5 fw-bold">Agregar cuenta</a>
+                        <a asp-controller="Admin" asp-action="AddAccount" asp-route-userId="@Model.User.Id" class="col-12 btn btn-outline-success fs-5 fw-bold">Agregar cuenta</a>
                     </div>
                 }
                 <h3 class="text-center fw-bold mb-5 mt-2 text-success">Cuentas de ahorro</h3>
@@ -72,7 +72,7 @@
                 @if (user.Roles.Contains(RoleTypes.Admin))
                 {
                     <div class="mb-4">
-                        <button class="col-12 btn btn-outline-success fs-5 fw-bold">Agregar préstamo</button>
+                        <button asp-controller="Admin" asp-action="AddLoan" asp-route-user="@Model.User" class="col-12 btn btn-outline-success fs-5 fw-bold">Agregar préstamo</button>
                     </div>
                 }
                 <h3 class="text-center fw-bold mb-5 mt-2 text-success ">Préstamos</h3>
@@ -117,7 +117,7 @@
                 @if (user.Roles.Contains(RoleTypes.Admin))
                 {
                     <div class="mb-4">
-                        <button class="col-12 btn btn-outline-success fs-5 fw-bold">Agregar tarjeta de crédito</button>
+                        <a asp-controller="Admin" asp-action="AddCreditCard" asp-route-userId="@Model.User.Id" class="col-12 btn btn-outline-success fs-5 fw-bold">Agregar tarjeta de crédito</a>
                     </div>
                 }
                 <h3 class="text-center fw-bold mb-5 mt-2 text-success">Tarjetas de crédito</h3>

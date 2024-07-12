@@ -220,7 +220,7 @@ namespace BankingApp.WebApp.Controllers
             return RedirectToAction("Users");
         }
 
-        public async Task<IActionResult> Products(string id)
+        public async Task<IActionResult> Products(string id, string message = "")
         {
             ProductsViewModel products = new();
             products.User = (await _userService.GetByIdAsync(id)).Data;
@@ -228,28 +228,59 @@ namespace BankingApp.WebApp.Controllers
             products.SavingsAccounts = _savingsAccountService.GetAllViewModel().Where(s => s.UserName == products.User.UserName).ToList();
             products.CreditCards = _creditCardService.GetAllViewModel().Where(c => c.UserName == products.User.UserName).ToList();
 
+            ViewBag.Message = message;
             return View(products);
         }
 
-        public async Task<IActionResult> AddAccount(string userName)
+        public async Task<IActionResult> AddAccount(string userId)
         {
             SaveSavingsAccountViewModel account = new();
-            ViewBag.UserName = userName;
+            ViewBag.User = (await _userService.GetByIdAsync(userId)).Data;
             return View(account);
         }
 
-        public async Task<IActionResult> AddCreditCard(string userName)
+        [HttpPost]
+        public async Task<IActionResult> AddAccount(SaveSavingsAccountViewModel account)
+        {
+            account.IsPrincipal = false;
+            await _savingsAccountService.Add(account);
+
+            var user = _userService.GetByNameAsync(account.UserName).Data;
+            return RedirectToAction("Products", new {id = user.Id, message = "Cuenta asignada exitosamente" });
+        }
+
+        public async Task<IActionResult> AddCreditCard(string userId)
         {
             SaveCreditCardViewModel creditCard = new();
-            ViewBag.UserNAme = userName;
+            ViewBag.User = (await _userService.GetByIdAsync(userId)).Data;
             return View(creditCard);
         }
 
-        public async Task<IActionResult> AddLoan(string userName)
+        [HttpPost]
+        public async Task<IActionResult> AddCreditCard(SaveCreditCardViewModel creditCard)
+        {
+            creditCard.PaymentDay = (byte)((int)creditCard.CutoffDay - 5);
+            await _creditCardService.Add(creditCard);
+
+            var user = _userService.GetByNameAsync(creditCard.UserName).Data;
+            return RedirectToAction("Products", new { id = user.Id, message = "Tarjeta de crédito asignada exitosamente" });
+        }
+
+        public async Task<IActionResult> AddLoan(string userId)
         {
             SaveLoanViewModel loan = new();
-            ViewBag.UserNAme = userName;
+            ViewBag.User = (await _userService.GetByIdAsync(userId)).Data;
             return View(loan);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddLoan(SaveLoanViewModel loan)
+        {
+            
+            await _loanService.Add(loan);
+
+            var user = _userService.GetByNameAsync(loan.UserName).Data;
+            return RedirectToAction("Products", new { id = user.Id, message = "Préstamo asignado exitosamente" });
         }
     }
 }

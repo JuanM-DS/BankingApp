@@ -179,6 +179,9 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
                 loan.Property(l => l.InterestRate)
                 .IsRequired();
 
+                loan.Property(l => l.Term)
+                .IsRequired();
+
                 loan.Property(l => l.Installment)
                 .IsRequired();
 
