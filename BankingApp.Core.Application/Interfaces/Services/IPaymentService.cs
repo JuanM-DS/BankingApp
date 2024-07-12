@@ -22,5 +22,6 @@ namespace BankingApp.Core.Application.Interfaces.Services
         Task<Response<SavePaymentToBeneficiariesViewModel>> PaymentToBeneficiaries(SavePaymentToBeneficiariesViewModel vm, string UserName);
         Task<Response<SaveCashAdvancesViewModel>> CashAdvances(SaveCashAdvancesViewModel vm, string UserName);
         Task<Response<SaveTransferBetweenAccountsViewModel>> TransferBetweenAccounts(SaveTransferBetweenAccountsViewModel vm, string UserName);
+        Task ConfirmTransactionBeneficiaryPost(SavePaymentToBeneficiariesViewModel vm, string UserName);
     }
 }

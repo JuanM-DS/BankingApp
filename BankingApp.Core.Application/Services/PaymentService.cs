@@ -422,7 +422,20 @@ namespace BankingApp.Core.Application.Services
             }
 
 
+
+            return new()
+            {
+                View = "ConfirmTransactionBeneficiary",
+                Success = true,
+                Data = vm 
+            };
+        }
+
+        public async Task ConfirmTransactionBeneficiaryPost(SavePaymentToBeneficiariesViewModel vm, string UserName)
+        {
             SaveSavingsAccountViewModel Tobeneficiary = await _savingsAccountService.GetByIdSaveViewModel(vm.ToBeneficiaryId);
+            SaveSavingsAccountViewModel FromAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.FromAccountId);
+
             if (vm.Amount >= Tobeneficiary.Balance)
             {
                 vm.Amount = Tobeneficiary.Balance;
@@ -443,12 +456,6 @@ namespace BankingApp.Core.Application.Services
             payment.UserName = UserName;
 
             await base.Add(payment);
-
-            return new()
-            {
-                View = "Index",
-                Success = true
-            };
         }
 
 

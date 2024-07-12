@@ -1,4 +1,4 @@
-﻿@* @using BankingApp.Core.Application.ViewModels.Payment
+﻿@using BankingApp.Core.Application.ViewModels.Payment
 @model SavePaymentToBeneficiariesViewModel
 @{
     ViewData["Title"] = "Confirmar transacción";
@@ -13,10 +13,10 @@
             </div>
             <div class="card-body">
 
-                <form method="post" asp-controller="Client" asp-action="ConfirmTransactionExpressPost">
+                <form method="post" asp-controller="Client" asp-action="ConfirmTransactionBeneficiaryPost">
 
                     <input type="hidden" asp-for="FromAccountId" />
-                    <input type="hidden" asp-for="ToAccountId" />
+                    <input type="hidden" asp-for="ToBeneficiaryId" />
                     <input type="hidden" asp-for="Amount" />
 
                     <div class="form-group mb-3">
@@ -34,4 +34,3 @@
 
 </div>
 
- *@

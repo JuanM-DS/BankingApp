@@ -226,12 +226,30 @@ namespace BankingApp.WebApp.Controllers
             ViewBag.Message = response.Error;
             if (response.Success == true)
             {
-                return RedirectToAction("Index", new { message = "Se ha realizado la transacción" });
+                return RedirectToAction(response.View, response.Data);
             }
             else
             {
                 return View(response.View, response.Data);
             }
+        }
+
+        public async Task<IActionResult> ConfirmTransactionBeneficiary(SavePaymentToBeneficiariesViewModel vm)
+        {
+            SaveSavingsAccountViewModel savingsAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToBeneficiaryId);
+            Response<UserViewModel> user = _userService.GetByNameAsync(savingsAccount.UserName);
+            vm.FirstName = user.Data.FirstName;
+            vm.LastName = user.Data.LastName;
+
+            return View("ConfirmTransactionBeneficiary", vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmTransactionBeneficiaryPost(SavePaymentToBeneficiariesViewModel vm)
+        {
+            await _paymentService.ConfirmTransactionBeneficiaryPost(vm, userViewModel.UserName);
+
+            return RedirectToAction("Index", new { message = "Se ha realizado la transacción" });
         }
 
         public async Task<IActionResult> CashAdvances()
