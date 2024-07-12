@@ -5,18 +5,22 @@
     <div class="w50">
         <div class="card">
             <div class="card-header bg-success fs-4 text-white">
-                Registrar nuevo usuario
+                Nueva cuenta de ahorro para el usuario @ViewBag.User.UserName
             </div>
             <div class="card-body">
-                <form asp-controller="Admin" asp-action="Register" method="post" enctype="multipart/form-data">
+                <form asp-controller="Admin" asp-action="AddAccount" method="post">
                     
 
-                    @* <div class="mb-3">
-                        <label asp-for="LastName" class="form-label">Apellido</label>
-                        <input asp-for="LastName" class="form-control">
-                        <span asp-validation-for="LastName" class="text-danger"></span>
-                    </div> *@
+                    <div class="mb-3">
+                        <label asp-for="Balance" class="form-label">Depósito Inicial</label>
+                        <input type="number" asp-for="Balance" class="form-control">
+                        <span asp-validation-for="Balance" class="text-danger"></span>
+                    </div>
 
+                    <input type="hidden" asp-for="UserName" value="@ViewBag.User.UserName" />
+
+                    <button type="submit" class="btn btn-success float-end">Asignar cuenta</button>
+                    <a asp-controller="Admin" asp-action="Products" asp-route-id="@ViewBag.User.Id" class="btn btn-warning">&larr; Volver atrás</a>
                     
                 </form>
             </div>
