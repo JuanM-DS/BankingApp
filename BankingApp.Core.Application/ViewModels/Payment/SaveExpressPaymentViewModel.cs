@@ -10,7 +10,7 @@ namespace BankingApp.Core.Application.ViewModels.Payment
 {
     public class SaveExpressPaymentViewModel
     {
-        [Range(100100100, 400100099, ErrorMessage = "Debe ingresar una cuenta.")]
+        [Range(100100100, 400100099, ErrorMessage = "Ese numero de cuenta no existe.")]
         public int ToAccountId {  get; set; }
         [Required(ErrorMessage = "Debe ingresar un monto.")]
         [DataType(DataType.Text)]

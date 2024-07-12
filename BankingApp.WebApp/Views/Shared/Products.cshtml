@@ -94,9 +94,18 @@
                                                     <h4 class="mb-0 text-wrap">@loan.Id</h4>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <h5 class="fw-bold">Balance: <span class="fw-bold text-success">RD$@loan.Balance</span></h5>
-                                            </div>
+                                            @if (loan.Balance == 0)
+                                            {
+                                                <div>
+                                                    <h5 class="fw-bold">Estado: <span class="fw-bold text-success">Pagado</span></h5>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div>
+                                                    <h5 class="fw-bold">Balance: <span class="fw-bold text-success">RD$@loan.Balance</span></h5>
+                                                </div>
+                                            }
 
                                             @if (user.Roles.Contains(RoleTypes.Admin))
                                             {
