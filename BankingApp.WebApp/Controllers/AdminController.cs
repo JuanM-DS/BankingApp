@@ -190,19 +190,28 @@ namespace BankingApp.WebApp.Controllers
 
             return RedirectToAction("Users");
         }
+
         public async Task<IActionResult> ChangeUserStatus(string id)
         {
             SaveUserViewModel user = (await _userService.GetSaveByIdAsync(id)).Data;
-            if (user.Status == (byte)UserStatus.Active)
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeUserStatus(SaveUserViewModel userVM)
+        {
+            userVM = (await _userService.GetSaveByIdAsync(userVM.Id)).Data;
+
+            if (userVM.Status == (byte)UserStatus.Active)
             {
-                user.Status = (byte)UserStatus.Inactive;
+                userVM.Status = (byte)UserStatus.Inactive;
             }
             else
             {
-                user.Status = (byte)UserStatus.Active;
+                userVM.Status = (byte)UserStatus.Active;
             }
 
-            await _userService.UpdateAsync(user);
+            await _userService.UpdateAsync(userVM);
 
             return RedirectToAction("Users");
         }
