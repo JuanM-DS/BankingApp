@@ -71,7 +71,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<Response<IEnumerable<UserViewModel>>> GetAll(UserQueryFilter? filters = null)
         {
-            var users = await _userRepository.Get();
+            var users = await _userRepository.GetAll();
 
             if (filters is not null)
             {
@@ -125,9 +125,22 @@ namespace BankingApp.Core.Application.Services
             };
         }
 
-        public async Task<Response<IEnumerable<UserViewModel>>> GetByNameAsync(string filter)
+        public Response<UserViewModel> GetByNameAsync(string userName)
         {
-            var users = (await _userRepository.Get())
+            var user = _userRepository.Get().FirstOrDefault(x => x.UserName == userName);
+
+            var userViewModels = _mapper.Map<UserViewModel>(user);
+
+            return new()
+            {
+                Data = userViewModels,
+                Success = true
+            };
+        }
+
+        public async Task<Response<IEnumerable<UserViewModel>>> GetByMatchesAsync(string filter)
+        {
+            var users = (await _userRepository.GetAll())
                                       .Where(x => x.UserName.Contains(filter) || x.FirstName.Contains(filter) || x.LastName.Contains(filter));
 
             var userViewModels = _mapper.Map<IEnumerable<UserViewModel>>(users);
@@ -138,7 +151,6 @@ namespace BankingApp.Core.Application.Services
                 Success = true
             };
         }
-
         public async Task<Response<SaveUserViewModel>> GetSaveByIdAsync(string id)
         {
             var users = await _userRepository.GetAsync(id);
@@ -155,7 +167,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<Response<SaveUserViewModel>> UpdateAsync(SaveUserViewModel userViewModel)
         {
-            var userByUserName = (await _userRepository.Get())
+            var userByUserName = (await _userRepository.GetAll())
                                               .FirstOrDefault(x => x.UserName == userViewModel.UserName);
             if (userByUserName is not null && userByUserName.Id != userViewModel.Id)
                 return new()
@@ -164,7 +176,7 @@ namespace BankingApp.Core.Application.Services
                     Error = $"{userViewModel.UserName} is already taken"
                 };
 
-            var userByEmail = (await _userRepository.Get())
+            var userByEmail = (await _userRepository.GetAll())
                                               .FirstOrDefault(x => x.Email == userViewModel.Email);
             if (userByEmail is not null && userByUserName.Id != userViewModel.Id)
                 return new()
@@ -173,7 +185,7 @@ namespace BankingApp.Core.Application.Services
                     Error = $"{userByEmail.Email} is already taken"
                 };
 
-            var userByIdCard = (await _userRepository.Get())
+            var userByIdCard = (await _userRepository.GetAll())
                                               .FirstOrDefault(x => x.IdCard == userViewModel.IdCard);
             if (userByIdCard is not null && userByUserName.Id != userViewModel.Id)
                 return new()

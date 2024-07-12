@@ -126,9 +126,9 @@ namespace BankingApp.WebApp.Controllers
         public async Task<IActionResult> ConfirmTransactionExpress(SaveExpressPaymentViewModel vm)
         {
             SaveSavingsAccountViewModel savingsAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToAccountId);
-            List<UserViewModel> users = (await _userService.GetByNameAsync(savingsAccount.UserName)).Data.ToList();
-            vm.FirstName = users[0].FirstName;
-            vm.LastName = users[0].LastName;
+            UserViewModel users = _userService.GetByNameAsync(savingsAccount.UserName).Data;
+            vm.FirstName = users.FirstName;
+            vm.LastName = users.LastName;
 
             return View("ConfirmTransactionExpress", vm);
         }

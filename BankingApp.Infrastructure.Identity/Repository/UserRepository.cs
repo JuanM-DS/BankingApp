@@ -33,13 +33,16 @@ namespace BankingApp.Infrastructure.Identity.Repository
             }
         }
 
-        public async Task<IEnumerable<ApplicationUserDTO>> Get()
+        public IEnumerable<ApplicationUserDTO> Get()
+        {
+            var users = context.Users.AsQueryable();
+
+            return _mapper.Map<IEnumerable<ApplicationUserDTO>>(users);
+        }
+        public async Task<IEnumerable<ApplicationUserDTO>> GetAll()
         {
             var users = context.Users.AsQueryable();
             List<ApplicationUserDTO> usersDTO = [];
-
-
-            
 
             foreach (var user in users)
             {
@@ -53,6 +56,8 @@ namespace BankingApp.Infrastructure.Identity.Repository
 
             return usersDTO;
         }
+
+
 
         public async Task<ApplicationUserDTO> GetAsync(int id)
         {

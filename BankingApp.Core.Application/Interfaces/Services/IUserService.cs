@@ -18,7 +18,9 @@ namespace BankingApp.Core.Application.Interfaces.Services
 
         public Task<Response<SaveUserViewModel>> GetSaveByIdAsync(string id);
 
-        public Task<Response<IEnumerable<UserViewModel>>> GetByNameAsync(string filter);
+        public Response<UserViewModel> GetByNameAsync(string userName);
+
+        Task<Response<IEnumerable<UserViewModel>>> GetByMatchesAsync(string filter);
 
         public Task<Response<IEnumerable<UserViewModel>>> GetAll(UserQueryFilter? filters = null);
 
