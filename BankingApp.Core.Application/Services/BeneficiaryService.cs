@@ -36,7 +36,7 @@ namespace BankingApp.Core.Application.Services
 
             foreach (var bn in beneficiaries)
             {
-                var user = (await _userRepository.Get())
+                var user = (await _userRepository.GetAll())
                                               .FirstOrDefault(x => x.UserName == bn.UserName);
                 beneficiary = bn;
                 beneficiary.FirstName = user.FirstName;

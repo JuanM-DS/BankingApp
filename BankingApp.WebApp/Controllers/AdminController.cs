@@ -96,9 +96,9 @@ namespace BankingApp.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> FindByUserName(string userName)
+        public async Task<IActionResult> FindByUserName(string filter)
         {
-            var users = (await _userService.GetByNameAsync(userName)).Data;
+            var users = (await _userService.GetByMatchesAsync(filter)).Data;
 
             if (users != null)
             {
@@ -138,18 +138,25 @@ namespace BankingApp.WebApp.Controllers
                 return View();
             }
 
-            SaveSavingsAccountViewModel savingsAccount = new();
+            if (viewModel.Role == RoleTypes.Client)
+            {
+                SaveSavingsAccountViewModel savingsAccount = new();
 
-            savingsAccount.Balance = viewModel.InitialAmount ?? 0;
-            savingsAccount.UserName = viewModel.UserName;
-            savingsAccount.IsPrincipal = true;
+                savingsAccount.Balance = viewModel.InitialAmount ?? 0;
+                savingsAccount.UserName = viewModel.UserName;
+                savingsAccount.IsPrincipal = true;
 
-            await _savingsAccountService.Add(savingsAccount);
+                await _savingsAccountService.Add(savingsAccount);
+            }
 
             return RedirectToAction("Users");
         }
 
-        public IActionResult EditUser() { return View(); }
+        public async Task<IActionResult> EditUser(string id)
+        {
+            SaveUserViewModel user = (await _userService.GetSaveByIdAsync(id)).Data;
+            return View(user);
+        }
 
         [HttpPost]
         public async Task<IActionResult> EditUser(SaveUserViewModel viewModel)
@@ -181,7 +188,23 @@ namespace BankingApp.WebApp.Controllers
 
             await _savingsAccountService.Update(principalAccount, principalAccount.Id);
 
-            return View(nameof(Users));
+            return RedirectToAction("Users");
+        }
+        public async Task<IActionResult> ChangeUserStatus(string id)
+        {
+            SaveUserViewModel user = (await _userService.GetSaveByIdAsync(id)).Data;
+            if (user.Status == (byte)UserStatus.Active)
+            {
+                user.Status = (byte)UserStatus.Inactive;
+            }
+            else
+            {
+                user.Status = (byte)UserStatus.Active;
+            }
+
+            await _userService.UpdateAsync(user);
+
+            return RedirectToAction("Users");
         }
     }
 }

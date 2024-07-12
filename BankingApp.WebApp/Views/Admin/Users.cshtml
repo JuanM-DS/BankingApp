@@ -1,7 +1,9 @@
-﻿@using BankingApp.Core.Application.Enums
+﻿@using BankingApp.Core.Application.Helpers;
+@using BankingApp.Core.Application.Enums
 @using BankingApp.Core.Application.ViewModels.User;
 @model List<UserViewModel>;
 
+@inject IHttpContextAccessor httpContextAccessor;
 @{
     ViewData["Title"] = "Usuarios";
     
@@ -9,15 +11,18 @@
     var inactiveClients = Model.Where(u => u.Status == (byte)UserStatus.Inactive && u.Roles.Contains((RoleTypes.Client)));
     var activeAdmins = Model.Where(u => u.Status == (byte)UserStatus.Active && u.Roles.Contains((RoleTypes.Admin)));
     var inactiveAdmins = Model.Where(u => u.Status == (byte)UserStatus.Inactive && u.Roles.Contains((RoleTypes.Admin)));
+
+    var user = httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
 }
 
-<div class="row mb-3">
-    <div class="col-3">
-        <a asp-controller="Admin" asp-action="Register" type="button" class="btn btn-outline-success">Añadir usuario</a>
-    </div>
-</div>
+
 
 <div class="container-fluid">
+
+    <div class="mb-2">
+        <a asp-controller="Admin" asp-action="Register" type="button" class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 col-xxl-1 btn btn-outline-success">Añadir usuario</a>
+    </div>
+    
     <div class="shadow p-3 mb-5 bg-body-tertiary rounded border">
 
         <h1 class="text-center fw-bold text-success mb-5">Usuarios</h1>
@@ -25,7 +30,7 @@
         <div class="row mb-4">
             <form class="col-6 offset-3" method="post" asp-controller="Admin" asp-action="FindByUserName">
                 <div class="btn-group d-flex mb-3 mb-md-0">
-                    <input required type="text" name="userName" placeholder="Buscar Usuario" class="form-control me-2" />
+                    <input required type="text" name="filter" placeholder="Buscar Usuario" class="form-control me-2" />
                     <button type="submit" class="btn-success px-3 py-2 rounded-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
@@ -58,8 +63,15 @@
                                             <div class="card-title">
                                                 <div class="d-flex align-items-center justify-content-start gap-1">
                                                     <div class="border border-2 border-warning p-1 rounded-circle">
-                                                        <div class="bg-success shadow-lg p-3 rounded-circle">
-                                                            <h4 class="mb-0 text-white fw-bold">@client.FirstName.Substring(0, 1)@client.LastName.Substring(0, 1)</h4>
+                                                        <div class="@(client.PhotoUrl == null || client.PhotoUrl == "" ? "bg-success p-3" : "") shadow-lg rounded-circle">
+                                                            @if (client.PhotoUrl == null || client.PhotoUrl == string.Empty)
+                                                            {
+                                                                <h4 class="mb-0 text-white fw-bold">@client.FirstName.Substring(0, 1)@client.LastName.Substring(0, 1)</h4>
+                                                            }
+                                                            else
+                                                            {
+                                                                <img class="rounded-circle profile-pic" src="@client.PhotoUrl" alt="Foto de cliente" />                                                                
+                                                            }
                                                         </div>
                                                     </div>
                                                     <h4 class="mb-0 text-decoration-underline text-wrap">@client.FirstName @client.LastName</h4>
@@ -71,9 +83,17 @@
                                                 <h5 class="fw-bold">Estado: <span class="fw-normal">Activo</span></h5>
                                             </div>
 
-                                            <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
-                                                <a class="btn btn-warning">Editar</a>
-                                                <a class="btn btn-danger">Eliminar</a>
+                                            <div class="d-flex justify-content-between gap-2 align-items-center mt-3">
+
+                                                <a asp-controller="Admin" asp-action="ClientProducts" class="btn btn-outline-success p-3 fw-bold">Ver productos</a>
+                                                @if (user.UserName != client.UserName)
+                                                {
+                                                    
+                                                    <div>
+                                                        <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@client.Id" class="btn btn-outline-warning p-2 fw-bold">Editar</a>
+                                                        <a asp-controller="Admin" asp-action="ChangeUserStatus" asp-route-id="@client.Id" class="btn btn-outline-danger p-2 fw-bold">Desactivar</a>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -113,8 +133,12 @@
                                             </div>
 
                                             <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
-                                                <a class="btn btn-warning">Editar</a>
-                                                <a class="btn btn-danger">Eliminar</a>
+                                                @if(user.UserName != admin.UserName)
+                                                {
+                                                    <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@admin.Id" class="btn btn-outline-warning p-2 fw-bold">Editar</a>
+                                                    <a asp-controller="Admin" asp-action="ChangeUserStatus" asp-route-id="@admin.Id" class="btn btn-outline-danger p-2 fw-bold">Desactivar</a>
+                                                }
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -160,9 +184,15 @@
                                                 <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
                                             </div>
 
-                                            <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
-                                                <a class="btn btn-warning">Editar</a>
-                                                <a class="btn btn-danger">Eliminar</a>
+                                            <div class="d-flex justify-content-between gap-2 align-items-center mt-3">
+                                                <a asp-controller="Admin" asp-action="ClientProducts" class="btn btn-outline-success p-3 fw-bold">Ver productos</a>
+                                                @if (user.UserName != client.UserName)
+                                                {
+                                                    <div>
+                                                        <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@client.Id" class="btn btn-outline-warning p-2 fw-bold">Editar</a>
+                                                        <a asp-controller="Admin" asp-action="ChangeUserStatus" asp-route-id="@client.Id" class="btn btn-outline-success p-2 fw-bold">Activar</a>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -202,8 +232,11 @@
                                             </div>
 
                                             <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
-                                                <a class="btn btn-warning">Editar</a>
-                                                <a class="btn btn-danger">Eliminar</a>
+                                                @if (user.UserName != admin.UserName)
+                                                {
+                                                    <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@admin.Id" class="btn btn-outline-warning p-2 fw-bold">Editar</a>
+                                                    <a asp-controller="Admin" asp-action="ChangeUserStatus" asp-route-id="@admin.Id" class="btn btn-outline-success p-2 fw-bold">Activar</a>
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -216,13 +249,8 @@
 
                 </div>
 
-
-
-
             </div>
         }
-
-
     </div>
 
 </div>
