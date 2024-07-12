@@ -10,6 +10,10 @@ using BankingApp.Core.Application.Services;
 using BankingApp.WebApp.Services;
 using BankingApp.Core.Domain.Entities;
 using BankingApp.Core.Application.ViewModels.SavingsAccount;
+using BankingApp.Core.Application.ViewModels.Product;
+using System.Drawing;
+using BankingApp.Core.Application.ViewModels.CreditCard;
+using BankingApp.Core.Application.ViewModels.Loan;
 
 namespace BankingApp.WebApp.Controllers
 {
@@ -214,6 +218,38 @@ namespace BankingApp.WebApp.Controllers
             await _userService.UpdateAsync(userVM);
 
             return RedirectToAction("Users");
+        }
+
+        public async Task<IActionResult> Products(string id)
+        {
+            ProductsViewModel products = new();
+            products.User = (await _userService.GetByIdAsync(id)).Data;
+            products.Loans = _loanService.GetAllViewModel().Where(l => l.UserName == products.User.UserName).ToList();
+            products.SavingsAccounts = _savingsAccountService.GetAllViewModel().Where(s => s.UserName == products.User.UserName).ToList();
+            products.CreditCards = _creditCardService.GetAllViewModel().Where(c => c.UserName == products.User.UserName).ToList();
+
+            return View(products);
+        }
+
+        public async Task<IActionResult> AddAccount(string userName)
+        {
+            SaveSavingsAccountViewModel account = new();
+            ViewBag.UserName = userName;
+            return View(account);
+        }
+
+        public async Task<IActionResult> AddCreditCard(string userName)
+        {
+            SaveCreditCardViewModel creditCard = new();
+            ViewBag.UserNAme = userName;
+            return View(creditCard);
+        }
+
+        public async Task<IActionResult> AddLoan(string userName)
+        {
+            SaveLoanViewModel loan = new();
+            ViewBag.UserNAme = userName;
+            return View(loan);
         }
     }
 }

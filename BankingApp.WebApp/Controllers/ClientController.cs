@@ -38,24 +38,16 @@ namespace BankingApp.WebApp.Controllers
             userViewModel = _httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
         }
 
-        public  IActionResult Index(string message ="")
+        public  IActionResult Index(string message = "")
         {
             ViewBag.Message = message;
             ProductsViewModel products = new();
             products.Loans = _loanService.GetAllViewModel().Where(l => l.UserName == userViewModel.UserName).ToList();
-            products.savingsAccounts =  _savingsAccountService.GetAllViewModel().Where(s => s.UserName == userViewModel.UserName).ToList();
-            products.CreditCards = _creditCardService.GetAllViewModel()
-                .Where(c => c.UserName == userViewModel.UserName)
-                .Select(c => new CreditCardViewModel
-                {
-                    Id = c.Id,
-                    UserName = c.UserName,
-                    CreditLimit = c.CreditLimit,
-                    Balance = c.CreditLimit - c.Balance
-                })
-                .ToList();
+            products.SavingsAccounts =  _savingsAccountService.GetAllViewModel().Where(s => s.UserName == userViewModel.UserName).ToList();
+            products.CreditCards = _creditCardService.GetAllViewModel().Where(c => c.UserName == userViewModel.UserName).ToList();
+               
 
-            return View("Index",products);
+            return View("Products", products);
         }
 
         public async Task<IActionResult> Beneficiary(string message = "")
