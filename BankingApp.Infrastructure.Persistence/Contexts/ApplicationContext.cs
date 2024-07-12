@@ -173,6 +173,9 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
                 loan.Property(l => l.Id)
                 .UseIdentityColumn(700100100, 1);
 
+                loan.Property(l => l.Principal)
+                .IsRequired();
+
                 loan.Property(l => l.Balance)
                 .IsRequired();
 

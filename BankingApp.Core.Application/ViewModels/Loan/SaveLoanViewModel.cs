@@ -9,6 +9,7 @@ namespace BankingApp.Core.Application.ViewModels.Loan
     public class SaveLoanViewModel
     {
         public int Id { get; set; }
+        public double Principal { get; set; }
         public double Balance { get; set; }
         public double InterestRate { get; set; }
         public int Term { get; set; }

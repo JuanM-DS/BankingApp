@@ -119,9 +119,6 @@ namespace BankingApp.Core.Application.Mappings
             #region Loans
             CreateMap<Loan, LoanViewModel>()
                .ReverseMap()
-               .ForMember(des => des.Installment, opt => opt.Ignore())
-               .ForMember(des => des.PaymentDay, opt => opt.Ignore())
-               .ForMember(des => des.InterestRate, opt => opt.Ignore())
                .ForMember(des => des.CreatedBy, opt => opt.Ignore())
                .ForMember(des => des.CreatedTime, opt => opt.Ignore())
                .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
@@ -129,9 +126,6 @@ namespace BankingApp.Core.Application.Mappings
 
             CreateMap<Loan, SaveLoanViewModel>()
                .ReverseMap()
-               .ForMember(des => des.Installment, opt => opt.Ignore())
-               .ForMember(des => des.PaymentDay, opt => opt.Ignore())
-               .ForMember(des => des.InterestRate, opt => opt.Ignore())
                .ForMember(des => des.CreatedBy, opt => opt.Ignore())
                .ForMember(des => des.CreatedTime, opt => opt.Ignore())
                .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())

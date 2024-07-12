@@ -5,19 +5,19 @@
     <div class="w50">
         <div class="card">
             <div class="card-header bg-success fs-4 text-white">
-                Nueva tarjeta de crédito para el usuario @ViewBag.User.UserName
+                Nueva tarjeta de crédito para para @ViewBag.User.FirstName @ViewBag.User.LastName
             </div>
             <div class="card-body">
                 <form asp-controller="Admin" asp-action="AddCreditCard" method="post">
 
                     <div class="mb-3">
-                        <label asp-for="CreditLimit" class="form-label">Límite de Crédito</label>
+                        <label asp-for="CreditLimit" class="form-label">Límite de Crédito:</label>
                         <input type="number" asp-for="CreditLimit" class="form-control">
                         <span asp-validation-for="CreditLimit" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="CutoffDay" class="form-label">Fecha de Corte</label>
+                        <label asp-for="CutoffDay" class="form-label">Fecha de Corte:</label>
                         <input type="number" asp-for="CutoffDay" class="form-control">
                         <span asp-validation-for="CutoffDay" class="text-danger"></span>
                     </div>
