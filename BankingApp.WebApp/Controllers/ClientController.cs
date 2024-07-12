@@ -38,30 +38,23 @@ namespace BankingApp.WebApp.Controllers
             userViewModel = _httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
         }
 
-        public  IActionResult Index(string message ="")
+        public  IActionResult Index(string message = "")
         {
             ViewBag.Message = message;
             ProductsViewModel products = new();
+            products.User = userViewModel;
             products.Loans = _loanService.GetAllViewModel().Where(l => l.UserName == userViewModel.UserName).ToList();
-            products.savingsAccounts =  _savingsAccountService.GetAllViewModel().Where(s => s.UserName == userViewModel.UserName).ToList();
-            products.CreditCards = _creditCardService.GetAllViewModel()
-                .Where(c => c.UserName == userViewModel.UserName)
-                .Select(c => new CreditCardViewModel
-                {
-                    Id = c.Id,
-                    UserName = c.UserName,
-                    CreditLimit = c.CreditLimit,
-                    Balance = c.CreditLimit - c.Balance
-                })
-                .ToList();
+            products.SavingsAccounts =  _savingsAccountService.GetAllViewModel().Where(s => s.UserName == userViewModel.UserName).ToList();
+            products.CreditCards = _creditCardService.GetAllViewModel().Where(c => c.UserName == userViewModel.UserName).ToList();
+               
 
-            return View("Index",products);
+            return View("Products", products);
         }
 
-        public IActionResult Beneficiary(string message = "")
+        public async Task<IActionResult> Beneficiary(string message = "")
         {
             ViewBag.Message = message;
-            List<BeneficiaryViewModel> Vm = _beneficiaryService.BeneficiariesList().Where(b => b.UserName == userViewModel.UserName).ToList();
+            List<BeneficiaryViewModel> Vm = (await _beneficiaryService.BeneficiariesList()).Where(b => b.UserName == userViewModel.UserName).ToList();
             return View("Beneficiary",Vm);
         }
 
@@ -126,9 +119,9 @@ namespace BankingApp.WebApp.Controllers
         public async Task<IActionResult> ConfirmTransactionExpress(SaveExpressPaymentViewModel vm)
         {
             SaveSavingsAccountViewModel savingsAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToAccountId);
-            Response<UserViewModel> user = _userService.GetByNameAsync(savingsAccount.UserName);
-            vm.FirstName = user.Data.FirstName;
-            vm.LastName = user.Data.LastName;
+            UserViewModel users = _userService.GetByNameAsync(savingsAccount.UserName).Data;
+            vm.FirstName = users.FirstName;
+            vm.LastName = users.LastName;
 
             return View("ConfirmTransactionExpress", vm);
         }
@@ -226,12 +219,30 @@ namespace BankingApp.WebApp.Controllers
             ViewBag.Message = response.Error;
             if (response.Success == true)
             {
-                return RedirectToAction("Index", new { message = "Se ha realizado la transacción" });
+                return RedirectToAction(response.View, response.Data);
             }
             else
             {
                 return View(response.View, response.Data);
             }
+        }
+
+        public async Task<IActionResult> ConfirmTransactionBeneficiary(SavePaymentToBeneficiariesViewModel vm)
+        {
+            SaveSavingsAccountViewModel savingsAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToBeneficiaryId);
+            var user = _userService.GetByNameAsync(savingsAccount.UserName);
+            vm.FirstName = user.Data.FirstName;
+            vm.LastName = user.Data.LastName;
+
+            return View("ConfirmTransactionBeneficiary", vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmTransactionBeneficiaryPost(SavePaymentToBeneficiariesViewModel vm)
+        {
+            await _paymentService.ConfirmTransactionBeneficiaryPost(vm, userViewModel.UserName);
+
+            return RedirectToAction("Index", new { message = "Se ha realizado la transacción" });
         }
 
         public async Task<IActionResult> CashAdvances()

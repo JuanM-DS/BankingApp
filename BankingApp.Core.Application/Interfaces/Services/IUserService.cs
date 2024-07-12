@@ -20,6 +20,8 @@ namespace BankingApp.Core.Application.Interfaces.Services
 
         public Response<UserViewModel> GetByNameAsync(string userName);
 
+        Task<Response<IEnumerable<UserViewModel>>> GetByMatchesAsync(string filter);
+
         public Task<Response<IEnumerable<UserViewModel>>> GetAll(UserQueryFilter? filters = null);
 
         public Task<Response<IEnumerable<UserViewModel>>> GetAll(RoleTypes roleType);

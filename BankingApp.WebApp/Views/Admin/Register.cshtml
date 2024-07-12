@@ -1,0 +1,115 @@
+﻿@using BankingApp.Core.Application.Enums
+@using BankingApp.Core.Application.ViewModels.User
+@model SaveUserViewModel
+@{
+    var Success = ViewData["Success"] as bool?;
+    Success = Success ?? true;
+    var error = ViewData["Error"] as string;
+}
+
+<div class="container">
+    <div class="w50">
+        <div class="card">
+            <div class="card-header bg-success fs-4 text-white">
+                Registrar nuevo usuario
+            </div>
+            <div class="card-body">
+                <form asp-controller="Admin" asp-action="Register" method="post" enctype="multipart/form-data">
+                    @if (!Success.Value)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <div class="mb-3">
+                        <label asp-for="FirstName" class="form-label">Nombre</label>
+                        <input asp-for="FirstName" class="form-control">
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="LastName" class="form-label">Apellido</label>
+                        <input asp-for="LastName" class="form-control">
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="UserName" class="form-label">Usuario</label>
+                        <input asp-for="UserName" class="form-control">
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" for="exampleInputEmail1" class="form-label">Correo electrónico</label>
+                        <input asp-for="Email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="IdCard" class="form-label">Cédula</label>
+                        <input asp-for="IdCard" class="form-control">
+                        <span asp-validation-for="IdCard" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" for="exampleInputPassword1" class="form-label">Contraseña</label>
+                        <input required asp-for="Password" type="password" class="form-control" id="exampleInputPassword1">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" for="exampleInputPassword1" class="form-label">Confirmar Contraseña</label>
+                        <input required asp-for="ConfirmPassword" type="password" class="form-control" id="exampleInputPassword1">
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="File" class="form-label">Photo</label>
+                        <input asp-for="File" type="file" class="form-control">
+                        <span asp-validation-for="File" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Role" class="form-label"></label>
+                        <select asp-for="Role" class="form-select" id="Select">
+                            <option value="-1">Seleccione el tipo de usuario</option>
+                            <option value="@((int)RoleTypes.Client)">Cliente</option>
+                            <option value="@((int)RoleTypes.Admin)">Administrador</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3 d-none" id="initialAmountDiv">
+                        <label asp-for="InitialAmount" class="form-label">Monto Inicial</label>
+                        <input asp-for="InitialAmount" class="form-control">
+                    </div>
+
+                    <div class="btn-form d-flex align-items-center" style="gap:3px;">
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+                        <a class="btn btn-warning" asp-controller="Admin" asp-action="Users">Volver atrás</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var select = document.getElementById('Select');
+        var div = document.getElementById('initialAmountDiv');
+
+        select.addEventListener('click', function () {
+
+            var selectedValue = select.value;
+
+            if (selectedValue == 0) {
+                div.classList.remove('d-none');
+            }
+            else {
+                div.classList.add('d-none');
+            }
+        });
+    </script>
+}

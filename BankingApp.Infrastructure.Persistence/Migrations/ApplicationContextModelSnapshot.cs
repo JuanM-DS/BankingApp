@@ -152,6 +152,9 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                     b.Property<byte>("PaymentDay")
                         .HasColumnType("tinyint");
 
+                    b.Property<int>("Term")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -163,11 +166,9 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("BankingApp.Core.Domain.Entities.Payment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");

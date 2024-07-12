@@ -1,5 +1,6 @@
 ﻿using BankingApp.Core.Domain.Common;
 using BankingApp.Core.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -176,6 +177,9 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
                 .IsRequired();
 
                 loan.Property(l => l.InterestRate)
+                .IsRequired();
+
+                loan.Property(l => l.Term)
                 .IsRequired();
 
                 loan.Property(l => l.Installment)

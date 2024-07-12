@@ -13,6 +13,8 @@ namespace BankingApp.Core.Application.Interfaces.Repositories
 
         public IEnumerable<ApplicationUserDTO> Get();
 
+        Task<IEnumerable<ApplicationUserDTO>> GetAll();
+
         public Task<IEnumerable<ApplicationUserDTO>> GetAsync(RoleTypes role);
     }
 }

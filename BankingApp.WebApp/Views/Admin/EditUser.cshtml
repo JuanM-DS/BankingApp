@@ -11,10 +11,10 @@
     <div class="w50">
         <div class="card">
             <div class="card-header">
-                Registrar nuevo usuario
+                Edición de usuario
             </div>
             <div class="card-body">
-                <form asp-controller="Admin" asp-action="Register" method="post" enctype="multipart/form-data">
+                <form asp-controller="Admin" asp-action="EditUser" method="post" enctype="multipart/form-data">
                     @if (!Success.Value)
                     {
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -54,35 +54,34 @@
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="File" class="form-label">Photo</label>
-                        <input asp-for="File" type="file" class="form-control">
-                        <span asp-validation-for="File" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
                         <label asp-for="Password" for="exampleInputPassword1" class="form-label">Contraseña</label>
-                        <input required asp-for="Password" type="password" class="form-control" id="exampleInputPassword1">
+                        <input asp-for="Password" type="password" class="form-control" id="exampleInputPassword1">
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
                         <label asp-for="ConfirmPassword" for="exampleInputPassword1" class="form-label">Confirmar Contraseña</label>
-                        <input required asp-for="ConfirmPassword" type="password" class="form-control" id="exampleInputPassword1">
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" id="exampleInputPassword1">
                         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Role" class="form-label"></label>
-                        <select asp-for="Role">
-                            <option value="">Seleccione el tipo de usuario</option>
-                            <option value="@RoleTypes.Client">Cliente</option>
-                            <option value="@RoleTypes.Admin">Administrador</option>
-                        </select>
+                        <label asp-for="File" class="form-label">Photo</label>
+                        <input asp-for="File" type="file" class="form-control">
+                        <span asp-validation-for="File" class="text-danger"></span>
                     </div>
+
+                    @if(Model.Role == RoleTypes.Client)
+                    {
+                        <div class="mb-3">
+                            <label asp-for="AditionalAmount" class="form-label">Monto Adicional</label>
+                            <input asp-for="AditionalAmount" class="form-control">
+                        </div>
+                    }
 
                     <div class="btn-form d-flex align-items-center" style="gap:3px;">
                         <button type="submit" class="btn btn-primary">Registrar</button>
-                        <a class="btn btn-warning" asp-controller="Admin" asp-action="User">Volver atrás</a>
+                        <a class="btn btn-warning" asp-controller="Admin" asp-action="Users">Volver atrás</a>
                     </div>
                 </form>
             </div>

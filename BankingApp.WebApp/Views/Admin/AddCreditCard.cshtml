@@ -1,0 +1,35 @@
+﻿@using BankingApp.Core.Application.ViewModels.CreditCard
+@model SaveCreditCardViewModel
+
+<div class="container">
+    <div class="w50">
+        <div class="card">
+            <div class="card-header bg-success fs-4 text-white">
+                Nueva tarjeta de crédito para el usuario @ViewBag.User.UserName
+            </div>
+            <div class="card-body">
+                <form asp-controller="Admin" asp-action="AddCreditCard" method="post">
+
+                    <div class="mb-3">
+                        <label asp-for="CreditLimit" class="form-label">Límite de Crédito</label>
+                        <input type="number" asp-for="CreditLimit" class="form-control">
+                        <span asp-validation-for="CreditLimit" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="CutoffDay" class="form-label">Fecha de Corte</label>
+                        <input type="number" asp-for="CutoffDay" class="form-control">
+                        <span asp-validation-for="CutoffDay" class="text-danger"></span>
+                    </div>
+
+                    <input type="hidden" asp-for="UserName" value="@ViewBag.User.UserName" />
+                    <input type="hidden" asp-for="Balance" value="0" />
+
+                    <button type="submit" class="btn btn-success float-end">Asignar tarjeta de crédito</button>
+                    <a asp-controller="Admin" asp-action="Products" asp-route-id="@ViewBag.User.Id" class="btn btn-warning">&larr; Volver atrás</a>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

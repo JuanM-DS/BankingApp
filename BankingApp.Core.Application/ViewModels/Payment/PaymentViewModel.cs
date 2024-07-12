@@ -8,7 +8,7 @@ namespace BankingApp.Core.Application.ViewModels.Payment
 {
     public class PaymentViewModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public int? FromProductId { get; set; }
 

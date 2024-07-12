@@ -42,5 +42,8 @@ namespace BankingApp.Core.Application.ViewModels.User
 
         [DataType(DataType.Upload)]
         public IFormFile? File { get; set; }
+
+        public double? InitialAmount { get; set; }
+        public double? AditionalAmount { get; set; }
     }
 }

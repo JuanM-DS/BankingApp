@@ -7,6 +7,6 @@ namespace BankingApp.Core.Domain.Entities
     {
         public double Balance { get; set; }
         public bool IsPrincipal { get; set; }
-        public ICollection<Beneficiary> Beneficiaries { get;}
+        public ICollection<Beneficiary> Beneficiaries { get; set; }
     }
 }

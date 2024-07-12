@@ -106,7 +106,7 @@ namespace BankingApp.Core.Application.Services
             return await SetUserViewModelToPayments(paymentsViewModel);
         }
 
-        public async Task<PaymentViewModel> GetByIdWithInclude(int id)
+        public async Task<PaymentViewModel> GetByIdWithInclude(Guid id)
         {
             var payments =  _paymentRepository.GetAllWithInclude(x => x.FromProduct, x => x.ToProduct);
 
@@ -273,7 +273,7 @@ namespace BankingApp.Core.Application.Services
                     Success = false
                 };
             }
-            if (ToCreditCard.CreditLimit == ToCreditCard.Balance)
+            if (ToCreditCard.Balance == 0)
             {
                 return new()
                 {
@@ -285,16 +285,16 @@ namespace BankingApp.Core.Application.Services
             }
 
 
-            double transferAmount = Math.Min(vm.Amount, ToCreditCard.CreditLimit - ToCreditCard.Balance);
+            double transferAmount = Math.Min(vm.Amount, ToCreditCard.Balance);
 
-            ToCreditCard.Balance += transferAmount;
+            ToCreditCard.Balance -= transferAmount;
             FromAccount.Balance -= transferAmount;
 
             await _creditCardService.Update(ToCreditCard, ToCreditCard.Id);
             await _savingsAccountService.Update(FromAccount, FromAccount.Id);
 
             SavePaymentViewModel payment = new();
-            payment.Amount = vm.Amount;
+            payment.Amount = transferAmount;
             payment.FromProductId = vm.FromAccountId;
             payment.ToProductId = vm.ToCreditCardId;
             payment.Type = ((byte)PaymentTypes.PaymentToCreditCard);
@@ -315,6 +315,7 @@ namespace BankingApp.Core.Application.Services
             vm.FromAccounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == UserName).ToList();
 
             SaveSavingsAccountViewModel FromAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.FromAccountId);
+            SaveLoanViewModel ToLoan = await _loanService.GetByIdSaveViewModel(vm.ToLoanId);
 
             if (FromAccount.Balance == 0)
             {
@@ -347,17 +348,30 @@ namespace BankingApp.Core.Application.Services
                     Success = false
                 };
             }
+            if (ToLoan.Balance == 0)
+            {
+                return new()
+                {
+                    Data = vm,
+                    View = "LoanPayment",
+                    Error = "Ya has pagado ese prestamo, selecciona otro o vuelve atras.",
+                    Success = false
+                };
+            }
 
 
-            SaveLoanViewModel ToLoan = await _loanService.GetByIdSaveViewModel(vm.ToLoanId);
             if (vm.Amount >= ToLoan.Balance)
             {
                 vm.Amount = ToLoan.Balance;
                 FromAccount.Balance -= vm.Amount;
                 ToLoan.Balance -= vm.Amount;
             }
-            FromAccount.Balance -= vm.Amount;
-            ToLoan.Balance -= vm.Amount;
+            else
+            {
+                FromAccount.Balance -= vm.Amount;
+                ToLoan.Balance -= vm.Amount;
+            }
+            
 
             await _loanService.Update(ToLoan, ToLoan.Id);
             await _savingsAccountService.Update(FromAccount, FromAccount.Id);
@@ -418,7 +432,20 @@ namespace BankingApp.Core.Application.Services
             }
 
 
+
+            return new()
+            {
+                View = "ConfirmTransactionBeneficiary",
+                Success = true,
+                Data = vm 
+            };
+        }
+
+        public async Task ConfirmTransactionBeneficiaryPost(SavePaymentToBeneficiariesViewModel vm, string UserName)
+        {
             SaveSavingsAccountViewModel Tobeneficiary = await _savingsAccountService.GetByIdSaveViewModel(vm.ToBeneficiaryId);
+            SaveSavingsAccountViewModel FromAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.FromAccountId);
+
             if (vm.Amount >= Tobeneficiary.Balance)
             {
                 vm.Amount = Tobeneficiary.Balance;
@@ -439,12 +466,6 @@ namespace BankingApp.Core.Application.Services
             payment.UserName = UserName;
 
             await base.Add(payment);
-
-            return new()
-            {
-                View = "Index",
-                Success = true
-            };
         }
 
 
@@ -454,7 +475,8 @@ namespace BankingApp.Core.Application.Services
             vm.ToAccounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == UserName).ToList();
 
             SaveCreditCardViewModel FromCreditCard = await _creditCardService.GetByIdSaveViewModel(vm.FromCreditCardId);
-            if (FromCreditCard.Balance == 0)
+            double availableBalance = FromCreditCard.CreditLimit - FromCreditCard.Balance;
+            if (FromCreditCard.Balance == FromCreditCard.CreditLimit)
             {
                 return new()
                 {
@@ -485,7 +507,7 @@ namespace BankingApp.Core.Application.Services
                 };
             }
 
-            if (FromCreditCard.Balance < vm.Amount)
+            if (availableBalance < vm.Amount)
             {
                 return new()
                 {
@@ -497,7 +519,7 @@ namespace BankingApp.Core.Application.Services
             }
 
             SaveSavingsAccountViewModel ToAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToAccountId);
-            FromCreditCard.Balance -= vm.Amount * 1.0625;
+            FromCreditCard.Balance += vm.Amount * 1.0625;
             ToAccount.Balance += vm.Amount;
 
             await _creditCardService.Update(FromCreditCard, FromCreditCard.Id);
@@ -586,6 +608,7 @@ namespace BankingApp.Core.Application.Services
             payment.ToProductId = vm.ToAccountId;
             payment.Type = ((byte)PaymentTypes.Transfer);
             payment.UserName = UserName;
+            await base.Add(payment);
 
             return new()
             {

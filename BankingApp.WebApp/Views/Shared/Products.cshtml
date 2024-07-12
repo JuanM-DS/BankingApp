@@ -1,0 +1,180 @@
+﻿@using BankingApp.Core.Application.ViewModels.Product
+@using BankingApp.Core.Application.Helpers;
+@using BankingApp.Core.Application.ViewModels.User;
+@using BankingApp.Core.Application.Enums;
+@model ProductsViewModel
+
+@inject IHttpContextAccessor httpContextAccessor;
+@{
+    var user = httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
+}
+
+<div class="container">
+    @if (ViewBag.Message != null && ViewBag.Message != "")
+    {
+        <div class="alert alert-info alert-dismissible fade show text-center" role="alert">
+            <h5 class="fw-bold">@ViewBag.Message</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    }
+    <div class="shadow p-3 mb-2 bg-body-tertiary rounded border">
+        <div class="row mb-4">
+            <h2 class="text-center fw-bold text-success mb-5">@(user.Roles.Contains(RoleTypes.Admin) ? $"Los productos de {Model.User.FirstName} {Model.User.LastName}" : "Tus productos")</h2>    
+            <div class="col-4 border-end">
+                @if (user.Roles.Contains(RoleTypes.Admin))
+                {
+                    <div class="mb-4">
+                        <a asp-controller="Admin" asp-action="AddAccount" asp-route-userId="@Model.User.Id" class="col-12 btn btn-outline-success fs-5 fw-bold">Agregar cuenta</a>
+                    </div>
+                }
+                <h3 class="text-center fw-bold mb-5 mt-2 text-success">Cuentas de ahorro</h3>
+                <div class="">
+                    <div class="">
+                        @if(Model.SavingsAccounts == null || Model.SavingsAccounts.Count == 0)
+                        {
+                            <h5 class="text-muted text-center">No tienes cuentas de ahorro</h5>
+                        }
+                        else
+                        {
+                            @foreach (var account in Model.SavingsAccounts)
+                            {
+                                <div class="mb-3">
+                                    <div class="card border-success">
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <div class="d-flex align-items-center justify-content-start gap-1">
+                                                    <h4 class="mb-0 text-wrap">@account.Id</h4>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h5 class="fw-bold">Balance: <span class="fw-bold text-success">RD$@account.Balance</span></h5>
+                                            </div>
+
+                                            @if (!account.IsPrincipal)
+                                            {
+                                                @if (user.Roles.Contains(RoleTypes.Admin))
+                                                {
+                                                    <div class="mt-2 float-end">
+                                                        <a asp-controller="Admin" asp-action="DeleteAccount" asp-route-id="@account.Id" class="btn btn-outline-danger p-2 fw-bold">Eliminar</a>
+                                                    </div>
+                                                }
+                                                
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 border-end">
+                @if (user.Roles.Contains(RoleTypes.Admin))
+                {
+                    <div class="mb-4">
+                        <button asp-controller="Admin" asp-action="AddLoan" asp-route-user="@Model.User" class="col-12 btn btn-outline-success fs-5 fw-bold">Agregar préstamo</button>
+                    </div>
+                }
+                <h3 class="text-center fw-bold mb-5 mt-2 text-success ">Préstamos</h3>
+                <div class="">
+                    <div class="">
+                        @if (Model.Loans == null || Model.Loans.Count == 0)
+                        {
+                            <h5 class="text-muted text-center">No tienes préstamos</h5>
+                        }
+                        else
+                        {
+                            @foreach (var loan in Model.Loans)
+                            {
+                                <div class="mb-3">
+                                    <div class="card border-success">
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <div class="d-flex align-items-center justify-content-start gap-1">
+                                                    <h4 class="mb-0 text-wrap">@loan.Id</h4>
+                                                </div>
+                                            </div>
+                                            @if (loan.Balance == 0)
+                                            {
+                                                <div>
+                                                    <h5 class="fw-bold">Estado: <span class="fw-bold text-success">Pagado</span></h5>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div>
+                                                    <h5 class="fw-bold">Balance: <span class="fw-bold text-success">RD$@loan.Balance</span></h5>
+                                                </div>
+                                            }
+
+                                            @if (user.Roles.Contains(RoleTypes.Admin))
+                                            {
+                                                <div class="mt-2 float-end">
+                                                    <a asp-controller="Admin" asp-action="DeleteLoan" asp-route-id="@loan.Id" class="btn btn-outline-danger p-2 fw-bold">Eliminar</a>
+                                                </div>
+                                            }
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                @if (user.Roles.Contains(RoleTypes.Admin))
+                {
+                    <div class="mb-4">
+                        <a asp-controller="Admin" asp-action="AddCreditCard" asp-route-userId="@Model.User.Id" class="col-12 btn btn-outline-success fs-5 fw-bold">Agregar tarjeta de crédito</a>
+                    </div>
+                }
+                <h3 class="text-center fw-bold mb-5 mt-2 text-success">Tarjetas de crédito</h3>
+                <div class="">
+                    <div class="">
+                        @if (Model.CreditCards == null || Model.CreditCards.Count == 0)
+                        {
+                            <h5 class="text-muted text-center">No tienes tarjetas de crédito</h5>
+                        }
+                        else
+                        {
+                            @foreach (var creditCard in Model.CreditCards)
+                            {
+                                <div class="mb-3">
+                                    <div class="card border-success">
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <div class="d-flex align-items-center justify-content-start gap-1">
+                                                    <h4 class="mb-0 text-wrap">@creditCard.Id</h4>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h5 class="fw-bold">Balance: <span class="fw-bold text-success">RD$@creditCard.Balance</span></h5>
+                                            </div>
+
+                                            @if (user.Roles.Contains(RoleTypes.Admin))
+                                            {
+                                                <div class="mt-2 float-end">
+                                                    <a asp-controller="Admin" asp-action="DeleteCreditCard" asp-route-id="@creditCard.Id" class="btn btn-outline-danger p-2 fw-bold">Eliminar</a>
+                                                </div>
+                                            }
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (user.Roles.Contains(RoleTypes.Admin))
+    {
+        <div class="mt-2">
+            <a asp-controller="Admin" asp-action="Users" class="btn btn-warning fs-5">&larr; Volver atrás</a>
+        </div>
+    }
+
+</div>
