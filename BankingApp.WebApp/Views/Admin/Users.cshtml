@@ -83,11 +83,16 @@
                                                 <h5 class="fw-bold">Estado: <span class="fw-normal">Activo</span></h5>
                                             </div>
 
-                                            <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
+                                            <div class="d-flex justify-content-between gap-2 align-items-center mt-3">
+
+                                                <a asp-controller="Admin" asp-action="ClientProducts" class="btn btn-outline-success p-3 fw-bold">Ver productos</a>
                                                 @if (user.UserName != client.UserName)
                                                 {
-                                                    <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@client.Id" class="btn btn-warning">Editar</a>
-                                                    <a asp-controller="Admin" asp-action="ChangeUserStatus" asp-route-id="@client.Id" class="btn btn-danger">Desactivar</a>
+                                                    
+                                                    <div>
+                                                        <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@client.Id" class="btn btn-outline-warning p-2 fw-bold">Editar</a>
+                                                        <a asp-controller="Admin" asp-action="ChangeUserStatus" asp-route-id="@client.Id" class="btn btn-outline-danger p-2 fw-bold">Desactivar</a>
+                                                    </div>
                                                 }
                                             </div>
                                         </div>
@@ -130,8 +135,8 @@
                                             <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
                                                 @if(user.UserName != admin.UserName)
                                                 {
-                                                    <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@admin.Id" class="btn btn-warning">Editar</a>
-                                                    <a asp-controller="Admin" asp-action="ChangeUserStatus" asp-route-id="@admin.Id" class="btn btn-danger">Desactivar</a>
+                                                    <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@admin.Id" class="btn btn-outline-warning p-2 fw-bold">Editar</a>
+                                                    <a asp-controller="Admin" asp-action="ChangeUserStatus" asp-route-id="@admin.Id" class="btn btn-outline-danger p-2 fw-bold">Desactivar</a>
                                                 }
                                                 
                                             </div>
@@ -179,11 +184,14 @@
                                                 <h5 class="fw-bold">Estado: <span class="fw-normal">Inactivo</span></h5>
                                             </div>
 
-                                            <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
+                                            <div class="d-flex justify-content-between gap-2 align-items-center mt-3">
+                                                <a asp-controller="Admin" asp-action="ClientProducts" class="btn btn-outline-success p-3 fw-bold">Ver productos</a>
                                                 @if (user.UserName != client.UserName)
                                                 {
-                                                    <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@client.Id" class="btn btn-warning">Editar</a>
-                                                    <a asp-controller="Admin" asp-action="ChangeUserStatus" asp-route-id="@client.Id" class="btn btn-success">Activar</a>
+                                                    <div>
+                                                        <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@client.Id" class="btn btn-outline-warning p-2 fw-bold">Editar</a>
+                                                        <a asp-controller="Admin" asp-action="ChangeUserStatus" asp-route-id="@client.Id" class="btn btn-outline-success p-2 fw-bold">Activar</a>
+                                                    </div>
                                                 }
                                             </div>
                                         </div>
@@ -226,8 +234,8 @@
                                             <div class="d-flex justify-content-end gap-2 align-items-center mt-3">
                                                 @if (user.UserName != admin.UserName)
                                                 {
-                                                    <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@admin.Id" class="btn btn-warning">Editar</a>
-                                                    <a asp-controller="Admin" asp-action="ChangeUserStatus" asp-route-id="@admin.Id" class="btn btn-success">Activar</a>
+                                                    <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@admin.Id" class="btn btn-outline-warning p-2 fw-bold">Editar</a>
+                                                    <a asp-controller="Admin" asp-action="ChangeUserStatus" asp-route-id="@admin.Id" class="btn btn-outline-success p-2 fw-bold">Activar</a>
                                                 }
                                             </div>
                                         </div>
