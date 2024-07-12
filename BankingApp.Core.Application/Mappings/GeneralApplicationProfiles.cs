@@ -141,8 +141,6 @@ namespace BankingApp.Core.Application.Mappings
             #region CreditCard
             CreateMap<CreditCard, CreditCardViewModel>()
                .ReverseMap()
-               .ForMember(des => des.CutoffDay, opt => opt.Ignore())
-               .ForMember(des => des.PaymentDay, opt => opt.Ignore())
                .ForMember(des => des.CreatedBy, opt => opt.Ignore())
                .ForMember(des => des.CreatedTime, opt => opt.Ignore())
                .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
@@ -150,9 +148,6 @@ namespace BankingApp.Core.Application.Mappings
 
             CreateMap<CreditCard, SaveCreditCardViewModel>()
                .ReverseMap()
-               .ForMember(des => des.CutoffDay, opt => opt.Ignore())
-               .ForMember(des => des.PaymentDay, opt => opt.Ignore())
-               .ForMember(des => des.CreditLimit, opt => opt.Ignore())
                .ForMember(des => des.CreatedBy, opt => opt.Ignore())
                .ForMember(des => des.CreatedTime, opt => opt.Ignore())
                .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())

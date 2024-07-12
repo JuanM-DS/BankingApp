@@ -6,9 +6,8 @@ namespace BankingApp.Core.Domain.Entities
     {
         public double Balance { get; set; }
         public double InterestRate { get; set; }
-
+        public int Term { get; set; }
         public double Installment {  get; set; }
-
         public byte PaymentDay { get; set; }
 
     }
