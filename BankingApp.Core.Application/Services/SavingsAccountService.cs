@@ -53,14 +53,14 @@ namespace BankingApp.Core.Application.Services
             }
         }
 
-        public override async Task Update(SaveSavingsAccountViewModel savesavingsAccountViewModel, int id)
+        public override async Task Update(SaveSavingsAccountViewModel saveSavingsAccountViewModel, int id)
         {
             var savingsAccount = await _savingsAccountRepository.GetByIdAsync(id);
 
-            if (savesavingsAccountViewModel.Balance > 0)
+            if (saveSavingsAccountViewModel.Balance > 0)
             {
                 Payment payment = new();
-                payment.Amount = (double)savesavingsAccountViewModel.Balance;
+                payment.Amount = (double)saveSavingsAccountViewModel.Balance;
                 payment.ToProductId = savingsAccount.Id;
                 payment.UserName = savingsAccount.UserName;
                 payment.Type = (byte)PaymentTypes.Deposit;
@@ -72,6 +72,30 @@ namespace BankingApp.Core.Application.Services
             }
         }
 
+        public async Task Delete(int accountToDeleteId, int principalAccountId)
+        {
+            var savingsAccount = await _savingsAccountRepository.GetByIdAsync(accountToDeleteId);
+            var principalAccount = await _savingsAccountRepository.GetByIdAsync(principalAccountId);
+
+            if (savingsAccount.Balance > 0)
+            {
+                Payment payment = new();
+                payment.Amount = (double)savingsAccount.Balance;
+                payment.FromProductId = savingsAccount.Id;
+                payment.ToProductId = principalAccount.Id;
+                payment.UserName = savingsAccount.UserName;
+                payment.Type = (byte)PaymentTypes.Transfer;
+
+                await _paymentRepository.AddAsync(payment);
+
+                principalAccount.Balance += payment.Amount;
+                await _savingsAccountRepository.UpdateAsync(principalAccount, principalAccount.Id);
+            }
+
+            await _productRepository.DeleteAsync(savingsAccount.Id);
+            await _savingsAccountRepository.DeleteAsync(savingsAccount);
+            
+        }
         public async Task TransferFromLoan(double amount, int id)
         {
             var savingsAccount = await _savingsAccountRepository.GetByIdAsync(id);

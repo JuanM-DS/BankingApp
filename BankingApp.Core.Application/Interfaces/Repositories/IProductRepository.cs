@@ -9,6 +9,6 @@ namespace BankingApp.Core.Application.Interfaces.Repositories
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
-
+        Task DeleteAsync(int id);
     }
 }

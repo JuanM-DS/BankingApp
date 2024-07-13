@@ -1,6 +1,9 @@
 ﻿using BankingApp.Core.Application.Interfaces.Repositories;
 using BankingApp.Infrastructure.Persistence.Contexts;
 using BankingApp.Infrastructure.Persistence.Repositories;
+using BankingApp.Infrastructure.Persistence.Seeds;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,5 +38,26 @@ namespace BankingApp.Infrastructure.Persistence
             services.AddTransient<IProductRepository, ProductRepository>();
             #endregion
         }
+
+        #region PrincipalAccountSeed
+        public static async Task RunPersistenceSeeds(this WebApplication app)
+        {
+            using var scope = app.Services.CreateScope();
+            var service = scope.ServiceProvider;
+
+            var savingsAccountRepository = service.GetRequiredService<ISavingsAccountRepository>();
+            var productRepository = service.GetRequiredService<IProductRepository>();
+
+            try
+            {
+                await DefaultClientPrincipalAccount.SeedAsync(savingsAccountRepository, productRepository);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        #endregion
     }
 }

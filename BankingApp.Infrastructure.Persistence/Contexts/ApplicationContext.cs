@@ -145,7 +145,7 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
             modelBuilder.Entity<SavingsAccount>(savingsAcount =>
             {
                 savingsAcount.Property(s => s.Id)
-                .UseIdentityColumn(100100100, 1);
+                .UseIdentityColumn(100100099, 1);
 
                 savingsAcount.Property(s => s.Balance)
                 .IsRequired();

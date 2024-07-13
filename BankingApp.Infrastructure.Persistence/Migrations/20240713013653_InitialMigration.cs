@@ -38,8 +38,10 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "700100100, 1"),
+                    Principal = table.Column<double>(type: "float", nullable: false),
                     Balance = table.Column<double>(type: "float", nullable: false),
                     InterestRate = table.Column<double>(type: "float", nullable: false),
+                    Term = table.Column<int>(type: "int", nullable: false),
                     Installment = table.Column<double>(type: "float", nullable: false),
                     PaymentDay = table.Column<byte>(type: "tinyint", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -58,6 +60,7 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<byte>(type: "tinyint", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -74,7 +77,7 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "100100100, 1"),
+                        .Annotation("SqlServer:Identity", "100100099, 1"),
                     Balance = table.Column<double>(type: "float", nullable: false),
                     IsPrincipal = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),

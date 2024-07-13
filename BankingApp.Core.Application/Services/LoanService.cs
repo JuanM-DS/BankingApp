@@ -51,6 +51,12 @@ namespace BankingApp.Core.Application.Services
             await _savingsAccountService.TransferFromLoan(loan.Principal, (int)payment.ToProductId);
 
         }
+
+        public override async Task Delete(int id)
+        {
+            await _productRepository.DeleteAsync(id);
+            await base.Delete(id);
+        }
         public List<LoanViewModel> GetAllByUserWithInclude(string userName)
         {
             var loans = _loanRepository.GetAllWithInclude();

@@ -35,6 +35,12 @@ namespace BankingApp.Core.Application.Services
             await _productRepository.AddAsync(product);
         }
 
+        public override async Task Delete(int id)
+        {
+            await _productRepository.DeleteAsync(id);
+            await base.Delete(id);
+        }
+
         public List<CreditCardViewModel> GetAllByUserWithInclude(string userName)
         {
             var creditCards = _creditCardRepository.GetAllWithInclude();

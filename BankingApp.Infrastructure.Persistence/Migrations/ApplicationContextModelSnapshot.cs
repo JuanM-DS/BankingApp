@@ -220,7 +220,7 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 100100100L);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 100100099L);
 
                     b.Property<double>("Balance")
                         .HasColumnType("float");

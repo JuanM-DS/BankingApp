@@ -291,5 +291,41 @@ namespace BankingApp.WebApp.Controllers
             
             return RedirectToAction("Products", new { id = user.Id, message = "Préstamo asignado exitosamente" });
         }
+
+        public async Task<IActionResult> DeleteAccount(int id)
+        {
+            var savingsAccount = await _savingsAccountService.GetByIdSaveViewModel(id);
+            var user = _userService.GetByNameAsync(savingsAccount.UserName).Data;
+
+            if (savingsAccount.IsPrincipal) return RedirectToAction("Products", new { id = user.Id, message = $"La cuenta {savingsAccount.Id} no puede ser eliminada porque es la principal del cliente" });
+
+            var principalAccount = await _savingsAccountService.GetPrincipalAccount(savingsAccount.UserName);
+
+            await _savingsAccountService.Delete(savingsAccount.Id, principalAccount.Id);
+
+            return RedirectToAction("Products", new { id = user.Id, message = "Cuenta eliminada exitosamente" });
+
+        }
+        public async Task<IActionResult> DeleteLoan(int id)
+        {
+            var loan = await _loanService.GetByIdSaveViewModel(id);
+            var user = _userService.GetByNameAsync(loan.UserName).Data;
+
+            if (loan.Balance > 0) return RedirectToAction("Products", new { id = user.Id, message = $"El préstamo {loan.Id} no puede ser eliminado porque tiene un balance pendiente" });
+
+            await _loanService.Delete(loan.Id);
+            return RedirectToAction("Products", new { id = user.Id, message = $"Préstamo eliminado satisfactoriamente" });
+        }
+
+        public async Task<IActionResult> DeleteCreditCard(int id)
+        {
+            var creditCard = await _creditCardService.GetByIdSaveViewModel(id);
+            var user = _userService.GetByNameAsync(creditCard.UserName).Data;
+
+            if (creditCard.Balance > 0) return RedirectToAction("Products", new { id = user.Id, message = $"La tarjeta de crédito {creditCard.Id} no puede ser eliminada porque tiene un balance pendiente" });
+
+            await _creditCardService.Delete(creditCard.Id);
+            return RedirectToAction("Products", new { id = user.Id, message = $"Tarjeta de crédito eliminada satisfactoriamente" });
+        }
     }
 }

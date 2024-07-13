@@ -117,7 +117,7 @@
                                                 @if (user.Roles.Contains(RoleTypes.Admin))
                                                 {
                                                     <div class="mt-2">
-                                                        <a asp-controller="Admin" asp-action="DeleteLoan" asp-route-id="@loan.Id" class="btn btn-outline-danger p-2 fw-bold">Eliminar</a>
+                                                        <a asp-controller="Admin" asp-action="DeleteLoan" asp-route-id="@loan.Id" class="@(loan.Balance > 0 ? "disabled" : "") btn btn-outline-danger p-2 fw-bold">Eliminar</a>
                                                     </div>
                                                 }
                                             </div>
@@ -165,7 +165,7 @@
                                             @if (user.Roles.Contains(RoleTypes.Admin))
                                             {
                                                 <div class="mt-2 float-end">
-                                                    <a asp-controller="Admin" asp-action="DeleteCreditCard" asp-route-id="@creditCard.Id" class="btn btn-outline-danger p-2 fw-bold">Eliminar</a>
+                                                    <a asp-controller="Admin" asp-action="DeleteCreditCard" asp-route-id="@creditCard.Id" class="@(creditCard.Balance > 0 ? "disabled" : "") btn btn-outline-danger p-2 fw-bold">Eliminar</a>
                                                 </div>
                                             }
                                             

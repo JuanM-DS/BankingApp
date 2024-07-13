@@ -25,6 +25,7 @@ builder.Services.AddTransient<ImageServices, ImageServices>();
 var app = builder.Build();
 
 await app.RunIdentitySeeds();
+await app.RunPersistenceSeeds();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

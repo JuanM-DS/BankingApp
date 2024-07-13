@@ -18,5 +18,12 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
         {
             _dbContext = dbContext;
         }
+
+        public async Task DeleteAsync(int id)
+        {
+            var product = await _dbContext.Products.FindAsync(id);
+            _dbContext.Products.Remove(product);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }
