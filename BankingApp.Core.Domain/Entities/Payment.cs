@@ -7,16 +7,9 @@ namespace BankingApp.Core.Domain.Entities
     {
         public Guid Id { get; set; }
         public int? FromProductId { get; set; }
-
         public int? ToProductId { get; set; }
-
         public double Amount { get; set; }
-
         public byte Type { get; set; }
 
-
-        //Navigation Property
-        public Product? FromProduct { get; set; }
-        public Product? ToProduct { get; set; }
     }
 }

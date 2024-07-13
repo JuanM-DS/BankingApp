@@ -7,10 +7,10 @@
     var error = ViewData["Error"] as string;
 }
 
-<div class="container-fluid">
+<div class="container">
     <div class="w50">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header bg-success fs-4 text-white">
                 Edición de usuario
             </div>
             <div class="card-body">
@@ -75,13 +75,15 @@
                     {
                         <div class="mb-3">
                             <label asp-for="AditionalAmount" class="form-label">Monto Adicional</label>
-                            <input asp-for="AditionalAmount" class="form-control">
+                            <input type="number" step="any" asp-for="AditionalAmount" class="form-control">
                         </div>
                     }
 
+                    <input type="hidden" asp-for="Status" />
+
                     <div class="btn-form d-flex align-items-center" style="gap:3px;">
-                        <button type="submit" class="btn btn-primary">Registrar</button>
-                        <a class="btn btn-warning" asp-controller="Admin" asp-action="Users">Volver atrás</a>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <a class="btn btn-warning" asp-controller="Admin" asp-action="Users">&larr;Volver atrás</a>
                     </div>
                 </form>
             </div>

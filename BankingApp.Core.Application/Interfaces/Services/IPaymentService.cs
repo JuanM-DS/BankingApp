@@ -1,7 +1,9 @@
 ﻿using BankingApp.Core.Application.CustomEntities;
 using BankingApp.Core.Application.Enums;
 using BankingApp.Core.Application.QueryFilters;
+using BankingApp.Core.Application.ViewModels.Loan;
 using BankingApp.Core.Application.ViewModels.Payment;
+using BankingApp.Core.Application.ViewModels.SavingsAccount;
 using BankingApp.Core.Domain.Entities;
 
 namespace BankingApp.Core.Application.Interfaces.Services
@@ -23,5 +25,8 @@ namespace BankingApp.Core.Application.Interfaces.Services
         Task<Response<SaveCashAdvancesViewModel>> CashAdvances(SaveCashAdvancesViewModel vm, string UserName);
         Task<Response<SaveTransferBetweenAccountsViewModel>> TransferBetweenAccounts(SaveTransferBetweenAccountsViewModel vm, string UserName);
         Task ConfirmTransactionBeneficiaryPost(SavePaymentToBeneficiariesViewModel vm, string UserName);
+
+        Task Disbursement(SaveLoanViewModel loan);
+        Task SavingsAccountDeletion(SaveSavingsAccountViewModel accountToDelete);
     }
 }

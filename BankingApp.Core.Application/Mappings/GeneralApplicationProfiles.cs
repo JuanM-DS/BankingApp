@@ -50,11 +50,9 @@ namespace BankingApp.Core.Application.Mappings
                 .ReverseMap();
             #endregion
 
-            #region payments
+            #region Payments
             CreateMap<Payment, SavePaymentViewModel>()
-                .ReverseMap()
-                .ForMember(des => des.FromProduct, opt => opt.Ignore())
-                .ForMember(des => des.ToProduct, opt => opt.Ignore());
+                .ReverseMap();
 
             CreateMap<Payment, PaymentViewModel>()
                 .ReverseMap();
@@ -146,21 +144,6 @@ namespace BankingApp.Core.Application.Mappings
                .ForMember(des => des.CreatedTime, opt => opt.Ignore())
                .ForMember(des => des.LastModifiedBy, opt => opt.Ignore())
                .ForMember(des => des.LastModifiedTime, opt => opt.Ignore());
-            #endregion
-
-            #region Product
-
-            CreateMap<SaveProductViewModel, Product>()
-                .ReverseMap();
-
-            CreateMap<ProductViewModel, Product>()
-                .ReverseMap();
-
-            CreateMap<SaveProductViewModel, ProductViewModel>()
-                .ReverseMap();
-            #endregion
-
-            #region nex region
             #endregion
         }
     }

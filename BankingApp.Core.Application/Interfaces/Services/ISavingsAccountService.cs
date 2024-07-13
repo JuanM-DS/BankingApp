@@ -10,8 +10,6 @@ namespace BankingApp.Core.Application.Interfaces.Services
 {
     public interface ISavingsAccountService : IGenericService<SaveSavingsAccountViewModel, SavingsAccountViewModel, SavingsAccount>
     {
-        Task Delete(int accountToDeleteId, int principalAccountId);
-        Task TransferFromLoan(double amount, int id);
         Task<SaveSavingsAccountViewModel> GetPrincipalAccount(string userName);
     }
 }

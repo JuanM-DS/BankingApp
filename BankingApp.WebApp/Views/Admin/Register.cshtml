@@ -11,7 +11,7 @@
     <div class="w50">
         <div class="card">
             <div class="card-header bg-success fs-4 text-white">
-                Registrar nuevo usuario
+                Registro de nuevo usuario
             </div>
             <div class="card-body">
                 <form asp-controller="Admin" asp-action="Register" method="post" enctype="multipart/form-data">
@@ -72,22 +72,23 @@
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Role" class="form-label"></label>
+                        <label asp-for="Role" class="form-label">Tipo de usuario</label>
                         <select asp-for="Role" class="form-select" id="Select">
-                            <option value="-1">Seleccione el tipo de usuario</option>
+                            <option value="@((int)2)">Seleccione el tipo de usuario</option>
                             <option value="@((int)RoleTypes.Client)">Cliente</option>
                             <option value="@((int)RoleTypes.Admin)">Administrador</option>
                         </select>
+                        <span asp-validation-for="Role" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3 d-none" id="initialAmountDiv">
                         <label asp-for="InitialAmount" class="form-label">Monto Inicial</label>
-                        <input asp-for="InitialAmount" class="form-control">
+                        <input type="number" step="any" asp-for="InitialAmount" class="form-control">
                     </div>
 
                     <div class="btn-form d-flex align-items-center" style="gap:3px;">
-                        <button type="submit" class="btn btn-primary">Registrar</button>
-                        <a class="btn btn-warning" asp-controller="Admin" asp-action="Users">Volver atrás</a>
+                        <button type="submit" class="btn btn-success">Registrar</button>
+                        <a class="btn btn-warning" asp-controller="Admin" asp-action="Users">&larr;Volver atrás</a>
                     </div>
                 </form>
             </div>

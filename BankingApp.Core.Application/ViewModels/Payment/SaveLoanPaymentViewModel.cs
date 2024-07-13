@@ -12,11 +12,13 @@ namespace BankingApp.Core.Application.ViewModels.Payment
 {
     public class SaveLoanPaymentViewModel
     {
-        [Range(700100100, 999999999, ErrorMessage = "Debe seleccionar un prestamo.")]
+        [Range(700100100, 999999999, ErrorMessage = "Debe seleccionar un préstamo")]
         public int ToLoanId { get; set; }
-        [Range(100100100, 400100099, ErrorMessage = "Debe seleccionar una cuenta.")]
+
+        [Range(100100098, 400100099, ErrorMessage = "Debe seleccionar la cuenta de origen")]
         public int FromAccountId { get; set; }
-        [Required(ErrorMessage = "Debe ingresar un monto.")]
+
+        [Required(ErrorMessage = "Debe ingresar un monto")]
         [DataType(DataType.Text)]
         public double Amount { get; set; }
 

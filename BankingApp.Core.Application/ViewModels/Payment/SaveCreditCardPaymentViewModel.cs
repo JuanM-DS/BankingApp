@@ -11,11 +11,13 @@ namespace BankingApp.Core.Application.ViewModels.Payment
 {
     public class SaveCreditCardPaymentViewModel
     {
-        [Range(400100100, 700100099, ErrorMessage = "Debe seleccionar una tarjeta de credito.")]
+        [Range(400100100, 700100099, ErrorMessage = "Debe seleccionar una tarjeta de crédito")]
         public int ToCreditCardId { get; set; }
-        [Range(100100100, 400100099, ErrorMessage = "Debe seleccionar una cuenta.")]
+
+        [Range(100100098, 400100099, ErrorMessage = "Debe seleccionar la cuenta de origen")]
         public int FromAccountId { get; set; }
-        [Required(ErrorMessage = "Debe ingresar un monto.")]
+
+        [Required(ErrorMessage = "Debe ingresar un monto")]
         [DataType(DataType.Text)]
         public double Amount { get; set; }
 

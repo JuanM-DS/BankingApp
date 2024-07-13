@@ -35,22 +35,20 @@ namespace BankingApp.Infrastructure.Persistence
             services.AddTransient<ILoanRepository, LoanRepository>();
             services.AddTransient<IPaymentRepository, PaymentRepository>();
             services.AddTransient<ISavingsAccountRepository, SavingsAccountRepository>();
-            services.AddTransient<IProductRepository, ProductRepository>();
             #endregion
         }
 
-        #region PrincipalAccountSeed
+        #region PrincipalAccountsSeed
         public static async Task RunPersistenceSeeds(this WebApplication app)
         {
             using var scope = app.Services.CreateScope();
             var service = scope.ServiceProvider;
 
             var savingsAccountRepository = service.GetRequiredService<ISavingsAccountRepository>();
-            var productRepository = service.GetRequiredService<IProductRepository>();
 
             try
             {
-                await DefaultClientPrincipalAccount.SeedAsync(savingsAccountRepository, productRepository);
+                await DefaultPrincipalAccounts.SeedAsync(savingsAccountRepository);
             }
             catch (Exception)
             {
