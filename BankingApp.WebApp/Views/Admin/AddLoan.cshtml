@@ -62,16 +62,10 @@
             var principalValue = principal.value;
             var interestRateValue = interestRate.value;
             var termValue = term.value;
-
-            console.log(principalValue);
-            console.log(interestRateValue);
-            console.log(termValue);
-            console.log(((interestRateValue / 100 / 12)));
-            console.log(((interestRateValue / 100 / 12) * termValue) * principalValue);
-
-
             balance.value = parseFloat(parseFloat(principalValue) + (((parseFloat(interestRateValue) / 100 / 12) * parseFloat(termValue)) * parseFloat(principalValue))).toFixed(2);
             installment.value = parseFloat(balance.value / termValue).toFixed(2);
+            console.log(balance.value)
+
         }
 
         principal.addEventListener('change', changeOnElements)
