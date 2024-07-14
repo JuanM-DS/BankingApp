@@ -264,6 +264,12 @@ namespace BankingApp.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCreditCard(SaveCreditCardViewModel creditCard)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.User = (_userService.GetByNameAsync(creditCard.UserName)).Data;
+                return View(creditCard);
+            }
+
             if ((int)creditCard.CutoffDay > 5) creditCard.PaymentDay = (byte)((int)creditCard.CutoffDay - 5);
             
             else creditCard.PaymentDay = (byte)(30 - (5 - (int)creditCard.CutoffDay));
@@ -284,8 +290,16 @@ namespace BankingApp.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddLoan(SaveLoanViewModel loan)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.User = (_userService.GetByNameAsync(loan.UserName)).Data;
+                return View(loan);
+            }
+
             loan.PaymentDay = (byte)DateTime.Now.Day;
             await _loanService.Add(loan);
+
+            await _paymentService.Disbursement(loan);
 
             var user = _userService.GetByNameAsync(loan.UserName).Data;
             
@@ -299,9 +313,12 @@ namespace BankingApp.WebApp.Controllers
 
             if (savingsAccount.IsPrincipal) return RedirectToAction("Products", new { id = user.Id, message = $"La cuenta {savingsAccount.Id} no puede ser eliminada porque es la principal del cliente" });
 
-            var principalAccount = await _savingsAccountService.GetPrincipalAccount(savingsAccount.UserName);
+            if (savingsAccount.Balance > 0)
+            {
+                await _paymentService.SavingsAccountDeletion(savingsAccount);
+            }
 
-            await _savingsAccountService.Delete(savingsAccount.Id, principalAccount.Id);
+            await _savingsAccountService.Delete(savingsAccount.Id);
 
             return RedirectToAction("Products", new { id = user.Id, message = "Cuenta eliminada exitosamente" });
 

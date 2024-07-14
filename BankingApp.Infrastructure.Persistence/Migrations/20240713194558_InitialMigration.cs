@@ -56,42 +56,6 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<byte>(type: "tinyint", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SavingsAccounts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "100100099, 1"),
-                    Balance = table.Column<double>(type: "float", nullable: false),
-                    IsPrincipal = table.Column<bool>(type: "bit", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedTime = table.Column<DateTime>(type: "datetime", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SavingsAccounts", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Payments",
                 columns: table => new
                 {
@@ -109,16 +73,25 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Payments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Payments_Products_FromProductId",
-                        column: x => x.FromProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Payments_Products_ToProductId",
-                        column: x => x.ToProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SavingsAccounts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "100100098, 1"),
+                    Balance = table.Column<double>(type: "float", nullable: false),
+                    IsPrincipal = table.Column<bool>(type: "bit", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModifiedTime = table.Column<DateTime>(type: "datetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SavingsAccounts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -146,16 +119,6 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                 name: "IX_Beneficiaries_AccountNumber",
                 table: "Beneficiaries",
                 column: "AccountNumber");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Payments_FromProductId",
-                table: "Payments",
-                column: "FromProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Payments_ToProductId",
-                table: "Payments",
-                column: "ToProductId");
         }
 
         /// <inheritdoc />
@@ -175,9 +138,6 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "SavingsAccounts");
-
-            migrationBuilder.DropTable(
-                name: "Products");
         }
     }
 }

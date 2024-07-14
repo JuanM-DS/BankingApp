@@ -107,18 +107,21 @@
                                                     else
                                                     {
                                                         <h5 class="fw-bold">Balance: <span class=" text-danger">RD$@loan.Balance.ToString("N")</span></h5>
-                                                        <h5 class="fw-bold">Tasa de interés: <span class=" text-muted">@loan.InterestRate%</span></h5>
-                                                        <h5 class="fw-bold">Cuotas: <span class=" text-muted">RD$@loan.Installment.ToString("N")</span></h5>
-                                                        <h5 class="fw-bold">Día de pago: <span class=" text-muted">@loan.PaymentDay</span></h5>
+                                                        <h5 class="fw-bold">Tasa de interés: <span class=" text-success">@loan.InterestRate%</span></h5>
+                                                        <h5 class="fw-bold">Cuotas: <span class=" text-success">RD$@loan.Installment.ToString("N")</span></h5>
+                                                        <h5 class="fw-bold">Día de pago: <span class=" text-success">@loan.PaymentDay</span></h5>
                                                     }
                                                     
                                                 </div>
 
                                                 @if (user.Roles.Contains(RoleTypes.Admin))
                                                 {
-                                                    <div class="mt-2">
-                                                        <a asp-controller="Admin" asp-action="DeleteLoan" asp-route-id="@loan.Id" class="@(loan.Balance > 0 ? "disabled" : "") btn btn-outline-danger p-2 fw-bold">Eliminar</a>
-                                                    </div>
+                                                    @if (!(loan.Balance > 0))
+                                                    {
+                                                        <div class="mt-2">
+                                                            <a asp-controller="Admin" asp-action="DeleteLoan" asp-route-id="@loan.Id" class="btn btn-outline-danger p-2 fw-bold">Eliminar</a>
+                                                        </div>
+                                                    }
                                                 }
                                             </div>
                                             
@@ -158,15 +161,18 @@
                                             </div>
                                             <div>
                                                 <h5 class="fw-bold">Balance: <span class="text-danger">RD$@creditCard.Balance.ToString("N")</span></h5>
-                                                <h5 class="fw-bold">Límite de Crédito: <span class="text-muted">RD$@creditCard.CreditLimit.ToString("N")</span></h5>
+                                                <h5 class="fw-bold">Límite de Crédito: <span class="text-success">RD$@creditCard.CreditLimit.ToString("N")</span></h5>
                                                 <h5 class="fw-bold">Disponible: <span class="text-success">RD$@((creditCard.CreditLimit - @creditCard.Balance).ToString("N"))</span></h5>
                                             </div>
 
                                             @if (user.Roles.Contains(RoleTypes.Admin))
                                             {
-                                                <div class="mt-2 float-end">
-                                                    <a asp-controller="Admin" asp-action="DeleteCreditCard" asp-route-id="@creditCard.Id" class="@(creditCard.Balance > 0 ? "disabled" : "") btn btn-outline-danger p-2 fw-bold">Eliminar</a>
-                                                </div>
+                                                @if (!(creditCard.Balance > 0))
+                                                {
+                                                    <div class="mt-2 float-end">
+                                                        <a asp-controller="Admin" asp-action="DeleteCreditCard" asp-route-id="@creditCard.Id" class="btn btn-outline-danger p-2 fw-bold">Eliminar</a>
+                                                    </div>
+                                                }
                                             }
                                             
                                         </div>

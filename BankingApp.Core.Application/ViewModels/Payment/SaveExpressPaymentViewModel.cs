@@ -10,13 +10,14 @@ namespace BankingApp.Core.Application.ViewModels.Payment
 {
     public class SaveExpressPaymentViewModel
     {
-        [Range(100100098, 400100099, ErrorMessage = "Ese numero de cuenta no existe.")]
+        [Range(100100098, 400100099, ErrorMessage = "Ese número de cuenta no existe")]
         public int ToAccountId {  get; set; }
-        [Required(ErrorMessage = "Debe ingresar un monto.")]
+
+        [Required(ErrorMessage = "Debe ingresar un monto")]
         [DataType(DataType.Text)]
         public double Amount { get; set; }
 
-        [Range(100100098, 400100099, ErrorMessage = "Debe seleccionar una cuenta.")]
+        [Range(100100098, 400100099, ErrorMessage = "Debe seleccionar la cuenta de origen")]
         public int FromAccountId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

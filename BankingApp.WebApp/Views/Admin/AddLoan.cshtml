@@ -2,7 +2,7 @@
 @model SaveLoanViewModel
 
 <div class="container">
-    <div class="w50">
+    <div class="w40">
         <div class="card">
             <div class="card-header bg-success fs-4 text-white">
                 Nuevo préstamo para @ViewBag.User.FirstName @ViewBag.User.LastName
@@ -11,33 +11,31 @@
                 <form asp-controller="Admin" asp-action="AddLoan" method="post">
 
                     <div class="mb-3">
-                        <label asp-for="Principal" class="form-label">Monto:</label>
+                        <label asp-for="Principal" class="form-label">Monto</label>
                         <input type="number" id="Principal" asp-for="Principal" class="form-control">
                         <span asp-validation-for="Principal" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="InterestRate" class="form-label">Tasa de interés:</label>
+                        <label asp-for="InterestRate" class="form-label">Tasa de interés %</label>
                         <input type="number" step="any" id="InterestRate" asp-for="InterestRate" class="form-control">
                         <span asp-validation-for="InterestRate" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Term" class="form-label">Plazo:</label>
+                        <label asp-for="Term" class="form-label">Plazo (meses)</label>
                         <input type="number" id="Term" asp-for="Term" class="form-control">
                         <span asp-validation-for="Term" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Balance" class="form-label">Balance:</label>
+                        <label asp-for="Balance" class="form-label">Balance</label>
                         <input asp-for="Balance" id="Balance" class="form-control" readonly>
-                        <span asp-validation-for="Balance" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Installment" class="form-label">Cuotas:</label>
+                        <label asp-for="Installment" class="form-label">Cuotas</label>
                         <input type="number" id="Installment" asp-for="Installment" class="form-control" readonly>
-                        <span asp-validation-for="Installment" class="text-danger"></span>
                     </div>
 
                     <input type="hidden" asp-for="UserName" value="@ViewBag.User.UserName" />

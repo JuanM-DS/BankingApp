@@ -8,8 +8,8 @@ namespace BankingApp.Core.Application.ViewModels.Payment
 
         public int? ToProductId { get; set; }
 
-        [Required]
-        [Range(0, double.MaxValue, ErrorMessage = "Amount must be a positive value.")]
+        [Required(ErrorMessage = "Debe ingresar un monto")]
+        [Range(0, double.MaxValue, ErrorMessage = "Amount must be a positive value")]
         public double Amount { get; set; }
 
         [Required]

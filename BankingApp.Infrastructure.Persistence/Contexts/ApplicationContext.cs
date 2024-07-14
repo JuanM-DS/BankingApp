@@ -15,7 +15,6 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
         public DbSet<Loan> Loans { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<SavingsAccount> SavingsAccounts { get; set; }
-        public DbSet<Product> Products { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -43,9 +42,6 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
             #region Tables
             modelBuilder.Entity<Beneficiary>()
                 .ToTable("Beneficiaries");
-
-            modelBuilder.Entity<Product>()
-                .ToTable("Products");
 
             modelBuilder.Entity<CreditCard>()
                 .ToTable("CreditCards");
@@ -86,29 +82,9 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
                 .HasForeignKey(b => b.AccountNumber)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Product>()
-                .HasMany<Payment>(p => p.PaymentsFrom)
-                .WithOne(p => p.FromProduct)
-                .HasForeignKey(p => p.FromProductId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<Product>()
-                .HasMany<Payment>(p => p.PaymentsTo)
-                .WithOne(p => p.ToProduct)
-                .HasForeignKey(p => p.ToProductId)
-                .OnDelete(DeleteBehavior.NoAction);
-
             #endregion
 
             #region Property configurations
-
-            #region Product
-
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Id)
-                .ValueGeneratedNever();
-
-            #endregion
 
             #region CreditCard
 
@@ -145,7 +121,7 @@ namespace BankingApp.Infrastructure.Persistence.Contexts
             modelBuilder.Entity<SavingsAccount>(savingsAcount =>
             {
                 savingsAcount.Property(s => s.Id)
-                .UseIdentityColumn(100100099, 1);
+                .UseIdentityColumn(100100098, 1);
 
                 savingsAcount.Property(s => s.Balance)
                 .IsRequired();

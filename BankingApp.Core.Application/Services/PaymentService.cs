@@ -12,6 +12,7 @@ using BankingApp.Core.Application.ViewModels.SavingsAccount;
 using BankingApp.Core.Application.ViewModels.User;
 using BankingApp.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Net.WebSockets;
 
 namespace BankingApp.Core.Application.Services
 {
@@ -43,7 +44,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<List<PaymentViewModel>> GetAllViewModel(PaymentQueryFilters? filters = null)
         {
-            var payments = _paymentRepository.GetAllWithInclude(x=>x.FromProduct, x=>x.ToProduct);
+            var payments = _paymentRepository.GetAllWithInclude();
             if (filters is not null)
             {
                 if (filters.PaymentTypes is not null && filters.PaymentTypes.Count > 1)
@@ -71,7 +72,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<List<PaymentViewModel>> GetAllTransactions(List<PaymentTypes> paymentTypes)
         {
-            var payments =  _paymentRepository.GetAllWithInclude(x => x.FromProduct, x => x.ToProduct);
+            var payments =  _paymentRepository.GetAllWithInclude();
 
             var transactionsId = paymentTypes.Select(x => (int)x).ToList();
 
@@ -84,7 +85,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<List<PaymentViewModel>> GetAllTransfersOfToday(DateTime time)
         {
-            var payments = _paymentRepository.GetAllWithInclude(x => x.FromProduct, x => x.ToProduct);
+            var payments = _paymentRepository.GetAllWithInclude();
 
             var transactionsId = new List<int>() { (int)PaymentTypes.Deposit, (int)PaymentTypes.CashAdvance, (int)PaymentTypes.Transfer, (int)PaymentTypes.Disbursement };
 
@@ -99,7 +100,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<List<PaymentViewModel>> GetAllWithInclude()
         {
-            var payments =  _paymentRepository.GetAllWithInclude(x => x.FromProduct, x => x.ToProduct);
+            var payments =  _paymentRepository.GetAllWithInclude();
 
             var paymentsViewModel = _mapper.Map<List<PaymentViewModel>>(payments);
 
@@ -108,7 +109,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<PaymentViewModel> GetByIdWithInclude(Guid id)
         {
-            var payments =  _paymentRepository.GetAllWithInclude(x => x.FromProduct, x => x.ToProduct);
+            var payments =  _paymentRepository.GetAllWithInclude();
 
             var paymentViewModel = _mapper.Map<PaymentViewModel>(payments.FirstOrDefault(x => x.Id == id));
 
@@ -446,12 +447,6 @@ namespace BankingApp.Core.Application.Services
             SaveSavingsAccountViewModel Tobeneficiary = await _savingsAccountService.GetByIdSaveViewModel(vm.ToBeneficiaryId);
             SaveSavingsAccountViewModel FromAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.FromAccountId);
 
-            if (vm.Amount >= Tobeneficiary.Balance)
-            {
-                vm.Amount = Tobeneficiary.Balance;
-                FromAccount.Balance -= vm.Amount;
-                Tobeneficiary.Balance += vm.Amount;
-            }
             FromAccount.Balance -= vm.Amount;
             Tobeneficiary.Balance += vm.Amount;
 
@@ -543,7 +538,7 @@ namespace BankingApp.Core.Application.Services
 
         public async Task<Response<SaveTransferBetweenAccountsViewModel>> TransferBetweenAccounts(SaveTransferBetweenAccountsViewModel vm, string UserName)
         {
-            vm.Accounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == UserName).ToList();
+            //vm.Accounts = _savingsAccountService.GetAllViewModel().Where(x => x.UserName == UserName).ToList();
             SaveSavingsAccountViewModel FromAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.FromAccountId);
 
             if (FromAccount.Balance == 0)
@@ -562,7 +557,7 @@ namespace BankingApp.Core.Application.Services
                 {
                     Data = vm,
                     View = "TransferBetweenAccounts",
-                    Error = "No se puede realizar una transaccion entre la misma cuenta.",
+                    Error = "No se puede realizar una transacción entre la misma cuenta.",
                     Success = false
                 };
             }
@@ -572,7 +567,7 @@ namespace BankingApp.Core.Application.Services
                 {
                     Data = vm,
                     View = "TransferBetweenAccounts",
-                    Error = "El monto no puede ser cero, agrega uno mayor.",
+                    Error = "El monto no puede ser cero. Agrega uno mayor.",
                     Success = false
                 };
             }
@@ -583,24 +578,12 @@ namespace BankingApp.Core.Application.Services
                 {
                     Data = vm,
                     View = "TransferBetweenAccounts",
-                    Error = "No tienes en esa cuenta el dinero suficiente para realizar la transacción, agrega un monto igual o menor a RD$" + FromAccount.Balance,
+                    Error = "No tienes dinero suficiente en esa cuenta para realizar la transacción. Agrega un monto igual o menor a RD$" + FromAccount.Balance,
                     Success = false
                 };
             }
 
-
             SaveSavingsAccountViewModel ToAccount = await _savingsAccountService.GetByIdSaveViewModel(vm.ToAccountId);
-            if (vm.Amount >= ToAccount.Balance)
-            {
-                vm.Amount = ToAccount.Balance;
-                FromAccount.Balance -= vm.Amount;
-                ToAccount.Balance += vm.Amount;
-            }
-            FromAccount.Balance -= vm.Amount;
-            ToAccount.Balance += vm.Amount;
-
-            await _savingsAccountService.Update(ToAccount, vm.ToAccountId);
-            await _savingsAccountService.Update(FromAccount, FromAccount.Id);
 
             SavePaymentViewModel payment = new();
             payment.Amount = vm.Amount;
@@ -610,11 +593,49 @@ namespace BankingApp.Core.Application.Services
             payment.UserName = UserName;
             await base.Add(payment);
 
+            FromAccount.Balance -= payment.Amount;
+            ToAccount.Balance += payment.Amount;
+
+            await _savingsAccountService.Update(FromAccount, FromAccount.Id);
+            await _savingsAccountService.Update(ToAccount, vm.ToAccountId);
             return new()
             {
                 View = "Index",
                 Success = true
             };
+        }
+
+        public async Task Disbursement(SaveLoanViewModel loan)
+        {
+            var principalAccount = await _savingsAccountService.GetPrincipalAccount(loan.UserName);
+            principalAccount.Balance += loan.Principal;
+
+            SavePaymentViewModel payment = new();
+            payment.Amount = loan.Principal;
+            payment.FromProductId = loan.Id;
+            payment.ToProductId = principalAccount.Id;
+            payment.Type = ((byte)PaymentTypes.Disbursement);
+            payment.UserName = loan.UserName;
+            await base.Add(payment);
+
+            await _savingsAccountService.Update(principalAccount, principalAccount.Id);
+        }
+
+        public async Task SavingsAccountDeletion(SaveSavingsAccountViewModel accountToDelete)
+        {
+            var principalAccount = await _savingsAccountService.GetPrincipalAccount(accountToDelete.UserName);
+
+            principalAccount.Balance += accountToDelete.Balance;
+
+            SavePaymentViewModel payment = new();
+            payment.Amount = accountToDelete.Balance;
+            payment.FromProductId = accountToDelete.Id;
+            payment.ToProductId = principalAccount.Id;
+            payment.Type = ((byte)PaymentTypes.Transfer);
+            payment.UserName = accountToDelete.UserName;
+            await base.Add(payment);
+
+            await _savingsAccountService.Update(principalAccount, principalAccount.Id);
         }
     }
 }

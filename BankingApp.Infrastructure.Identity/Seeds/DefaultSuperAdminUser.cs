@@ -18,7 +18,7 @@ namespace BankingApp.Infrastructure.Identity.Seeds
                 PhoneNumberConfirmed = true,
                 CreatedTime = DateTime.Now,
                 CreatedBy = "System",
-                IdCard = "0",
+                IdCard = "000-0000000-0",
             };
 
             var userByUserName = await userManager.FindByNameAsync(user.UserName);

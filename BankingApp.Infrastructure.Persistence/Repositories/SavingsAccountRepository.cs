@@ -15,12 +15,10 @@ namespace BankingApp.Infrastructure.Persistence.Repositories
     public class SavingsAccountRepository : GenericRepository<SavingsAccount>, ISavingsAccountRepository
     {
         private readonly ApplicationContext _dbContext;
-        private readonly IProductRepository _productRepository;
 
-        public SavingsAccountRepository(ApplicationContext dbContext, IProductRepository productRepository) : base(dbContext)
+        public SavingsAccountRepository(ApplicationContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
-            _productRepository = productRepository;
         }
 
         public override async Task<SavingsAccount> AddAsync(SavingsAccount savingsAccount)

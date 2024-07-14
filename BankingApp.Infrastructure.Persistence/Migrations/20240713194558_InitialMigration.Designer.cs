@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240713013653_InitialMigration")]
+    [Migration("20240713194558_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -24,36 +24,6 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BankingApp.Core.Domain.Common.Product", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte>("Type")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Products", (string)null);
-                });
 
             modelBuilder.Entity("BankingApp.Core.Domain.Entities.Beneficiary", b =>
                 {
@@ -210,10 +180,6 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FromProductId");
-
-                    b.HasIndex("ToProductId");
-
                     b.ToTable("Payments", (string)null);
                 });
 
@@ -223,7 +189,7 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 100100099L);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 100100098L);
 
                     b.Property<double>("Balance")
                         .HasColumnType("float");
@@ -262,30 +228,6 @@ namespace BankingApp.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("SavingsAccount");
-                });
-
-            modelBuilder.Entity("BankingApp.Core.Domain.Entities.Payment", b =>
-                {
-                    b.HasOne("BankingApp.Core.Domain.Common.Product", "FromProduct")
-                        .WithMany("PaymentsFrom")
-                        .HasForeignKey("FromProductId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("BankingApp.Core.Domain.Common.Product", "ToProduct")
-                        .WithMany("PaymentsTo")
-                        .HasForeignKey("ToProductId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("FromProduct");
-
-                    b.Navigation("ToProduct");
-                });
-
-            modelBuilder.Entity("BankingApp.Core.Domain.Common.Product", b =>
-                {
-                    b.Navigation("PaymentsFrom");
-
-                    b.Navigation("PaymentsTo");
                 });
 
             modelBuilder.Entity("BankingApp.Core.Domain.Entities.SavingsAccount", b =>
