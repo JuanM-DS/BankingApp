@@ -14,7 +14,7 @@ namespace BankingApp.Core.Application.ViewModels.Payment
     {
         [Range(700100100, 999999999, ErrorMessage = "Debe seleccionar un prestamo.")]
         public int ToLoanId { get; set; }
-        [Range(100100100, 400100099, ErrorMessage = "Debe seleccionar una cuenta.")]
+        [Range(100100098, 400100099, ErrorMessage = "Debe seleccionar una cuenta.")]
         public int FromAccountId { get; set; }
         [Required(ErrorMessage = "Debe ingresar un monto.")]
         [DataType(DataType.Text)]

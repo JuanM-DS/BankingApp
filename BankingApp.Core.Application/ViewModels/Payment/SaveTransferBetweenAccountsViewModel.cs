@@ -11,9 +11,9 @@ namespace BankingApp.Core.Application.ViewModels.Payment
 {
     public class SaveTransferBetweenAccountsViewModel
     {
-        [Range(100100100, 400100099, ErrorMessage = "Debe seleccionar una cuenta.")]
+        [Range(100100098, 400100099, ErrorMessage = "Debe seleccionar una cuenta.")]
         public int ToAccountId { get; set; }
-        [Range(100100100, 400100099, ErrorMessage = "Debe seleccionar una cuenta.")]
+        [Range(100100098, 400100099, ErrorMessage = "Debe seleccionar una cuenta.")]
         public int FromAccountId { get; set; }
         [Required(ErrorMessage = "Debe ingresar un monto.")]
         [DataType(DataType.Text)]
