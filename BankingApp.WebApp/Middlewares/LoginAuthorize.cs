@@ -1,23 +1,23 @@
-﻿using BankingApp.WebApp.Controllers;
+﻿using BankingApp.Core.Application.Enums;
+using BankingApp.Core.Application.Helpers;
+using BankingApp.Core.Application.ViewModels.User;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace BankingApp.WebApp.Middlewares
 {
-    public class LoginAuthorize : IAsyncActionFilter
+    public class LoginAuthorize(IHttpContextAccessor accessor) : IAsyncActionFilter
     {
-        private readonly ValidateUserSession _userSession;
-
-        public LoginAuthorize(ValidateUserSession userSession)
-        {
-            _userSession = userSession;
-        }
+        private readonly IHttpContextAccessor accessor = accessor;
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (_userSession.HasUser())
+            var currentUser = accessor.HttpContext.Session.Get<UserViewModel>("user");
+            if (currentUser is not null)
             {
-                var controller = (UserController)context.Controller;
-                context.Result = controller.RedirectToAction("Index", "Home");
+                var controller = (Controller)context.Controller;
+                var controllerResult = currentUser.Roles.Contains(RoleTypes.Admin) ? "Admin" : "Client";
+                context.Result = controller.RedirectToAction("Index", controllerResult);
             }
             else
             {

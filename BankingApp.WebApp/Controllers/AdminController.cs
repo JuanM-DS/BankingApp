@@ -16,9 +16,11 @@ using BankingApp.Core.Application.ViewModels.CreditCard;
 using BankingApp.Core.Application.ViewModels.Loan;
 using BankingApp.Core.Domain.Common;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BankingApp.WebApp.Controllers
 {
+    [Authorize(Roles = nameof(RoleTypes.Admin))]
     public class AdminController : Controller
     {
         private readonly ISavingsAccountService _savingsAccountService;

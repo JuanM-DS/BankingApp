@@ -4,6 +4,7 @@ using BankingApp.Core.Application.Interfaces.Services;
 using BankingApp.Core.Application.ViewModels.Account;
 using BankingApp.Core.Application.ViewModels.User;
 using BankingApp.Core.Domain.Entities;
+using BankingApp.WebApp.Middlewares;
 using BankingApp.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,8 +15,10 @@ namespace BankingApp.WebApp.Controllers
         private readonly IUserService _userServices = userServices;
         private readonly ImageServices _imageServices = imageServices;
 
+        [ServiceFilter(typeof(LoginAuthorize))]
         public IActionResult Index() => View();
 
+        [ServiceFilter(typeof(LoginAuthorize))]
         [HttpPost]
         public async Task<IActionResult> Index(LoginViewModel login)
         {
@@ -40,6 +43,7 @@ namespace BankingApp.WebApp.Controllers
             return View(login);
         }
 
+        [ServiceFilter(typeof(LoginAuthorize))]
         public async Task<IActionResult> ConfirmAccount(ConfirmAccountViewModel viewModel)
         {
             var result = await _userServices.ConfirmAccountAsync(viewModel);
@@ -51,13 +55,14 @@ namespace BankingApp.WebApp.Controllers
                 return View(viewModel);
             }
 
-            ViewData["Message"] = $"Account confirm for {viewModel.Email}, You can now user the app";
+            ViewData["Message"] = $"La cuenta {viewModel.Email} ya esta confirmada, ya puedes acceder a la app";
 
             return View();
         }
 
         public IActionResult ForgotPassword() => View();
 
+        [ServiceFilter(typeof(LoginAuthorize))]
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel viewModel)
         {
@@ -74,8 +79,10 @@ namespace BankingApp.WebApp.Controllers
             return View(nameof(Index));
         }
 
+        [ServiceFilter(typeof(LoginAuthorize))]
         public IActionResult ResetPassword(string Token, string Email) => View(new ResetPasswordViewModel() { Email = Email, Token = Token});
 
+        [ServiceFilter(typeof(LoginAuthorize))]
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel viewModel)
         {

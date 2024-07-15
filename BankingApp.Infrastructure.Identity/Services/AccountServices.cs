@@ -41,21 +41,21 @@ namespace BankingApp.Infrastructure.Identity.Services
                 return new()
                 {
                     Success = false,
-                    Error = $"{request.UserName} is not register"
+                    Error = $"{request.UserName} no esta registrado"
                 };
 
             if(userByUserName.Status is (int)UserStatus.Inactive)
                 return new()
                 {
                     Success = false,
-                    Error = $"{request.UserName} is inactive must contact an administrator"
+                    Error = $"{request.UserName} esta inactivo contacta con un admin"
                 };
 
             if (userByUserName.EmailConfirmed is false)
                 return new()
                 {
                     Success = false,
-                    Error = $"{userByUserName.Email} is not confirmed"
+                    Error = $"{userByUserName.Email} no esta registrado"
                 };
 
             var result = await _signInManager.PasswordSignInAsync(userByUserName, request.Password, false, lockoutOnFailure : false);
@@ -64,7 +64,7 @@ namespace BankingApp.Infrastructure.Identity.Services
                 return new()
                 {
                     Success = false,
-                    Error = "Credentials are incorrect"
+                    Error = "las credenciales no son correctas"
                 };
 
             var userDTO = _mapper.Map<ApplicationUserDTO>(userByUserName);
@@ -86,7 +86,7 @@ namespace BankingApp.Infrastructure.Identity.Services
                 return new()
                 {
                     Success = false,
-                    Error = "User doestn exists"
+                    Error = "el usuario no existe"
                 };
 
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
@@ -113,21 +113,21 @@ namespace BankingApp.Infrastructure.Identity.Services
                 return new()
                 {
                     Success = false,
-                    Error = $"{request.Email} is not register"
+                    Error = $"{request.Email} no esta registrado"
                 };
 
             if (userByEmail.Status is (int)UserStatus.Inactive)
                 return new()
                 {
                     Success = false,
-                    Error = $"{userByEmail.UserName} is inactive must contact an administrator"
+                    Error = $"{userByEmail.UserName} esta inactivo contacta con un admin"
                 };
 
             if (userByEmail.EmailConfirmed is false)
                 return new()
                 {
                     Success = false,
-                    Error = $"{userByEmail.Email} is not confirmed"
+                    Error = $"{userByEmail.Email} no esta confirmado"
                 };
             
             var token = await _userManager.GeneratePasswordResetTokenAsync(userByEmail);
@@ -138,7 +138,7 @@ namespace BankingApp.Infrastructure.Identity.Services
             var emailRequest = new EmailRequestDTO()
             {
                 To = userByEmail.Email,
-                Body = $"Please reset your account visiting this URl {url}",
+                Body = $"cambia tu contrasena en la siguiente url: {url}",
                 Subject = "Reset your Password"
             };
             await _emailServices.SendEmailAsync(emailRequest);
@@ -158,7 +158,7 @@ namespace BankingApp.Infrastructure.Identity.Services
                 return new()
                 {
                     Success = false,
-                    Error = $"the user name: {request.UserName} is already taken"
+                    Error = $"EL user name: {request.UserName} ya esta tomado"
                 };
 
             var userByEmail = await _userManager.FindByEmailAsync(request.Email);
@@ -166,7 +166,7 @@ namespace BankingApp.Infrastructure.Identity.Services
                 return new()
                 {
                     Success = false,
-                    Error = $"the email: {request.Email} is already taken"
+                    Error = $"el email: {request.Email} ya esta tomado"
                 };
 
             var userByIdCard = await _userManager.Users.Where(x => x.IdCard == request.IdCard).FirstOrDefaultAsync();
@@ -174,7 +174,7 @@ namespace BankingApp.Infrastructure.Identity.Services
                 return new()
                 {
                     Success = false,
-                    Error = $"the idCard: {request.IdCard} is already taken"
+                    Error = $"la cedula: {request.IdCard} ya esta tomada"
                 };
 
             var user = _mapper.Map<ApplicationUser>(request);
@@ -217,7 +217,7 @@ namespace BankingApp.Infrastructure.Identity.Services
                 return new()
                 {
                     Success = false,
-                    Error = $"{request.Email} is not register"
+                    Error = $"{request.Email} no esta registrado"
                 };
 
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
