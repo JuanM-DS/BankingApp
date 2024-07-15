@@ -39,6 +39,15 @@ namespace BankingApp.Infrastructure.Identity
             service.AddTransient<IUserRepository, UserRepository>();
             #region Services
             service.AddTransient<IAccountService, AccountServices>();
+            service.AddAuthentication();
+            #endregion
+
+            #region cookie
+            service.ConfigureApplicationCookie(option =>
+            {
+                option.LoginPath = "/Login";
+                option.AccessDeniedPath = "/Login/AccessDenied";
+            });
             #endregion
         }
 

@@ -12,9 +12,11 @@ using Microsoft.AspNetCore.Mvc;
 using BankingApp.Core.Application.Helpers;
 using BankingApp.Core.Application.ViewModels.Product;
 using BankingApp.Core.Application.ViewModels.Message;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BankingApp.WebApp.Controllers
 {
+    [Authorize(Roles = nameof(RoleTypes.Client))]
     public class ClientController : Controller
     {
         public readonly IBeneficiaryService _beneficiaryService;

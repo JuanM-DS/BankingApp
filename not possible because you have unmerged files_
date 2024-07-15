@@ -1,0 +1,50 @@
+*   [33m1a3ab06[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m commit
+[31m|[m[32m\[m  
+* [32m|[m [33m3dfacc6[m commit
+[32m|[m [32m|[m *[35m-[m[35m.[m   [33m3f86823[m[33m ([m[1;35mrefs/stash[m[33m)[m On juanm-dd: Extrayendo master del repositorio
+[32m|[m [32m|[m [33m|[m[34m\[m [35m\[m  
+[32m|[m [32m|[m [33m|[m [34m|[m * [33m62a7af4[m untracked files on juanm-dd: 44ab559 Merge pull request #10 from JuanM-DS/master
+[32m|[m [32m|[m [33m|[m * [33m3b501b6[m index on juanm-dd: 44ab559 Merge pull request #10 from JuanM-DS/master
+[32m|[m [32m|[m [33m|[m[33m/[m  
+[32m|[m [32m|[m *   [33m44ab559[m[33m ([m[1;31morigin/juanm-dd[m[33m, [m[1;32mjuanm-dd[m[33m)[m Merge pull request #10 from JuanM-DS/master
+[32m|[m [32m|[m [36m|[m[32m\[m  
+[32m|[m [32m|[m [36m|[m[32m/[m  
+[32m|[m [32m|[m[32m/[m[36m|[m   
+[32m|[m * [36m|[m [33me938fc0[m[33m ([m[1;31morigin/master[m[33m)[m Merge pull request #9 from JuanM-DS/juanm-dd
+[32m|[m [1;32m|[m[36m\[m[36m|[m 
+[32m|[m [1;32m|[m * [33m27f1e81[m implementing email services
+[32m|[m [1;32m|[m[32m/[m  
+[32m|[m[32m/[m[1;32m|[m   
+[32m|[m [1;32m|[m *   [33mef0ecad[m[33m ([m[1;31morigin/Darlin[m[33m)[m Merge pull request #8 from JuanM-DS/master
+[32m|[m [1;32m|[m [1;34m|[m[1;32m\[m  
+[32m|[m [1;32m|[m [1;34m|[m[1;32m/[m  
+[32m|[m [1;32m|[m[1;32m/[m[1;34m|[m   
+[32m|[m * [1;34m|[m [33m1815d0d[m Merge pull request #7 from JuanM-DS/Carlos
+[32m|[m[32m/[m[31m|[m [1;34m|[m 
+[32m|[m * [1;34m|[m   [33mcca4efe[m[33m ([m[1;31morigin/Carlos[m[33m, [m[1;32mCarlos[m[33m)[m Merge pull request #6 from JuanM-DS/master
+[32m|[m [32m|[m[32m\[m [1;34m\[m  
+[32m|[m [32m|[m[32m/[m [1;34m/[m  
+[32m|[m[32m/[m[32m|[m [1;34m|[m   
+* [32m|[m [1;34m|[m [33m3362846[m Merge pull request #5 from JuanM-DS/Carlos
+[34m|[m[32m\[m[32m|[m [1;34m|[m 
+[34m|[m * [1;34m|[m [33m15a0db9[m Services and ViewModels created
+* [35m|[m [1;34m|[m [33mf7b0f45[m Merge pull request #4 from JuanM-DS/Carlos
+[36m|[m[35m\[m[35m|[m [1;34m|[m 
+[36m|[m * [1;34m|[m [33m402934d[m Repositories created
+[36m|[m * [1;34m|[m [33m5283a19[m Project dependencies managed.
+[36m|[m * [1;34m|[m   [33mc321f3b[m Merge pull request #3 from JuanM-DS/master
+[36m|[m [1;32m|[m[36m\[m [1;34m\[m  
+[36m|[m [1;32m|[m[36m/[m [1;34m/[m  
+[36m|[m[36m/[m[1;32m|[m [1;34m|[m   
+[36m|[m [1;32m|[m * [33mb535b31[m[33m ([m[1;32mDarlin[m[33m)[m Merge pull request #2 from JuanM-DS/master
+[36m|[m [1;32m|[m[1;32m/[m[36m|[m 
+[36m|[m [1;32m|[m[36m/[m  
+[36m|[m[36m/[m[1;32m|[m   
+* [1;32m|[m   [33m7907384[m Merge pull request #1 from JuanM-DS/juanm-dd
+[1;32m|[m[31m\[m [1;32m\[m  
+[1;32m|[m [31m|[m[1;32m/[m  
+[1;32m|[m[1;32m/[m[31m|[m   
+[1;32m|[m * [33m49a2de8[m updateEntities
+[1;32m|[m[1;32m/[m  
+* [33mba93cd5[m Agregar archivos de proyecto.
+* [33ma3dcf40[m Agregar .gitattributes, .gitignore y README.md.

@@ -49,7 +49,7 @@ namespace BankingApp.Core.Application.Services
                 {
                     Data = null,
                     Success = false,
-                    Error = $"There is any user with this id: {id}"
+                    Error = $"no hay un usuario con el id: {id}"
                 };
 
             var result = await _userRepository.DeleteAsycn(userById);
@@ -58,7 +58,7 @@ namespace BankingApp.Core.Application.Services
                 {
                     Data = null,
                     Success = false,
-                    Error = $"There is a problem deleting the user"
+                    Error = $"hubo un problema eliminando el usuario"
                 };
 
             var userViewModel = _mapper.Map<UserViewModel>(userById);
@@ -173,7 +173,7 @@ namespace BankingApp.Core.Application.Services
                 return new()
                 {
                     Success = false,
-                    Error = $"{userViewModel.UserName} is already taken"
+                    Error = $"{userViewModel.UserName} ya esta tomado"
                 };
 
             var userByEmail = (await _userRepository.GetAll())
@@ -182,7 +182,7 @@ namespace BankingApp.Core.Application.Services
                 return new()
                 {
                     Success = false,
-                    Error = $"{userByEmail.Email} is already taken"
+                    Error = $"{userByEmail.Email} ya esta tomado"
                 };
 
             var userByIdCard = (await _userRepository.GetAll())
@@ -191,7 +191,7 @@ namespace BankingApp.Core.Application.Services
                 return new()
                 {
                     Success = false,
-                    Error = $"{userByIdCard.IdCard} is already taken"
+                    Error = $"{userByIdCard.IdCard} ya esta tomado"
                 };
 
             var userDto = _mapper.Map<ApplicationUserDTO>(userViewModel);
@@ -204,7 +204,7 @@ namespace BankingApp.Core.Application.Services
                 {
                     Data = null,
                     Success = false,
-                    Error = $"There is a problem updating the user: {userViewModel.UserName}"
+                    Error = $"hubo un problema actualizando el usuario: {userViewModel.UserName}"
                 };
 
             return new()

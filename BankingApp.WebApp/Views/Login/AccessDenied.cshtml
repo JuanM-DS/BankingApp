@@ -1,4 +1,15 @@
-﻿<div class="container">
+﻿@using BankingApp.Core.Application.Enums
+@using BankingApp.Core.Application.ViewModels.User
+@using Microsoft.AspNetCore.Http
+@using BankingApp.Core.Application.Helpers;
+
+@inject IHttpContextAccessor httpContextAccessor;
+@{
+    var user = httpContextAccessor.HttpContext.Session.Get<UserViewModel>("user");
+    var isAdmin = user.Roles.Contains(RoleTypes.Admin);
+}
+
+<div class="container">
     <div class="w40">
         <div class="card">
             <div class="card-header">
@@ -8,7 +19,7 @@
             </div>
             <div class="card-body">
                 <div class="d-flex justify-content-center alert alert-danger" role="alert">
-                    <a asp-controller="Login" asp-action="Index" class="btn btn-primary">Sign in</a>
+                    <a asp-controller="@(isAdmin? "Admin" : "Client")" asp-action="Index" class="btn btn-primary">Home</a>
                 </div>
             </div>
         </div>

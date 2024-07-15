@@ -3,6 +3,7 @@ using BankingApp.Infrastructure.Persistence;
 using BankingApp.Infrastructure.Shared;
 using BankingApp.Core.Application;
 using BankingApp.WebApp.Services;
+using BankingApp.WebApp.Middlewares;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,7 @@ builder.Services.AddIdentityInfrastructure(builder.Configuration);
 builder.Services.AddApplicationLayer();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddTransient<ImageServices, ImageServices>();
+builder.Services.AddScoped<LoginAuthorize>();
 #endregion
 
 
