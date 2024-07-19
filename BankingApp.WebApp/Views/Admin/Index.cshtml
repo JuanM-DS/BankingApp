@@ -10,15 +10,15 @@
     <div class="row mt-5 mb-5">
 
         <div class="col-10 offset-1 d-flex justify-content-around align-items-center shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-            <a asp-controller="Admin" asp-action="User" name="filterOption" value="0" class="btn btn-success px-3 py-2 d-inline-block">
+            <a href="#" name="filterOption" value="0" class="btn btn-success px-3 py-2 d-inline-block">
                 <span class="fs-5 d-block">Productos Activos</span>
                 <span class="fs-4 fw-bold">@ViewBag.TotalProducts</span>
             </a>
-            <a asp-controller="Admin" asp-action="User" name="filterOption" value="0" class="btn btn-success px-3 py-2 d-inline-block">
+            <a href="#" name="filterOption" value="0" class="btn btn-success px-3 py-2 d-inline-block">
                 <span class="fs-5 d-block">Clientes Activos</span>
                 <span class="fs-4 fw-bold">@ViewBag.ActiveClients</span>
             </a>
-            <a asp-controller="Admin" asp-action="Index" name="filterOption" value="1" class="btn btn-success px-3 py-2 d-inline-block">
+            <a href="#" name="filterOption" value="1" class="btn btn-success px-3 py-2 d-inline-block">
                 <span class="fs-5 d-block">Clientes Inactivos</span>
                 <span class="fs-4 fw-bold">@ViewBag.InactiveClients</span>
             </a>
@@ -44,13 +44,13 @@
         </div>
     </div>
 
-    @if (Model != null && Model.Count > 0)
+    @* @if (Model != null && Model.Count > 0)
     {
         <div class="col-12 alert alert-success mb-4">
             <h2 class="text-center">@ViewBag.TransactionsTitle</h2>
         </div>
 
         @await Html.PartialAsync("Transactions", Model)
-    } 
+    }  *@
     
 </div>
